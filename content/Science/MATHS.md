@@ -1,12 +1,12 @@
 ---
 date created: 2025-06-18T05:20:40+04:00
-date modified: 2025-06-18T05:51:50+04:00
+date modified: 2025-06-18T05:56:53+04:00
 tags:
   - math
 ---
 This article will use some images from: [3Blue1Brown](https://www.3blue1brown.com/lessons), [Math Academy](https://www.mathacademy.com/)
 
-I study math, these are my notes, I figured it would be great to make an article of that.
+I study math, these are my notes, I figured it would be great to make an article of that. This article mainly English, but there is some Russian generally as a translation, since math is whole another language...
 
 > [!Tip] Glossary (click)
 > Integer - целое число  $-1 \leq x \leq 1 \cdots$
@@ -53,7 +53,7 @@ I study math, these are my notes, I figured it would be great to make an article
 
 
 
-> [!Tip] Glossary
+> [!Tip] Glossary and translation
 > 
 > - **Integer** - Целое число, e.g., $-1 \leq x \leq 1, \dots$
 > - **Addition** - Сложение
@@ -104,7 +104,6 @@ $$\begin{array}{c} \text{Example 1: } 45 \times 11 \\[-0.2em] \text{Step 1: Star
 7. You can quickly verify subtraction or addition by checking the last number of produce, for example $387+604=990$ is false because $7+4=11$, where 1?
 # Basic Math
 Keep in mind order of operations:
-
 ![[PEMDAS-min.png|200]]
 ## Number types and systems
 ```mermaid
