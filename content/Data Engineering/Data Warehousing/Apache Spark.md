@@ -103,6 +103,7 @@ Databricks connects you to its Spark infrastructure when you login to Databricks
 
 ## How it executes
 What happens when you run an application or [[Databricks#Notebooks]].
+
 ![[Screenshot 2024-06-21 at 12.50.13.png]]
 ### Driver
 Spark driver is responsible to execution, during execution it covert Application to into Jobs

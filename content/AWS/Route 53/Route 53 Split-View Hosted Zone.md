@@ -6,4 +6,4 @@ Records are created in zones according to their publicity level, i.e. in out exa
 - A – record is private record
 - TXT, MX, www – are public records.
 So in our example private can access anything (assuming they have access to internet) but public internet hosts can't resolve private records
-![[Pasted image 20230121231905.png|]]
+![[Pasted image 20230121231905.png]]

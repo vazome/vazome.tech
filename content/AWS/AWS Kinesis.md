@@ -25,7 +25,7 @@ Can deliver to HTTP, Splunk, [[Redshift]], [[ElasticSearch]], [[S3]]
 
 Producers can put data directly into Firehouse or into [[#Data Streams]] then Kinesis will consume it from them.
 Delivers data when either 1MB buffer fills up or 60s timeout.
-![[Pasted image 20230213022632.png|]]
+![[Pasted image 20230213022632.png]]
 
 # Data Analytics
 Real time analytics of data using [[SQL]] (Firehouse can do this too via lambda but is not real time)

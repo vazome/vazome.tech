@@ -63,7 +63,7 @@ $$\begin{array}{c} \text{Example 1: } 45 \times 11 \\[-0.2em] \text{Step 1: Star
 7. You can quickly verify subtraction or addition by checking the last number of produce, for example $387+604=990$ is false because $7+4=11$, where 1?
 # Basic Math
 Keep in mind order of operations:
-![[PEMDAS-min.png|200]]
+![[PEMDAS-min.png]]
 ## Number types and systems
 ```mermaid
 classDiagram
@@ -335,8 +335,6 @@ Finishing up with resultant vector line which goes from start to finish, providi
 This resembles a [parallelogram](https://en.wikipedia.org/wiki/Parallelogram), as Newton once stated:
 
 > *A body by two forces conjoined will describe the diagonal of a parallelogram, in the same time that it would describe the sides, by those forces apart.*
-
-
 
 ## Notes
 Sigma used to denote [Summation - Wikipedia](https://en.wikipedia.org/wiki/Summation) operation, in this case summing all $w_i x_i$ together producing $y$:
