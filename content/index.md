@@ -21,6 +21,7 @@ Back in high school I did photography (street, journalism) as a hobby two years,
 | ------------------------------------------------------------- | ------------------------------------------------ |
 | ![[SJvg5_nuKNM.jpg]]                                          | ![[36450522820_e4e3097894_k.jpg]]                |
 | ![[462515117_2338110376523793_6268542425224261985_n.jpg]]     | ![[w0gHaxQUka8.jpg]]                             |
+
 ![[35883171585_35907ed051_k.jpg]]
 Took this one in metro.
 
