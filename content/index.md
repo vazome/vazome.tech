@@ -27,6 +27,7 @@ Took this one in metro.
 
 | ![[35430311892_b726a89d03_k.jpg]]<br>MSU from the Riverside | ![[35559728926_12bc29f7d7_k.jpg]]<br>Moscow City from Vorobyovy Gory |
 | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+
 ![[35313831712_5804e8f399_k.jpg]]
 The original was a regular sized 3:4 photo, but if you crop it, it look much better, focusing on the key parts of these clouds.
 
