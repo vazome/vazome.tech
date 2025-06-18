@@ -6,6 +6,9 @@
 	- [[Pandas Python]]
 	- [[Python]]
 - **Containerization**
+	- [[Docker]]
+	- [[Kubernetes (K8S)]]
+	- [[Terraform]]
 - [[CRON jobs]]
 - [[git]]
 - [[Github actions]]
