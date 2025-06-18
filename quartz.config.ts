@@ -17,7 +17,7 @@ const config: QuartzConfig = {
     },
     locale: "en-US",
     baseUrl: "vazome.tech",
-    ignorePatterns: ["private", "templates", ".obsidian", "(maintenance)"],
+    ignorePatterns: ["private", "templates", ".obsidian", "content/(maintenance)"],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
