@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "vazome.tech",
     ignorePatterns: ["private", "templates", ".obsidian", "(maintenance)"],
     defaultDateType: "modified",
     theme: {
