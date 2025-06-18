@@ -1,6 +1,6 @@
 ---
 date created: 2025-06-05T17:16:06+04:00
-date modified: 2025-06-17T23:08:50+04:00
+date modified: 2025-06-18T09:09:25+04:00
 tags: [ml, code/python]
 ---
 We will create a project to run PyTorch for our #ml project
@@ -15,6 +15,9 @@ Let's create the environment, the following will
 3. Install PyTorch
 ``` shell
 mkdir pytorch-sandbox && cd pytorch-sandbox
+```
+---
+``` python-r
 uv init
 uv add torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu128 
 ```
@@ -26,11 +29,9 @@ uv add torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu
 [Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
 I work in VSCode, UV has instruction on how we can enable Junyper to work with UV environment.
 in
-``` shell
+``` python-r
 uv add --dev ipykernel
 ```
-
-
 
 Our initial directory will contain all necessary boilerplate environment configurations to begin with coding:
 ![[Pasted image 20250605194251.png]]
