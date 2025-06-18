@@ -1,10 +1,10 @@
 ---
 date created: 2025-06-18T05:20:40+04:00
-date modified: 2025-06-18T05:56:53+04:00
+date modified: 2025-06-18T06:04:55+04:00
 tags:
   - math
 ---
-This article will use some images from: [3Blue1Brown](https://www.3blue1brown.com/lessons), [Math Academy](https://www.mathacademy.com/)
+This article will use some images from: [3Blue1Brown](https://www.3blue1brown.com/lessons), [Math Academy](https://www.mathacademy.com/), [Why Machines Learn by Anil Ananthaswamy](https://www.penguin.co.uk/books/446849/why-machines-learn-by-ananthaswamy-anil/9780241586488)
 
 I study math, these are my notes, I figured it would be great to make an article of that. This article mainly English, but there is some Russian generally as a translation, since math is whole another language...
 
@@ -31,11 +31,11 @@ I study math, these are my notes, I figured it would be great to make an article
 > Quotient - Частное
 > $$\underbrace{15}_{\text{Dividend}} \div \underbrace{3}_{\text{Divisor}} = \underbrace{5}_{\text{Quotient}}$$
 > $$\begin{array}{c}
-\underbrace{k \times 1 = 1 \times k = k}_{\text{Multiplicative Identity}} \\
-\underbrace{n / 1 = n}_{\text{Division by One}} \\
-\underbrace{m \times 0 = 0 \times m = 0}_{\text{Zero Property of Multiplication}} \\
-\underbrace{n / n = 1 \ (n \neq 0)}_{\text{Division of a Number by Itself}}
-\end{array}$$
+> \underbrace{k \times 1 = 1 \times k = k}_{\text{Multiplicative Identity}} \\
+> \underbrace{n / 1 = n}_{\text{Division by One}} \\
+> \underbrace{m \times 0 = 0 \times m = 0}_{\text{Zero Property of Multiplication}} \\
+> \underbrace{n / n = 1 \ (n \neq 0)}_{\text{Division of a Number by Itself}}
+> \end{array}$$
 > Hundredths place - Класс сотен
 > Mathematical expression - математическое выражение.
 > Quantitative - количественный
@@ -252,6 +252,7 @@ I case of missing numerator apply the same login and if we feel like it, divide 
 |     6     |     18      |
 |     ?     |     24      |
 |    20     |      ?      |
+
 ### Unit rate
 
 A **unit rate** is a comparison of two quantities where one of the terms has a quantity of  This means the ratio, in fraction form, has a denominator of 1.
