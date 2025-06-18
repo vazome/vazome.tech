@@ -1,5 +1,4 @@
 %% Begin Waypoint %%
-- [[Advanced Lab]]
 - [[Amazon AppFlow]]
 - [[Amazon Athena]]
 - [[Amazon Cognito]]
@@ -7,19 +6,11 @@
 - [[Amazon Macie]]
 - [[Amazon MQ]]
 - [[API Gateway]]
-- [[AWS Backup]]
-- [[AWS BeanStalk]]
-- [[AWS Certificate Manager (ACM)]]
-- [[AWS Config]]
 - [[AWS Global Accelerator]]
 - [[AWS Glue]]
 - [[AWS GuardDuty]]
 - [[AWS Kinesis]]
 - **AWS Lore**
-	- [[AWS Global and Regional Architecture]]
-	- [[AWS Local Zones]]
-	- [[Public vs Private Service]]
-	- [[Shared Responsibility]]
 - [[AWS Secrets Manager]]
 - [[AWS Shield]]
 - [[AWS Site-to-Site VPN]]
@@ -32,23 +23,8 @@
 	- [[CloudWatch Logs]]
 - [[CloudFront]]
 - **[[CloudTrail]]**
-- **[[Control Tower]]**
+- **Control Tower**
 - **Databases**
-	- [[Amazon Aurora Global Database]]
-	- [[Amazon Aurora Serverless]]
-	- [[Amazon Aurora]]
-	- [[Database Migration Service (DMS)]]
-	- [[DynamoDB Accelerator (DAX)]]
-	- [[DynamoDB]]
-	- [[ElastiCache]]
-	- [[RDS Appliance]]
-	- [[RDS Backup, Snapshots and Restore]]
-	- [[RDS Custom]]
-	- [[RDS Multi-AZ]]
-	- [[RDS Read Replicas (RR)]]
-	- [[RDS]]
-	- [[Redshift]]
-	- [[Secuirty in AWS RDS]]
 - [[DataSync]]
 - [[Demo Notes Site-to-Site VPN]]
 - [[Direct Connect (DX)]]
@@ -60,12 +36,6 @@
 	- [[EBS Provisioned IOPS - IO]]
 	- [[EBS Snapshot]]
 - **[[EC2]]**
-	- [[CloudFormation Init]]
-	- [[EC2 AMI]]
-	- [[EC2 Auto Scaling Groups (ASG)]]
-	- [[EC2 Bootstraping]]
-	- [[EC2 Dedicated host]]
-	- [[EC2 Enchanced Networking]]
 	- [[EC2 ENI with DNS]]
 	- [[EC2 Image Builder]]
 	- [[EC2 Instance Export caveats]]
@@ -117,7 +87,7 @@
 	- [[Route 53 Health checks]]
 	- [[Route 53 Routing]]
 	- [[Route 53 Split-View Hosted Zone]]
-- **[[S3]]**
+- **S3**
 	- [[AWS Snow Family]]
 	- [[S3 Access Points]]
 	- [[S3 Encryption]]
@@ -125,15 +95,6 @@
 	- [[S3 Logging]]
 	- [[S3 Multi-Region Access Points (MRAP)]]
 	- [[S3 Object Lock]]
-	- [[S3 Performance Optimization]]
-	- [[S3 Pre-signed URL]]
-	- [[S3 Replication]]
-	- [[S3 Resource Policies and Features]]
-	- [[S3 Select and Glacier Select]]
-	- [[S3 Static Website Hosting]]
-	- [[S3 Storage Classes]]
-	- [[S3 Storage Gateway]]
-	- [[S3 Versioning and MFA]]
 - [[SNS]]
 - [[SQS]]
 - [[Step Functions]]
@@ -141,16 +102,9 @@
 - **Systems Manager**
 	- [[SSM Parameter store]]
 - [[Untitled]]
-- **[[VPC]]**
+- **VPC**
 	- [[Transit Gateway (TGW)]]
 	- [[VPC Flow Logs]]
-	- [[VPC NACL (Stateless)]]
-	- [[VPC NATGW]]
-	- [[VPC Peering]]
-	- [[VPC Planning]]
-	- [[VPC Routing]]
-	- [[VPC Security Groups (Stateful)]]
-	- [[VPC Subnets]]
 - [[Web Application Firewall (WAF)]]
 
 %% End Waypoint %%

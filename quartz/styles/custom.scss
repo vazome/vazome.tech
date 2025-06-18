@@ -2,6 +2,7 @@
 
 // put your custom CSS here!
 
+// Python Code Runner Plugin Styles
 .spinner {
   display: none;
   width: 20px;
@@ -37,11 +38,22 @@
   border-radius: 0.5rem !important;
 }
 
+// Code wrapper for better spacing
+.code-wrapper {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
 .code-block {
   width: 100%;
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.code-block:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 [saved-theme="light"] .code-block {
@@ -72,6 +84,7 @@
 .code-language {
   font-family: monospace;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 [saved-theme="light"] .code-language {
@@ -92,7 +105,21 @@
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-actions button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5);
+}
+
+.code-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 [saved-theme="light"] .code-actions button {
@@ -103,18 +130,20 @@
   color: #cba6f7;
 }
 
-[saved-theme="light"] .code-actions button:hover {
+[saved-theme="light"] .code-actions button:hover:not(:disabled) {
   color: #7287fd;
+  background-color: rgba(139, 92, 246, 0.1);
 }
 
-[saved-theme="dark"] .code-actions button:hover {
+[saved-theme="dark"] .code-actions button:hover:not(:disabled) {
   color: #f5c2e7;
+  background-color: rgba(203, 166, 247, 0.2);
 }
 
 .code-content {
   position: relative;
   height: 150px;
-  transition: height 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
@@ -125,6 +154,17 @@
 
 .CodeMirror {
   height: 100%;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+[saved-theme="light"] .CodeMirror {
+  background-color: #eff1f5 !important;
+}
+
+[saved-theme="dark"] .CodeMirror {
+  background-color: #1e1e2e !important;
 }
 
 .code-gradient {
@@ -134,6 +174,8 @@
   right: 0;
   height: 2rem;
   pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
 }
 
 [saved-theme="light"] .code-gradient {
@@ -151,19 +193,20 @@
 .output-wrapper {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-  border-radius: 0.5rem;
-  padding-top: 0.5rem;
+  transition: all 0.3s ease-in-out;
+  border-radius: 0 0 0.5rem 0.5rem;
+  margin-top: -1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .output-wrapper.expanded {
-  min-height: 300px;
-  max-height: none;
-  border-radius: 0.5rem;
+  min-height: 100px;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .output-content {
-  font-family: monospace;
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
   white-space: pre-wrap;
@@ -186,21 +229,25 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 [saved-theme="light"] .output-header {
   background-color: #dce0e8;
-  border-top: 1px solid #bcc0cc;
+  border-bottom: 1px solid #bcc0cc;
 }
 
 [saved-theme="dark"] .output-header {
   background-color: #313244;
-  border-top: 1px solid #45475a;
+  border-bottom: 1px solid #45475a;
 }
 
 .output-title {
   font-family: monospace;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 [saved-theme="light"] .output-title {
@@ -216,7 +263,8 @@
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 [saved-theme="light"] .close-output-btn {
@@ -229,10 +277,59 @@
 
 [saved-theme="light"] .close-output-btn:hover {
   color: #7287fd;
+  background-color: rgba(139, 92, 246, 0.1);
 }
 
 [saved-theme="dark"] .close-output-btn:hover {
   color: #f5c2e7;
+  background-color: rgba(203, 166, 247, 0.2);
+}
+
+// Python plot styling
+.python-plot {
+  margin-top: 0.5rem;
+}
+
+.python-plot img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[saved-theme="light"] .python-plot img {
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #dce0e8;
+}
+
+[saved-theme="dark"] .python-plot img {
+  background-color: white; /* Keep white for matplotlib plots */
+  padding: 10px;
+  border: 1px solid #45475a;
+}
+
+.python-text {
+  line-height: 1.5;
+}
+
+// Loading state indicator
+.python-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+[saved-theme="light"] .python-loading {
+  color: #4c4f69;
+}
+
+[saved-theme="dark"] .python-loading {
+  color: #cdd6f4;
 }
 
 // main center border with light/dark mode
