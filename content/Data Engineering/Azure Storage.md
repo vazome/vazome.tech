@@ -1,6 +1,10 @@
+---
+date created: 2025-06-18T05:03:58+04:00
+date modified: 2025-06-18T05:08:48+04:00
+---
 Good comparison of AWS vs AZURE options: [Compare storage services on Azure and AWS - Azure Architecture Center | Microsoft Learn](https://learn.microsoft.com/en-us/azure/architecture/aws-professional/storage)
 
-**Public by default**, needs unique name.
+**Public by default**, needs unique name. yep
 
 LRS - local replication, less redundant, less expensive
 GRS - global replication, more redundant, more expensive

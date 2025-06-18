@@ -5,7 +5,7 @@ tags: [deployment, monitoring]
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)
 
-In reality creating a model does not equate to production deployment
+In reality creating a model does not equate to production deployment.
 You need a lot more than just a working PoC.![[Pasted image 20250605203444.png]]
 ![[Pasted image 20250605203952.png]]
 Speech-to-Text model:
