@@ -1,0 +1,45 @@
+%% Begin Waypoint %%
+- [[Active Directory]]
+- [[Architectures]]
+- **Bussines terminology**
+	- [[HA vs FT vs DR]]
+	- [[RPO]]
+	- [[RTO]]
+- **[[General IT]]**
+	- [[Bootable password]]
+	- [[How do you create a flash drive via macos]]
+	- [[Linux Hax]]
+- **How clouds work**
+	- [[Cloud Service Models]]
+	- [[Public vs Private vs Multi vs Hybrid Cloud]]
+	- [[Virtualization]]
+- **How DNS Works**
+	- [[DNS Records Types]]
+	- [[DNS Resolving]]
+	- [[DNS]]
+	- [[DNSSEC]]
+- **OSI Model**
+	- [[ARP]]
+	- [[Border Gateway Protocol (BGP)]]
+	- [[Subnetting and IP Calculation]]
+	- [[L1 Physical]]
+	- [[L2 Data Link]]
+	- [[L3 Network]]
+	- [[L4 Transport]]
+	- [[NAT]]
+	- [[OSI]]
+	- [[Routing]]
+	- [[TLS and SSL]]
+	- [[VLAN]]
+- [[Scaling]]
+- **Security contepts**
+	- [[Application Layer (L7) Firewall]]
+	- [[DDOS]]
+	- [[Digital Signatures]]
+	- [[Encryption and Encoding]]
+	- [[How IPSEC VPN work]]
+	- [[Security]]
+	- [[Signing]]
+	- [[Steganography]]
+
+%% End Waypoint %%
