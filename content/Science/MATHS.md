@@ -1,3 +1,7 @@
+---
+date created: 2025-06-18T00:15:08+04:00
+date modified: 2025-06-18T00:23:26+04:00
+---
 Math notes.
 > [!Tip] Glossary (click)
 > Integer - целое число  $-1 \leq x \leq 1 \cdots$
@@ -5,26 +9,22 @@ Math notes.
 > Added - Слагаемое
 > Sum - Сумма
 > $$\underbrace{7}_{\text{Addend}} + \underbrace{4}_{\text{Addend}} = \underbrace{11}_{\text{Sum}}$$
-> ---
 > Subtraction - Вычитание
 > Minuend - уменьшаемое
 > Subtrahend - вычитаемое
 > Difference - разница 
 > $$\underbrace{10}_{\text{Minuend}} - \underbrace{4}_{\text{Subtrahend}} = \underbrace{6}_{\text{Difference}}$$
 > Разница между уменьшаемым и вычитаемым — это разность, разница между уменьшаемым и разностью — это вычитаемое.
-> ---
 > Multiplication - умножение
 > Multiplier - <- множитель
 > Multiplicand - множитель ->
 > Product - произведение
 > $$\underbrace{6}_{\text{Multiplier}} \times \underbrace{3}_{\text{Multiplicand}} = \underbrace{18}_{\text{Product}}$$
-> ---
 > Division - Деление
 > Dividend - Делимое
 > Divisor - Делитель
 > Quotient - Частное
 > $$\underbrace{15}_{\text{Dividend}} \div \underbrace{3}_{\text{Divisor}} = \underbrace{5}_{\text{Quotient}}$$
-> ---
 > $$\begin{array}{c}
 \underbrace{k \times 1 = 1 \times k = k}_{\text{Multiplicative Identity}} \\
 \underbrace{n / 1 = n}_{\text{Division by One}} \\
@@ -40,10 +40,51 @@ Math notes.
 > Vector - вектор
 > Magnitude - магнитуда, "speed" of a vector
 > Reciprocal (Multiplicative inverse) - Обратное число
+
+
 > НОД
 > НОК
 > Общий знаменатель
 
+
+
+> [!Tip] Glossary
+> 
+> - **Integer** - Целое число, e.g., $-1 \leq x \leq 1, \dots$
+> - **Addition** - Сложение
+> - **Addend** - Слагаемое
+> - **Sum** - Сумма  
+>     $$ \begin{align} \underbrace{7}_{\text{Addend}} + \underbrace{4}_{\text{Addend}} = \underbrace{11}_{\text{Sum}} \end{align} $$
+> - **Subtraction** - Вычитание
+> - **Minuend** - Уменьшаемое
+> - **Subtrahend** - Вычитаемое
+> - **Difference** - Разница  
+>     $$ \begin{align} \underbrace{10}_{\text{Minuend}} - \underbrace{4}_{\text{Subtrahend}} = \underbrace{6}_{\text{Difference}} \end{align} $$
+> - Разница между уменьшаемым и вычитаемым — это разность, разница между уменьшаемым и разностью — это вычитаемое.
+> - **Multiplication** - Умножение
+> - **Multiplier** - Множитель
+> - **Multiplicand** - Множитель
+> - **Product** - Произведение  
+>     $$ \begin{align} \underbrace{6}_{\text{Multiplier}} \times \underbrace{3}_{\text{Multiplicand}} = \underbrace{18}_{\text{Product}} \end{align} $$
+> - **Division** - Деление
+> - **Dividend** - Делимое
+> - **Divisor** - Делитель
+> - **Quotient** - Частное  
+>     $$ \begin{align} \underbrace{15}_{\text{Dividend}} \div \underbrace{3}_{\text{Divisor}} = \underbrace{5}_{\text{Quotient}} \end{align} $$
+> - **Mathematical Properties**  
+>     $$ \begin{align} \underbrace{k \times 1 = 1 \times k = k}_{\text{Multiplicative Identity}} \end{align} $$  
+>     $$ \begin{align} \underbrace{n / 1 = n}_{\text{Division by One}} \end{align} $$  
+>     $$ \begin{align} \underbrace{m \times 0 = 0 \times m = 0}_{\text{Zero Property of Multiplication}} \end{align} $$  
+>     $$ \begin{align} \underbrace{n / n = 1 \ (n \neq 0)}_{\text{Division of a Number by Itself}} \end{align} $$
+> - **Hundredths place** - Класс сотен
+> - **Mathematical expression** - Математическое выражение
+> - **Quantitative** - Количественный
+> - **Ordinal** - Порядковый
+> - **Fractions** - Десятичные дроби
+> - **Scalar** - Скаляр
+> - **Vector** - Вектор
+> - **Magnitude** - Магнитуда, "speed" of a vector
+> - **Reciprocal (Multiplicative inverse)** - Обратное число
 # Tricks
 1. Multiplication table: when multiply by 9 use finger for multiplicand, so to the left you will be tens place and to right will be ones place so: $9\times7=63$, as shown below:![[1.1.4__Kartinka_v_teoriiu_2_rf_1632842845.png]]
 2. Multiplication table: multiply by 10 and reduce by amount of multipliers: $9 \times 8 = 90 -  9 \times 2$

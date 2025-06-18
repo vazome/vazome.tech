@@ -3,8 +3,6 @@
 - [[Apache Kafka]]
 - [[APT Issues]]
 - **Coding**
-	- [[Pandas Python]]
-	- [[Python]]
 - **Containerization**
 	- [[Docker]]
 	- [[Kubernetes (K8S)]]
