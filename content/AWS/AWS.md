@@ -1,28 +1,5 @@
 %% Begin Waypoint %%
-- [[Advanced Lab]]
-- [[Amazon AppFlow]]
-- [[Amazon Athena]]
-- [[Amazon Cognito]]
-- [[Amazon Inspector]]
-- [[Amazon Macie]]
-- [[Amazon MQ]]
-- [[API Gateway]]
-- [[AWS Backup]]
-- [[AWS BeanStalk]]
-- [[AWS Certificate Manager (ACM)]]
-- [[AWS Config]]
-- [[AWS Global Accelerator]]
-- [[AWS Glue]]
-- [[AWS GuardDuty]]
-- [[AWS Kinesis]]
 - **AWS Lore**
-	- [[AWS Global and Regional Architecture]]
-	- [[AWS Local Zones]]
-	- [[Public vs Private Service]]
-	- [[Shared Responsibility]]
-- [[AWS Secrets Manager]]
-- [[AWS Shield]]
-- [[AWS Site-to-Site VPN]]
 - [[AWS Transfer Family]]
 - [[Cloud-HSM]]
 - **CloudFormation and CloudWatch**
@@ -134,13 +111,8 @@
 	- [[S3 Storage Classes]]
 	- [[S3 Storage Gateway]]
 	- [[S3 Versioning and MFA]]
-- [[SNS]]
-- [[SQS]]
-- [[Step Functions]]
-- [[Storage gateway]]
 - **Systems Manager**
 	- [[SSM Parameter store]]
-- [[Untitled]]
 - **[[VPC]]**
 	- [[Transit Gateway (TGW)]]
 	- [[VPC Flow Logs]]
@@ -151,6 +123,5 @@
 	- [[VPC Routing]]
 	- [[VPC Security Groups (Stateful)]]
 	- [[VPC Subnets]]
-- [[Web Application Firewall (WAF)]]
 
 %% End Waypoint %%

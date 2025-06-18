@@ -1,12 +1,13 @@
 ---
 date created: 2025-06-18T05:20:40+04:00
-date modified: 2025-06-18T05:42:12+04:00
+date modified: 2025-06-18T05:51:50+04:00
 tags:
   - math
 ---
 This article will use some images from: [3Blue1Brown](https://www.3blue1brown.com/lessons), [Math Academy](https://www.mathacademy.com/)
 
-Math notes.
+I study math, these are my notes, I figured it would be great to make an article of that.
+
 > [!Tip] Glossary (click)
 > Integer - целое число  $-1 \leq x \leq 1 \cdots$
 > Addition - Сложение
@@ -90,11 +91,13 @@ Math notes.
 > - **Magnitude** - Магнитуда, "speed" of a vector
 > - **Reciprocal (Multiplicative inverse)** - Обратное число
 # Tricks
-1. Multiplication table: when multiply by 9 use finger for multiplicand, so to the left you will be tens place and to right will be ones place so: $9\times7=63$, as shown below:![[1.1.4__Kartinka_v_teoriiu_2_rf_1632842845.png]]
+1. Multiplication table: when multiply by 9 use finger for multiplicand, so to the left you will be tens place and to right will be ones place so: $9\times7=63$, as shown below:
+![[1.1.4__Kartinka_v_teoriiu_2_rf_1632842845.png|400]]
 2. Multiplication table: multiply by 10 and reduce by amount of multipliers: $9 \times 8 = 90 -  9 \times 2$
 3. Multiplication: when multiplying a double-digit number 11 you just expand multiplier and add sum digits in between (if sum bigger than 9 add tens to first digit):
 
 $$\begin{array}{c} \text{Example 1: } 45 \times 11 \\[-0.2em] \text{Step 1: Start with } 45 \\[-0.2em] 45 \\[0.5em] \text{Step 2: Separate } 4 \text{ and } 5 \\[-0.2em] 4 \quad \_\quad 5 \\[-0.2em] \swarrow \quad \quad \searrow \\[0.2em] \text{Step 3: Insert sum } 4 + 5 = 9 \\[-0.2em] 4 \quad 9 \quad 5 \\[0.5em] \text{Step 4: Result } 45 \times 11 = 495 \\[-0.2em] 495 \\[1em] \text{Example 2: } 78 \times 11 \text{ (sum } 7 + 8 = 15 \text{)} \\[-0.2em] \text{Step 1: Start with } 78 \\[-0.2em] 78 \\[0.5em] \text{Step 2: Separate } 7 \text{ and } 8 \\[-0.2em] 7 \quad \_\quad 8 \\[-0.2em] \swarrow \quad \quad \searrow \\[0.2em] \text{Step 3: Insert units of } 15 \text{ (5), add tens (1) to } 7 \\[-0.2em] (7+1) \quad 5 \quad 8 \\[-0.2em] 8 \quad 5 \quad 8 \\[0.5em] \text{Step 4: Result } 78 \times 11 = 858 \\[-0.2em] 858 \end{array}$$
+
 4. Multiplication: if you divide first by two and multiply second by 2 the result will be the same, like 16 X 45 becomes 8 X 90 which is easier to calculate
 5. Instead of subtracting and adding by 9, do it by 10, if 99 do it by 100, example: $25+9=25+10−1$
 6. If you add multiple numbers start with the ones that easy: $45+17+5 = 50+17$
