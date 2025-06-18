@@ -8,51 +8,6 @@ This article will use some images from: [3Blue1Brown](https://www.3blue1brown.co
 
 I study math, these are my notes, I figured it would be great to make an article of that. This article mainly English, but there is some Russian generally as a translation, since math is whole another language...
 
-> [!Tip] Glossary (click)
-> Integer - целое число  $-1 \leq x \leq 1 \cdots$
-> Addition - Сложение
-> Added - Слагаемое
-> Sum - Сумма
-> $$\underbrace{7}_{\text{Addend}} + \underbrace{4}_{\text{Addend}} = \underbrace{11}_{\text{Sum}}$$
-> Subtraction - Вычитание
-> Minuend - уменьшаемое
-> Subtrahend - вычитаемое
-> Difference - разница 
-> $$\underbrace{10}_{\text{Minuend}} - \underbrace{4}_{\text{Subtrahend}} = \underbrace{6}_{\text{Difference}}$$
-> Разница между уменьшаемым и вычитаемым — это разность, разница между уменьшаемым и разностью — это вычитаемое.
-> Multiplication - умножение
-> Multiplier - <- множитель
-> Multiplicand - множитель ->
-> Product - произведение
-> $$\underbrace{6}_{\text{Multiplier}} \times \underbrace{3}_{\text{Multiplicand}} = \underbrace{18}_{\text{Product}}$$
-> Division - Деление
-> Dividend - Делимое
-> Divisor - Делитель
-> Quotient - Частное
-> $$\underbrace{15}_{\text{Dividend}} \div \underbrace{3}_{\text{Divisor}} = \underbrace{5}_{\text{Quotient}}$$
-> $$\begin{array}{c}
-> \underbrace{k \times 1 = 1 \times k = k}_{\text{Multiplicative Identity}} \\
-> \underbrace{n / 1 = n}_{\text{Division by One}} \\
-> \underbrace{m \times 0 = 0 \times m = 0}_{\text{Zero Property of Multiplication}} \\
-> \underbrace{n / n = 1 \ (n \neq 0)}_{\text{Division of a Number by Itself}}
-> \end{array}$$
-> Hundredths place - Класс сотен
-> Mathematical expression - математическое выражение.
-> Quantitative - количественный
-> Ordinal - порядковый
-> Fractions - десятичные дроби
-> Scalar - скаляр
-> Vector - вектор
-> Magnitude - магнитуда, "speed" of a vector
-> Reciprocal (Multiplicative inverse) - Обратное число
-
-
-> НОД
-> НОК
-> Общий знаменатель
-
-
-
 > [!Tip] Glossary and translation
 > 
 > - **Integer** - Целое число, e.g., $-1 \leq x \leq 1, \dots$
@@ -90,6 +45,10 @@ I study math, these are my notes, I figured it would be great to make an article
 > - **Vector** - Вектор
 > - **Magnitude** - Магнитуда, "speed" of a vector
 > - **Reciprocal (Multiplicative inverse)** - Обратное число
+> - **Greatest Common Divisor (GCD)** - НОД
+> - **Least Common Multiple (LCM)** - НОК
+> - **Common Denominator** - Общий знаменатель
+
 # Tricks
 1. Multiplication table: when multiply by 9 use finger for multiplicand, so to the left you will be tens place and to right will be ones place so: $9\times7=63$, as shown below:
 ![[1.1.4__Kartinka_v_teoriiu_2_rf_1632842845.png|400]]
@@ -396,5 +355,3 @@ $$ y = f(g(x)) = \begin{cases}
 1, & g(x) \geq \theta  
 \end{cases}
 $$
-
-![sds](https://www.youtube.com/watch?v=jNQXAC9IVRw)
