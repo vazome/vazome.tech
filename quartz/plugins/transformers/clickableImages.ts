@@ -85,20 +85,56 @@ export const ClickableImages: QuartzTransformerPlugin<Partial<Options>> = (userO
                 
                 modal.appendChild(closeBtn);
                 modal.appendChild(img);
-                document.body.appendChild(modal);
-
-                // Function to open lightbox
-                function openLightbox(imageSrc, imageAlt) {
+                document.body.appendChild(modal);                // Function to open lightbox
+                function openLightbox(imageSrc, imageAlt, originalImg) {
                   img.src = imageSrc;
                   img.alt = imageAlt || '';
                   img.style.display = 'block';
                   modal.classList.add('active');
                   document.body.classList.add('lightbox-open');
                   
-                  // Preload the image for smooth display
+                  // Preload the image and set appropriate size
                   const preloadImg = new Image();
                   preloadImg.onload = () => {
                     img.src = imageSrc;
+                    
+                    // Get original image size on page
+                    const originalRect = originalImg ? originalImg.getBoundingClientRect() : null;
+                    const originalDisplayWidth = originalRect ? originalRect.width : 0;
+                    const originalDisplayHeight = originalRect ? originalRect.height : 0;
+                    
+                    // Smart scaling based on image size
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+                    const imageWidth = preloadImg.naturalWidth;
+                    const imageHeight = preloadImg.naturalHeight;
+                    
+                    // Calculate appropriate display size
+                    let targetWidth, targetHeight;
+                    
+                    // Ensure lightbox image is at least 1.5x the size it appears on page
+                    const minDisplayWidth = Math.max(
+                      originalDisplayWidth * 1.5,
+                      Math.min(500, viewportWidth * 0.7)
+                    );
+                    const minDisplayHeight = Math.max(
+                      originalDisplayHeight * 1.5,
+                      Math.min(400, viewportHeight * 0.7)
+                    );
+                    
+                    // Calculate scale to meet minimum size requirements
+                    const scaleForWidth = minDisplayWidth / imageWidth;
+                    const scaleForHeight = minDisplayHeight / imageHeight;
+                    const minScale = Math.max(scaleForWidth, scaleForHeight, 1); // At least 1x (never smaller than original)
+                    
+                    // Limit maximum scale to prevent pixelation
+                    const maxScale = Math.min(3, viewportWidth * 0.9 / imageWidth, viewportHeight * 0.9 / imageHeight);
+                    const finalScale = Math.min(minScale, maxScale);
+                    
+                    targetWidth = Math.min(imageWidth * finalScale, viewportWidth * 0.9);
+                    targetHeight = Math.min(imageHeight * finalScale, viewportHeight * 0.9);
+                      img.style.width = targetWidth + 'px';
+                    img.style.height = 'auto';
                   };
                   preloadImg.src = imageSrc;
                 }
@@ -127,9 +163,7 @@ export const ClickableImages: QuartzTransformerPlugin<Partial<Options>> = (userO
                   if (e.key === 'Escape' && modal.classList.contains('active')) {
                     closeLightbox();
                   }
-                });
-
-                // Add click handlers to all lightbox images
+                });                // Add click handlers to all lightbox images
                 const lightboxWrappers = document.querySelectorAll('.lightbox-wrapper');
                 lightboxWrappers.forEach(wrapper => {
                   wrapper.addEventListener('click', (e) => {
@@ -138,7 +172,7 @@ export const ClickableImages: QuartzTransformerPlugin<Partial<Options>> = (userO
                     if (img) {
                       const src = img.getAttribute('data-src') || img.src;
                       const alt = img.getAttribute('data-alt') || img.alt;
-                      openLightbox(src, alt);
+                      openLightbox(src, alt, img);
                     }
                   });
                 });

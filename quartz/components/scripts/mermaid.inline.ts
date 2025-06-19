@@ -102,16 +102,22 @@ class DiagramPanZoom {
   private zoom(delta: number) {
     const newScale = Math.min(Math.max(this.scale + delta, this.MIN_SCALE), this.MAX_SCALE)
 
-    // Zoom around center
-    const rect = this.content.getBoundingClientRect()
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
+    // Zoom around the center of the container viewport, not the content
+    const containerRect = this.container.getBoundingClientRect()
+    const centerX = containerRect.width / 2
+    const centerY = containerRect.height / 2
 
-    const scaleDiff = newScale - this.scale
-    this.currentPan.x -= centerX * scaleDiff
-    this.currentPan.y -= centerY * scaleDiff
+    // Calculate the point we're zooming around relative to current transform
+    const zoomPointX = (centerX - this.currentPan.x) / this.scale
+    const zoomPointY = (centerY - this.currentPan.y) / this.scale
 
+    // Update scale
     this.scale = newScale
+
+    // Adjust pan to keep the zoom point in the same screen position
+    this.currentPan.x = centerX - zoomPointX * this.scale
+    this.currentPan.y = centerY - zoomPointY * this.scale
+
     this.updateTransform()
   }
 
@@ -121,11 +127,19 @@ class DiagramPanZoom {
 
   private resetTransform() {
     this.scale = 1
+    
+    // Get container and SVG dimensions
+    const containerRect = this.container.getBoundingClientRect()
     const svg = this.content.querySelector("svg")!
+    const svgRect = svg.getBoundingClientRect()
+    
+    // Calculate center position relative to container
+    // We want to center the SVG within the container viewport
     this.currentPan = {
-      x: svg.getBoundingClientRect().width / 2,
-      y: svg.getBoundingClientRect().height / 2,
+      x: (containerRect.width - svgRect.width) / 2,
+      y: (containerRect.height - svgRect.height) / 2,
     }
+    
     this.updateTransform()
   }
 }
@@ -237,8 +251,10 @@ document.addEventListener("nav", async () => {
       popupContainer.classList.add("active")
       container.style.cursor = "grab"
 
-      // Initialize pan-zoom after showing the popup
-      panZoom = new DiagramPanZoom(container, content)
+      // Initialize pan-zoom after showing the popup and let the layout settle
+      requestAnimationFrame(() => {
+        panZoom = new DiagramPanZoom(container, content)
+      })
     }
 
     function hideMermaid() {
