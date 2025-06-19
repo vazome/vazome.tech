@@ -5,7 +5,3 @@ tags:
   - code/python
   - code/python/pandas
 ---
-
-<iframe src="https://github.com/vazome/mlops-zoomcamp-epam/blob/main/01-intro/pandas-prerequisite.html" width="100%" height="500px"></iframe>
-
-![pandas-prerequisite.html](https://raw.githubusercontent.com/vazome/mlops-zoomcamp-epam/refs/heads/main/01-intro/pandas-prerequisite.html)
