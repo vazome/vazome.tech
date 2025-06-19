@@ -15,9 +15,6 @@ Let's create the environment, the following will
 3. Install PyTorch
 ``` shell
 mkdir pytorch-sandbox && cd pytorch-sandbox
-```
----
-``` python-r
 uv init
 uv add torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu128 
 ```
@@ -35,6 +32,7 @@ uv add --dev ipykernel
 
 Our initial directory will contain all necessary boilerplate environment configurations to begin with coding:
 ![[Pasted image 20250605194251.png]]
+For more info on `pyproject.toml` and other environment files, refer to: [Working on projects \| uv](https://docs.astral.sh/uv/guides/projects/)
 ## If you use WSL 2 
 To enable CUDA on WSL Ubuntu 24.04, install the following:
 ``` shell
