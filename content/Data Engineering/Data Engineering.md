@@ -9,7 +9,15 @@
 - [[Data Visualization]]
 - **Data Warehousing**
 	- [[Apache Spark]]
+	- [[AWS vs Azure Data Engineering]]
+	- [[Data Warehouses and Lakes in depth]]
+	- [[Data Warehouses and Lakes]]
+	- [[Databricks coding]]
+	- [[Databricks]]
+	- [[ETL and ELT]]
+	- [[Snowflake]]
 - **Databases**
+	- [[Database Types]]
 	- [[DBMS]]
 	- [[NoSQL]]
 	- [[SQL]]

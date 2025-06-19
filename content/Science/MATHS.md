@@ -1,6 +1,6 @@
 ---
 date created: 2025-06-18T05:20:40+04:00
-date modified: 2025-06-18T06:04:55+04:00
+date modified: 2025-06-19T07:01:55+04:00
 tags:
   - math
 ---
@@ -63,7 +63,7 @@ $$\begin{array}{c} \text{Example 1: } 45 \times 11 \\[-0.2em] \text{Step 1: Star
 7. You can quickly verify subtraction or addition by checking the last number of produce, for example $387+604=990$ is false because $7+4=11$, where 1?
 # Basic Math
 Keep in mind order of operations:
-![[PEMDAS-min.png]]
+![[PEMDAS-min.png|400]]
 ## Number types and systems
 ```mermaid
 classDiagram
