@@ -32,7 +32,7 @@ Use `countrycode-region-id-citycode-id` notation: us-west-2-las-1
 - Use local zones when you need THE HIGHEST performance
 
 Help to reduce latency because AZs can be 100+km away from on-premise.
-Not all services support them. Can connect to them with [[Direct Connect (DX)]] (generally)
+Not all services support them. Can connect to them with [[AWS Direct Connect (DX)]] (generally)
 Local zones have private networking with the parent region, but subnets located in Local Zones. Not resilient.
 	EBS snapshots are stored in regional S3.![[Pasted image 20230320045939.png]]
 [AWS Local Zones Features - Amazon Web Services](https://aws.amazon.com/about-aws/global-infrastructure/localzones/features)

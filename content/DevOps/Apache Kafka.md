@@ -48,7 +48,7 @@ Contains topics. A cluster can have multiple of them. They have its own ID.
 When connection to any broker, that one "**Bootstrap** broker" will automatically discover other brokers for consumers. Able to horizontal scale and distribute topics.![[Screenshot 2024-06-25 at 09.52.43.png|500]]
 
 Brokers have a single leader for a given partition and producers can only send data to leader.![[Screenshot 2024-06-25 at 10.12.15.png|500]]
-Meaning that the **default** behavior is that Producer is only writing to a single leader broker and Consumer is only reading from single leader broker even though replicas are in place – meaning replicas here are only for [[Resilience and Reliability#High availability (HA)]].
+So the **default** behavior is that Producer is only writing to a single leader broker. Consumer is only reading from single leader broker even though replicas are in place – meaning replicas here are only for [[Resilience and Reliability#High availability (HA)]].
 > [!NOTE]
 > Though since Kafka 2.4 you can configure a consumer to read from the closest replica.![[Screenshot 2024-06-25 at 10.19.53.png]]
 

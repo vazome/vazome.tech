@@ -1,7 +1,10 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-10T00:17:20+04:00
-tags: [personal, docs]
+date modified: 2025-06-21T02:01:29+04:00
+tags:
+  - personal
+  - docs
+title: About
 ---
 # Premise
 This is my personal Tech blog, here I share my articles, notes and opinions.

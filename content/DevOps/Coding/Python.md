@@ -1,6 +1,6 @@
 ---
 date created: 2025-05-12T01:18:03+04:00
-date modified: 2025-06-17T18:51:35+04:00
+date modified: 2025-06-21T03:03:31+04:00
 tags:
   - code/python
 ---
@@ -43,12 +43,12 @@ dir(example)
 ## Variable scopes
 When a variable is encountered, Python searches for it in the following order of scopes ([LEGB](https://realpython.com/python-scope-legb-rule/)):
 - **Local**: defined within a function
-- ![[Pasted image 20250530003132.png|130]]
+	- ![[Pasted image 20250530003132.png|130]]
 - **Enclosing**: function inside a function.
-- ![[Pasted image 20250530003146.png|130]]
-- **Global**: outside of function or defined by keyword `global` ![[Pasted image 20250530003215.png|130]]
+	- ![[Pasted image 20250530003146.png|130]]
+- **Global**: outside of function or defined by keyword `global` 
+	- ![[Pasted image 20250530003215.png|130]]
 - **Built-in**: which contains all keywords, functions, exceptions and attributes, which are built-in.![[Pasted image 20250530004002.png]]
-
 ## Text and number formatting
 ``` python
 x = float(input("what is x")) # 999

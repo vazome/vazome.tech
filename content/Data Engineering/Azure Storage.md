@@ -15,17 +15,17 @@ TL;DR container is a bucket within storage account.
 ![[Pasted image 20240820020214.png]]
 
 **Table storage?**
-Allows NoSQL, like [[DynamoDB]]
+Allows NoSQL, like [[AWS DynamoDB]]
 
 **Queue storage?**
-For messaging, I spose it is like [[SQS]]
+For messaging, I spose it is like [[AWS SQS]]
 
 **Append Blobs?**
 Optimized for appeding data, good for logging.
 
 Azure Files (File Storage)?
-It is like [[EFS]].
+It is like [[AWS EFS]].
 
 **Page Blobs?**
-It is can function like [[EBS]](though for VM better use [Azure Disk Storage overview - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview)) block storage for VMs. Cos better for index based data.
+It is can function like [[AWS EBS]](though for VM better use [Azure Disk Storage overview - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview)) block storage for VMs. Cos better for index based data.
 ![[Pasted image 20240820020506.png]]

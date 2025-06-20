@@ -1,7 +1,7 @@
 Basically DLP (Data Leak(Loss) Prevention)
 
 - Data Security and Data Privacy Service
-- Discover, Monitor and Protect Data .. stored in [[S3 Simple Storage Service]]
+- Discover, Monitor and Protect Data .. stored in [[AWS S3 Simple Storage Service]]
 - Automated discovery of data i.e PII, PHI, Finance
 	- Managed Data identifiers- Built-in - ML/Patterns
 	- Custom Data identifiers - Proprietary - Regex Based

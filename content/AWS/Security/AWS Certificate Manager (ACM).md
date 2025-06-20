@@ -1,10 +1,10 @@
-Related: [[Security]], [[TLS and SSL]]
+Related: [[node_modules/fastq/SECURITY]], [[TLS and SSL]]
 Regional.
 
 Allows you to create Certification Authority and generate/import certificates.
 **If generated, automatically renewed**
 
-Works with only supported services:  [[Elastic Load Balancer (ELB)#ALB]] and [[CloudFront]], but **not** EC2
+Works with only supported services:  [[AWS Elastic Load Balancer (ELB)#ALB]] and [[AWS CloudFront]], but **not** EC2
 
 > [!DANGER]
 > To use cert on ALB like in ap-southeast-2 you need certificate issued in the same region!

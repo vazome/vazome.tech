@@ -1,6 +1,6 @@
-# Secrets Manager vs [[SSM Parameter store]]
+# Secrets Manager vs [[AWS SSM Parameter store]]
 
- It does share functionality with [[SSM Parameter store]] BUT
+ It does share functionality with [[AWS SSM Parameter store]] BUT
 
 - Designed for secrets (.. passwords, API KEYS..)
 	- Consider it instead of Param Store if you need more capabilities of secrets management

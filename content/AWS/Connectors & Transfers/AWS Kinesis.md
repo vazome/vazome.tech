@@ -1,4 +1,4 @@
-Related: [[Architectures]]
+Related: [[IT Software Architectures]]
 
 Is a scaleable streaming service, producers send data into a kinesis stream.
 Public, Has [[Resilience and Reliability#High availability (HA)]]. 
@@ -21,7 +21,7 @@ Automatic scaling, fully serverless and resilient.
 Supports transformation of data on the fly [[Lambda]] (increases latency)
 Billed per passed data 
 
-Can deliver to HTTP, Splunk, [[Redshift]], [[ElasticSearch]], [[S3 Simple Storage Service]]
+Can deliver to HTTP, Splunk, [[AWS Redshift]], [[ElasticSearch]], [[AWS S3 Simple Storage Service]]
 
 Producers can put data directly into Firehouse or into [[#Data Streams]] then Kinesis will consume it from them.
 Delivers data when either 1MB buffer fills up or 60s timeout.
@@ -32,7 +32,7 @@ Real time analytics of data using [[SQL]] (Firehouse can do this too via lambda 
 
 Ingests from [[#Data Streams]] or [[#Data Firehouse]], and optionally static data from S3
 Destination [[#Data Firehouse]]  (and it's destinations, also **loses real time**), [[Lambda]], [[#Data Streams]]
-Enrich source data with references (like form [[S3 Simple Storage Service]]), select, format data and output it to [[#Data Streams]] or [[#Data Firehouse]]
+Enrich source data with references (like form [[AWS S3 Simple Storage Service]]), select, format data and output it to [[#Data Streams]] or [[#Data Firehouse]]
 Pay for processed data, not cheap, best use for
 - Streaming data requiring real-time SQL processing
 - Time-series analytics (elections/e-sports)
@@ -52,7 +52,7 @@ Relatable to [Real Time Streaming Protocol - Wikipedia](https://en.wikipedia.org
 
 ![[Pasted image 20230215011417.png]]
 
-# [[SQS]] vs Kinesis
+# [[AWS SQS]] vs Kinesis
 
 >[!NOTE]
 >**SQS** usually for worker pools, decoupling, asynchronous communication

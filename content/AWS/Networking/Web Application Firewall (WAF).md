@@ -1,6 +1,6 @@
 Related: [[Application Layer (L7) Firewall]]
 
-Aside from Firewall, can log events, can be also integrated with [[EventBridge]] to pass IP Lists to it and many other things.
+Aside from Firewall, can log events, can be also integrated with [[AWS EventBridge]] to pass IP Lists to it and many other things.
 Can protect against SQL injections and cross site scripts even
 ![[Pasted image 20230305151003.png]]
 # WEBACL

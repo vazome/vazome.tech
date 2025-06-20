@@ -1,4 +1,4 @@
-Related: [[S3 Simple Storage Service]], [[EBS]], [[EFS]], [[content/AWS/RDS/RDS]], [[Amazon Aurora]], [[public/AWS/EC2/EC2]] 
+Related: [[AWS S3 Simple Storage Service]], [[AWS EBS]], [[AWS EFS]], [[content/AWS/RDS/RDS]], [[AWS Amazon Aurora]], [[public/AWS/EC2/EC2]] 
 
 Multi-account, multi-region backup service.
 Consolidates management of backups in one place.

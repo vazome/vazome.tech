@@ -1,1 +1,0 @@
-Allows third party to be injected in VPC

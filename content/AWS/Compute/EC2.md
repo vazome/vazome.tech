@@ -95,7 +95,7 @@ You capture EC2 instance into an AMI, allows to customize your deployment.
 Containing
 -   Permissions.
 -   Device ID of connected volumes.
--   Block Device Mapping to newly created snapshots of [[EBS]] volumes.
+-   Block Device Mapping to newly created snapshots of [[AWS EBS]] volumes.
 
 AMI Baking – creating an AMI form a configured instance (golden imaging)
 AMI cannot be edited – launch a new instance and update configuration
@@ -128,7 +128,7 @@ chmod u+x ec2-metadata
 
 Related: [[public/AWS/EC2/EC2]]
 
-[[IAM Role]] assumed by an instance
+[[AWS IAM Role]] assumed by an instance
 Instance Profile allows permissions to get inside instance.
 IAM Role and Instance Profile are separate entities but in UI they represented as one  
 You **attach** Instance profile not IAM Role.
@@ -166,9 +166,9 @@ Info store in cloud-init.log and cloud-init.output.log
 
 # EC2 Auto Scaling Groups (ASG)
 
-Related: [[public/AWS/EC2/EC2]], [[Elastic Load Balancer (ELB)]]
+Related: [[public/AWS/EC2/EC2]], [[AWS Elastic Load Balancer (ELB)]]
 
-Free. Linked to a VPC. Helps to deploy more instances (scale out) when there is a high load and decrease the number (scale in) when there is a minimal load. Can automatically add new instances to an [[Elastic Load Balancer (ELB)]]. 
+Free. Linked to a VPC. Helps to deploy more instances (scale out) when there is a high load and decrease the number (scale in) when there is a minimal load. Can automatically add new instances to an [[AWS Elastic Load Balancer (ELB)]]. 
 
 Think about using more, but smaller instances - **granularity**.
 ASG defines **WHEN** and **WHER**, LT defines **WHAT**
@@ -177,7 +177,7 @@ Optimizes the cost. Has Minimum, Desired and Maximum size i.e.(1:2:4)
 	Desired capacity must be always more than Minimum and less than Maximum.
 [Set capacity limits on your Auto Scaling group - Amazon EC2 Auto Scaling](https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-capacity-limits.html)
 
-ASG can use [[Elastic Load Balancer (ELB)]] instead of [[EC2 Instance Status Checks and Auto recovery]] - Load Balancer checks with EC2 in stances and they don't pass – report -> scale. With ALB you can utilize HTTP/S health check and be aware of the application status. 
+ASG can use [[AWS Elastic Load Balancer (ELB)]] instead of [[EC2 Instance Status Checks and Auto recovery]] - Load Balancer checks with EC2 in stances and they don't pass – report -> scale. With ALB you can utilize HTTP/S health check and be aware of the application status. 
 
 > [!WARNING]
 > Make sure you Load Balancer health checks are configured thoroughly to report actual application status and don't erroneously report successful state.
@@ -218,7 +218,7 @@ Scaling Policies options automate capacity settings.
 	- Simple - CPU Above/Below 50% and +/-1, you adding/removing same amount no matter how much it all increases or decreases.![[Pasted image 20230201014009.png|450]]
 	- Stepped - Bigger +/- based on difference. helps do scaling/descaling by steps. Usually better than Simple.![[Pasted image 20230201014255.png|450]]
 	- Target Tracking - Desired aggregate, i.e. keep CPU at 40% (some network, CPU, ALB metics!)
-	- Based on [[SQS]] - ApproximateNumberofMessagesVisible (more messages in queue, more instances, less - less instances)
+	- Based on [[AWS SQS]] - ApproximateNumberofMessagesVisible (more messages in queue, more instances, less - less instances)
 - Predictive Scaling
 	- Uses Machine Learning to predict usage. Forecasts the usage.
 **Scaling Policies have ==Cooldown period== - control how long to wait after scale before being able to start next (important.)**
@@ -230,7 +230,7 @@ Uses EC2 status checks and replace failed instance, self healing. Same if we man
 ### Scaling Processes
 Scaling processes have states:
 1. Launch and Terminate - SUSPEND (stop) and RESUME (continue)
-2. AddToLoadBalance - add provisioned instances to an [[Elastic Load Balancer (ELB)]]
+2. AddToLoadBalance - add provisioned instances to an [[AWS Elastic Load Balancer (ELB)]]
 3. AlarmNotification - ability of ASG to react on cloud watch alarm or not
 4. AZRebalance - rebalance instances evenly across AZs
 5. HealthCheck - controls whether instances in the ASG have HC on/off
@@ -242,7 +242,7 @@ Scaling processes have states:
 Allows us to run custom actions when ASG action is happening.
 When an ASG action happens (Launch/Terminate transitions) instances get paused in the flow, they wait. Until timeout, then CONTINUE or ABONDON ASG action or you explicitly resume ASG process with CompleteLifecycleAction (when you done what you wanted)
 
-Can be integrated with [[EventBridge]] or [[SNS]].
+Can be integrated with [[AWS EventBridge]] or [[AWS SNS]].
 ![[Pasted image 20230201015249.png]]
 
 # EC2 ENI with DNS
@@ -291,7 +291,7 @@ Enhanced networking uses [[Virtualization#Single Root IOV (SR-IOV) (4rd iteratio
 - Higher packets per second (PPS)
 - Consistent low latency.
 - Either enabled by default or [allowed to be enabled](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking.html) on modern instance types
-[[EBS]] Optimized
+[[AWS EBS]] Optimized
 - Dedicated capacity for EBS I/O traffic from other instance traffic, no contention.
 - [Supported enabled by default, no charge. On old instances can be turned on, paid](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html).
 

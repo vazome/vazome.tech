@@ -1,4 +1,4 @@
-Related: [[content/AWS/RDS/RDS]], [[DynamoDB]], 
+Related: [[content/AWS/RDS/RDS]], [[AWS DynamoDB]], 
 
 # RDMBS (SQL) vs NoSQL
 ![[Pasted image 20250206052246.png]]

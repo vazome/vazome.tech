@@ -45,7 +45,7 @@ When integrating data, you need to ask several questions:
 4. How often will you pull/receive data?
 Integration is done through transformations, they vary. If it's a handcoded solution, then be wary and avoid maintenance costs if possible.
 ![[Pasted image 20250206045020.png]]
-An extension on the transformation idea is [[#ETL]] and [[#ELT]]. These approaches becoming a standard, they combine multiple stages of data integration and process data from multiple sources. Popular tools are [[Databricks]], [[Apache Spark]] or [[Redshift]]. The tool must be flexible with many data formats, reliable and scalable, as always.
+An extension on the transformation idea is [[#ETL]] and [[#ELT]]. These approaches becoming a standard, they combine multiple stages of data integration and process data from multiple sources. Popular tools are [[Databricks]], [[Apache Spark]] or [[AWS Redshift]]. The tool must be flexible with many data formats, reliable and scalable, as always.
 
 Pay attention to security and anonymization, to prevent access to PII, PHI and other sensitive information to unauthorized parties and employees.
 

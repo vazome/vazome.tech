@@ -21,7 +21,7 @@ Gigabits per second.
 
 # EC2 Storage Terminology
 Direct Storage – attached to the EC2 Host
-Network attached ([[EBS]]) Storage – volumes are delivered over network
+Network attached ([[AWS EBS]]) Storage – volumes are delivered over network
 Ephemeral Storage – temporary storage (like Instance Store)
 Persistent Storage – permanent storage, lives past the lifetime of EC2 instance
 

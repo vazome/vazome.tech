@@ -1,4 +1,4 @@
-Function as a Service (FaaS) - short running and focused. A key part in [[Architectures]]: generally used with [[S3 Simple Storage Service]], [[API Gateway]]. Good at file processing: [[S3 Simple Storage Service]], [[S3 Logging#Events]]. Database triggers: [[DynamoDB]], [[DynamoDB#Streams]]. Serverless CRON: [[EventBridge]]/[[CloudWatch (Metrics)#Events]]. Realtime Stream Data Processing ([[AWS Kinesis]] + Lambda)
+Function as a Service (FaaS) - short running and focused. A key part in [[IT Software Architectures]]: generally used with [[AWS S3 Simple Storage Service]], [[AWS API Gateway]]. Good at file processing: [[AWS S3 Simple Storage Service]], [[S3 Logging#Events]]. Database triggers: [[AWS DynamoDB]], [[AWS DynamoDB#Streams]]. Serverless CRON: [[AWS EventBridge]]/[[CloudWatch (Metrics)#Events]]. Realtime Stream Data Processing ([[AWS Kinesis]] + Lambda)
 
 - Lambda function - is a piece of code which gets executed by Lambda service
 - Function uses a runtime - usually like python 3.8, then runtime env is create for such runtime
@@ -18,7 +18,7 @@ Lambda Function at it's most basics is a deployment package **50MB zipped 250 MB
 
 # Execution 
 ## Synchronous invocation
-Executes from API/CLI data is passed to lambda and client awaiting response. Then data or failure is returned. Also client > [[API Gateway]] > Lambda is possible. Errors and Retries are up to client.
+Executes from API/CLI data is passed to lambda and client awaiting response. Then data or failure is returned. Also client > [[AWS API Gateway]] > Lambda is possible. Errors and Retries are up to client.
 ![[Pasted image 20230207005001.png|400]]
 ## Asynchronous invocation
 Usually when invoked by AWS on your behalf. Lambda now retries to reprocess failed queue.
@@ -59,7 +59,7 @@ Injected to VPC with an ENI, One ENI per collection of lambdas with shared secur
 ![[Screenshot 2023-02-07 at 00.20.07.png|500]]
 
 # Security 
-[[IAM]] is enabled as execution roles.
+[[AWS IAM]] is enabled as execution roles.
 Also, has resource policies, like in [[S3 Resource Policies and Features]] which control who can use lambda and which external account are allowed. Can't be changed with console UI (for now)
 
 # Logging

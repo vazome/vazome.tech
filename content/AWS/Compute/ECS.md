@@ -51,7 +51,7 @@ Relates to [[Containers Theory#Container registry]]
 AWS Elastic container registry.
 Each account can have it's registry, public or private.
 
-It's integrated with [[IAM]]
+It's integrated with [[AWS IAM]]
 Image scanning, basic/enhanced (inspector)
 Near real-time metrics > CloudWatch
 Event ≥ Event bridge

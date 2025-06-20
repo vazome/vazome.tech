@@ -1,4 +1,4 @@
-if `${{ failure() }}` to trigger when failure of the previous step
+If `${{ failure() }}` to trigger when failure of the previous step
 
 leave comment via github scripts, permissions, pull-requests: write or none even...
 

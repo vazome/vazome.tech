@@ -1,5 +1,5 @@
-Related: [[SQS]], [[SNS]], [[Architectures#Hybrid]]
-**VPC Based (or [[Direct Connect (DX)]]), not public**
+Related: [[AWS SQS]], [[AWS SNS]], [[IT Software Architectures#Hybrid]]
+**VPC Based (or [[AWS Direct Connect (DX)]]), not public**
 **No native AWS integration**
 
 Open source message broker. 
