@@ -1,3 +1,11 @@
+---
+date created: 2025-06-21T01:02:28+04:00
+date modified: 2025-06-21T01:19:22+04:00
+tags:
+  - compute
+  - aws/ec2
+  - storage
+---
 Block storage devices, local (connected to one EC2 Host), not network. Provided with specific instance types, included in price anyway even if you don't use it.
 
 Highest storage performance in AWS. Must be attached at launch – one chance to attach. Can't attach if instance already lauched. Launch time only.

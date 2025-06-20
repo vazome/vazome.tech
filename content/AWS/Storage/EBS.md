@@ -37,7 +37,6 @@ Benefits of both GP2 and IO1
 Extra cost for up to 16,000 IOPS & 1000MiB/s (4x Faster Max throughput than GP2)
 GP3 is 20% cheaper than GP2, for standard-base price.
 
-#ec2/storage
 
 ### EBS HDD-Based
 
@@ -66,7 +65,6 @@ Works like GP2 credit bucket
 
 Cold data requiring few scans per day.
 
-#ec2/storage
 
 ### EBS Provisioned IOPS - IO
 
@@ -90,8 +88,6 @@ io1 50IOPS/GB (MAX)
 io2 50IOPS/GB (MAX)
 Also there are caps on EC2 Instance level
 ![[Pasted image 20230122005446.png|600]]
-
-#ec2/storage
 
 ### EBS Snapshot
 

@@ -1,12 +1,9 @@
 ---
-tags: [monitoring]
+tags: [aws/ec2, compute, monitoring]
 date created: 2025-06-20T16:15:50+04:00
-date modified: 2025-06-20T16:16:43+04:00
+date modified: 2025-06-21T01:22:35+04:00
 ---
-
-# Amazon EC2
-
-## EC2 Instance Types
+# EC2 Instance Types
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 Purchase Options]]
 
@@ -17,7 +14,7 @@ The difference affects
 -   System Architecture / Vendor
 -   Additional features…
 
-Instance code: R5dn.x8large.
+Instance code: `R5dn.x8large`.
 
 | R       | Instance Family                         |
 | ------- | --------------------------------------- |
@@ -32,35 +29,35 @@ Types (may be old):
 -   [https://aws.amazon.com/ec2/instance-types/](https://aws.amazon.com/ec2/instance-types/)
 -   [https://ec2instances.info/](https://ec2instances.info/)
 
-## EC2 Purchase Options
+# EC2 Purchase Options
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 Instance Types]]
 
-### On-demand
+## On-demand
 Capacity allocated, the instances isolated, but multiple customer share same hardware, no specific pros and cons, for is needed for short term or unpredictable planning instances.
 Per-second pricing, but you only pay for storage if it stopped
 
-### Spot
+## Spot
 Using free capacity when other EC2 instances are not working with decent discount up to 90%. It works the way that you set your price cap, if AWS instance price becomes greater than your cap, you lose the instance. Something which can tolerate interruption and need burst.
 
 Must not be used for workloads which can't tolerate interruptions.
 
-### Reservations
+## Reservations
 
 You agree to "use" instance for 1/3 years with reserved capacity/discount, reservation are per AZ or Region
 Region – does not reserve the capacity, focuses on the discount
 AZ – does reserve the capacity, less focus on discount
 No-upfront (less discount)/Partial (Middle)/All-upfront(more discount)
 
-#### Scheduled Reserved
+### Scheduled Reserved
 Commitment for specific time in day, 1 year period. Good for scheduled jobs etc.
 
-#### Capacity Reserved
+### Capacity Reserved
 Can be regional reservation – billing discount for an AZ. 1 - 3 year
 Can be zonal reservation – get capacity in certain AZ. 1 - 3 year
 On demand capacity – reserve for any duration of time, pay as on-demand type
 
-### EC2 Dedicated host
+## EC2 Dedicated host
 
 Related: [[public/AWS/EC2/EC2]]
 
@@ -74,12 +71,12 @@ Dedicated Host – you are dedicated with whole physical server (host)
 - Hosts can be shared within ORG (AWS RAM)
 Dedicated Instances – when you don't need to share host's hardware, but also, don't control it. Extra charges. ![[Pasted image 20230121235241.png|600]] ![[Pasted image 20230121235248.png|600]]
 
-### Savings Plan (better if no capacity needed)
+## Savings Plan (better if no capacity needed)
 
 Commit how much dollars you pay in 1/3 years and receive discount.
 You specify specific amount dollar per hour you committed to spend, beyond on-demand you get commitment
 
-## EC2 AMI
+# EC2 AMI
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 Image Builder]], [[EC2 Instance Export caveats]]
 
@@ -105,7 +102,7 @@ AMI cannot be edited – launch a new instance and update configuration
 Can be copied between regions (w/ snapshots), absolutely new AMI unique name
 ![[Pasted image 20230122032619.png|600]]
 
-## EC2 Metadata
+# EC2 Metadata
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 Bootstraping]]
 
@@ -127,7 +124,7 @@ chmod u+x ec2-metadata
 
 ![[Pasted image 20230121234033.png|600]]
 
-## EC2 Instance Profile
+# EC2 Instance Profile
 
 Related: [[public/AWS/EC2/EC2]]
 
@@ -147,7 +144,7 @@ CLI Tools inside that instance will use role credentials automatically
 Credential check precedence
 [https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-precedence](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-precedence)
 
-## EC2 Bootstraping
+# EC2 Bootstraping
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 Metadata]]
 
@@ -167,7 +164,7 @@ Can be modified when instance stopped.
 ![[Pasted image 20230121235956.png|500]]
 Info store in cloud-init.log and cloud-init.output.log
 
-## EC2 Auto Scaling Groups (ASG)
+# EC2 Auto Scaling Groups (ASG)
 
 Related: [[public/AWS/EC2/EC2]], [[Elastic Load Balancer (ELB)]]
 
@@ -187,7 +184,7 @@ ASG can use [[Elastic Load Balancer (ELB)]] instead of [[EC2 Instance Status Che
 > 
 > Or when application loads info from DB, but DB becomes unavailable and health checks report failed state, but for EC2 and starting reprovisioning EC2 instances.. 
 
-### Launch Template and Launch Configuration
+## Launch Template and Launch Configuration
 
 > [!NOTE]
 > Launch Templates supersedes Launch Configuration
@@ -202,7 +199,7 @@ LT provides newer features as: including T2/T3 Unlimited, [[EC2 Placement groups
 Launch Configurations > Autoscaling Groups
 Launch Templates > Autoscaling Groups|EC2 Instances
 
-### Health Checks
+## Health Checks
 - EC2 (Default), ELB (Can be enabled) & Custom
 - ﻿﻿EC2 - Stopping, Stopped, Terminated, Shutting Down or Impaired (not 2/2 status) = UNHEALTHY
 - ﻿﻿ELB - HEALTHY = Running & passing ELB health check
@@ -211,7 +208,7 @@ Launch Templates > Autoscaling Groups|EC2 Instances
 - ﻿﻿Health check grace period (Default 300s) - Delay before starting checks
 - ﻿﻿... allows system launch, bootstrapping and application start
 
-### Scaling
+## Scaling
 ![[Pasted image 20230201003748.png]]
 Scaling Policies options automate capacity settings. 
 - Manual Scaling - manual capacity adjust
@@ -230,7 +227,7 @@ Uses EC2 status checks and replace failed instance, self healing. Same if we man
 > [!NOTE]
 > Create a launch template which can deploy an Instance, create an ASG, set it to use multiple subnets and AZs, then set capacity as 1:1:1, then you have simple instance recover, i.e. [[HA vs FT vs DR#High availability (HA)]] instance
 
-#### Scaling Processes
+### Scaling Processes
 Scaling processes have states:
 1. Launch and Terminate - SUSPEND (stop) and RESUME (continue)
 2. AddToLoadBalance - add provisioned instances to an [[Elastic Load Balancer (ELB)]]
@@ -241,14 +238,14 @@ Scaling processes have states:
 7. ScheduledActions - do scheduled actions or not
 8. Standby - suspends any activity of ASG on an instance by 'inService' vs 'Standby' states (good for maintenance)
 
-#### Lifecycle hooks
+### Lifecycle hooks
 Allows us to run custom actions when ASG action is happening.
 When an ASG action happens (Launch/Terminate transitions) instances get paused in the flow, they wait. Until timeout, then CONTINUE or ABONDON ASG action or you explicitly resume ASG process with CompleteLifecycleAction (when you done what you wanted)
 
 Can be integrated with [[EventBridge]] or [[SNS]].
 ![[Pasted image 20230201015249.png]]
 
-## EC2 ENI with DNS
+# EC2 ENI with DNS
 
 Instances can have many secondary interfaces
 
@@ -261,7 +258,7 @@ Use case 3: Different security groups for each ENI, if needed, it's available
 
 **Within VPC, Public DNS corresponding to the Public IP resolves to Private IP in public, so in case if you have 2 instances with public IP, they won't talk to each other over internet, but within VPC.**
 
-## EC2 Placement groups
+# EC2 Placement groups
 
 Related: [[public/AWS/EC2/EC2]], [[Scaling]]
 
@@ -284,7 +281,7 @@ Related: [[public/AWS/EC2/EC2]], [[Scaling]]
 	-   You select into which partition launch an instance.
 	-   Best for huge scale parallel processing. Can be used with topology aware applications such as HDFS, HBase and Cassandra (intelligent data replication)![[Pasted image 20230121235802.png]]
 
-## EC2 Enchanced Networking
+# EC2 Enchanced Networking
 
 Related: [[public/AWS/EC2/EC2]], [[L3 Network]]
 
@@ -298,8 +295,7 @@ Enhanced networking uses [[Virtualization#Single Root IOV (SR-IOV) (4rd iteratio
 - Dedicated capacity for EBS I/O traffic from other instance traffic, no contention.
 - [Supported enabled by default, no charge. On old instances can be turned on, paid](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html).
 
-
-## EC2 Image Builder
+# EC2 Image Builder
 
 Related: [[public/AWS/EC2/EC2]], [[EC2 AMI]]
 
@@ -308,13 +304,13 @@ Can be scheduled
 Pipeline is a configuration of this automation
 Recipe is an explanation of how the image will be customised
 
-## [[Caveats of EC2 Instance Export]]
+# [[Caveats of EC2 Instance Export]]
 ![[Caveats of EC2 Instance Export]]
-## EC2 Instance Status Checks and Auto recovery
+# EC2 Instance Status Checks and Auto recovery
 
 Related: [[public/AWS/EC2/EC2]]
 
-### Status checks
+## Status checks
 
 1. System Status checks
 	1. Loss of power
@@ -326,7 +322,7 @@ Related: [[public/AWS/EC2/EC2]]
 	3. OS Kernel Issues
 	4. Instance issues
 
-### Auto recovery (System Status)
+## Auto recovery (System Status)
 Status check alarm can initiate auto-recovery. Helps in HA. Uses SNS
 If you start auto recovery, EC2 Instance is moved to other host.
 Networking, metadata, Elastic IP, data configuration is saved. Does not work for instance store volumes
@@ -334,7 +330,7 @@ Networking, metadata, Elastic IP, data configuration is saved. Does not work for
 
 #monitoring 
 
-## EC2
+# EC2
 
 **Instances** are run on **EC2 Hosts**
 
