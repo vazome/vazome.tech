@@ -1,15 +1,13 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-21T02:01:29+04:00
-tags:
-  - personal
-  - docs
+date modified: 2025-06-21T03:19:29+04:00
+tags: [personal, docs, concept]
 title: About
 ---
-# Premise
 This is my personal Tech blog, here I share my articles, notes and opinions.
-## How to navigate
-Click on tags to find similar or relevant materials #personal, #docs
+
+**How to navigate**:
+Click on tags #concept,. Backlinks or Graph to find similar or relevant materials.
 # About me
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub. I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia.
 ![[me.jpg|300]]
