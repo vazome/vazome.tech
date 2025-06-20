@@ -22,13 +22,13 @@ Still has downsides, e.g. each tier is coupled - relies on one another, they can
 - Stateless and ephimeral - each time env is new and clean
 - Event driven - works only when there is a need to
 - [Function as a service - Wikipedia](https://en.wikipedia.org/wiki/Function_as_a_service) – used when possible for compute
-- Don't reinvent the wheel, if you need other than compute, consider managed services, like [[S3]] for storage.
+- Don't reinvent the wheel, if you need other than compute, consider managed services, like [[S3 Simple Storage Service]] for storage.
 (Generally API gateway is used between client and lambda, but not mentioned on the image)
 ![[Pasted image 20230209015416.png|500]]  
 
 # Queues
 Message instead of being pushed to Processing is queued for Processing. Message contains infomarion about the data to process, like path, name, size, requirements. Usually queues are FIFO (First In First Out).
-[[EC2 Auto Scaling Groups (ASG)]] is configured to scale based on the **queue length**. Instances take messages in front of the queue. Once message is retrieved, instances take data from [[S3]] based on the in-message info.
+[[EC2 Auto Scaling Groups (ASG)]] is configured to scale based on the **queue length**. Instances take messages in front of the queue. Once message is retrieved, instances take data from [[S3 Simple Storage Service]] based on the in-message info.
 ![[Pasted image 20230206015646.png|400]]
 
 # Microservices

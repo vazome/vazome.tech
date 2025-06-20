@@ -1,4 +1,4 @@
-Related: [[RDS]]
+Related: [[content/AWS/RDS/RDS]]
 
 # [[Encryption and Encoding]]
 Encryption in transit: accomplished with SSL/TLS connection between client and RDS instance, can be mandatory.

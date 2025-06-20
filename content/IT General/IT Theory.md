@@ -2,7 +2,7 @@
 - [[Active Directory]]
 - [[Architectures]]
 - **Bussines terminology**
-	- [[HA vs FT vs DR]]
+	- [[Resilience and Reliability]]
 	- [[RPO]]
 	- [[RTO]]
 - **[[General IT]]**

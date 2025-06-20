@@ -107,7 +107,7 @@ Make snapshots of entire dimensions table, considering low storage costs and the
 
 ## Row vs column data store
 
-Relates to block storage concepts: [[Azure Storage]], [[S3]]
+Relates to block storage concepts: [[Azure Storage]], [[S3 Simple Storage Service]]
 TL;DR fewer blocks you use to write the data, the faster Read and Write will be.
 
 **In case of Row storage** and storing in blocks, it is excellent option for transaction storage since transactions come in rows, and we can store each new transaction in a new block.

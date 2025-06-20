@@ -1,4 +1,12 @@
+---
+date created: 2025-06-19T12:57:45+04:00
+date modified: 2025-06-20T15:18:43+04:00
+tags:
+  - concept/resilience
+---
 Related: [[RTO]]
+
+Below mentioned concepts are a part of [Business Continuity](https://en.wikipedia.org/wiki/Business_continuity_planning).
 
 Aim to know Goldilocks as close to the TRUE business requirements as possible. Business may not know, you must help them and yourself to know.
 

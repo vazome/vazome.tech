@@ -101,7 +101,7 @@ You create tables in multiple regions and then link them from a single table. At
 - Strongly consistency reads only in the same region where write has happened.
 - Global application must tolerate eventual consistency.
 
-Provides global [[HA vs FT vs DR#High availability (HA)]] and [[HA vs FT vs DR#Disaster Recovery (DR)]]
+Provides global [[Resilience and Reliability#High availability (HA)]] and [[Resilience and Reliability#Disaster Recovery (DR)]]
 
 # Accelerator (DAX)
 - There is DAX SDK for better integration of caching into an application.
@@ -117,3 +117,7 @@ Eventual consistency here, again.
 # TTL
 If enabled you can specify per item, date and time when data marked expired and then deleted. Value specified in a picked attribute "Column"
 [[#Stream]] of TTL deletions can be enabled.
+
+# Accelerator (DAX)
+In-memory cache solution only available for DynamoDB
+Improved performance, milliseconds to microseconds

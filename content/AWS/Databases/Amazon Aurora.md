@@ -1,4 +1,8 @@
-Related: [[RDS]]
+---
+date created: 2025-06-19T12:57:45+04:00
+date modified: 2025-06-20T16:10:25+04:00
+---
+Related: [[content/AWS/RDS/RDS]]
 - Proprietary to AWS, uses PostgreSQL and MySQL.
 - "Cloud Optimised", up to 3x+ faster than RDS, costs more.
 - Storage grows incrementally from 10gb to 64TB, not free tier
@@ -24,7 +28,7 @@ Incorporate both [[RDS Multi-AZ]] and [[RDS Read Replicas (RR)]] (yes, failover 
 All replica instances are capable at both read and write. Denies the concept of lengthy failover because each instance is like a master.
 There is no load balancing as a concept. Application can connect to more than one instance at a time.![[Pasted image 20230128231634.png]]
 Write operation requires quorum of nodes to agree on the change, i.e. proposes to write across all storages if quorum agrees changes also get replicated to other instances' in-memory cache![[Pasted image 20230128231134.png]]
-Does not grate [[HA vs FT vs DR#Fault Tolerance (FT)]] but can be and in some cases best option for building Fault Tolerant applications, but the application must load balance between instances, 
+Does not grate [[Resilience and Reliability#Fault Tolerance (FT)]] but can be and in some cases best option for building Fault Tolerant applications, but the application must load balance between instances, 
 
 
 ## Restore, Clone & Backtrack
@@ -46,3 +50,31 @@ Storage GB per month, IO cost per request to cluster storage
 
 100% DB Backup storage is included
 
+# Global Database
+- Allow replicate cluster volume over a secondary region (read-only)
+- Usually ~1s or less replication
+- Cross-region DR and BackUP
+- Global read scaling,
+- Replication has no impact on CPU (storage level replication)
+- Secondary region have up to 16[[Amazon Aurora]]ndary regions
+
+# Aurora Serverless
+
+Eliminates admin overhead in [[Amazon Aurora MERGED]], which is managing instances "Aurora provisioned".
+The concept of service provision is defunct, instead Aurora Capacity Unit (ACUs) in cluster are used.
+
+You set MIN and MAX ACU values and cluster will scale between these values, based on the load.
+It can go down to 0 and being billed only for storage.
+
+Billing is done on per second basis. Same resilience as Aurora provisioned.
+
+Best for:
+- infrequently used applications
+- New applications where uncertainty is a major factor
+- Variable workloads (when picks and downs are frequent)
+- Unpredictable workloads.
+- Development/test w[[Amazon Aurora]] applications where load aligns with revenue
+
+## Difference with [[Amazon Aurora MERGED]]
+
+ACUs allocated from a shared pool. Proxy Fleets are used as middle ground between your application and Serverless DB. You communicate with Proxy Fleet and they translate it to the Serverless cluster

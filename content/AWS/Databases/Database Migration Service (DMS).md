@@ -1,4 +1,8 @@
-Related: [[DBMS]], [[RDS]], [[Amazon Aurora]],
+---
+date created: 2025-06-19T12:57:45+04:00
+date modified: 2025-06-20T16:10:28+04:00
+---
+Related: [[DBMS]], [[content/AWS/RDS/RDS]], [[Amazon Aurora]],
 No downtime migration service.
 
 Consists of 
@@ -29,6 +33,6 @@ Used in cases like:
 
 If DB is multi-TB it maybe impractical to transfer data over network. [[AWS Snow Family]] is a solution, DMS can utilise snowball ...
 - ﻿Step 1 : Use SCT to extract data locally and move to a snowball device
-- ﻿Step 2: Ship the device back to AWS. They load onto an [[S3]] bucket.
+- ﻿Step 2: Ship the device back to AWS. They load onto an [[S3 Simple Storage Service]] bucket.
 - ﻿Step 3: DMS migrates from S3 into the target store
 - ﻿Step 4: Change Data Capture (CDC) can capture changes, and via S3 intermediary they are also written to the target database

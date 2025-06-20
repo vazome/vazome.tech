@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-15T00:14:32+04:00
+date modified: 2025-06-20T15:04:22+04:00
 tags:
   - containers/kubernetes
 ---
@@ -36,50 +36,51 @@ Services are used to connect between nodes.
 ![[kubernetes-cluster-architecture.svg]]
 It all works in scales motion where when you create a deployment it also create replicaset which creates pods. Also if there is already a stray pod with matching label it will be removed by deployment since  pods will be created regardless and stray pod will hit with limit condition
 
-- **Pod** - an abstraction over containers, can contain multiple containers
+- **`Pod`** - an abstraction over containers, can contain multiple containers
 	- e.g. Init container (run before), plus sidecars (run along) and primary
 	- Usually 1 app/DB per pod
 	- Pod get an internal IP address, (ephemeral)
 	- ![[Pasted image 20250527170116.png|300]]
 	- ![[Pasted image 20250615013217.png|300]]
-- **Job** is an ad-hoc (single use) work until completion container configuration, creates one or mode pods, completes. Pods also assigned random name Set backoffLimit![[Pasted image 20250528152516.png]]
-- **CronJob** is like job, but can be scheduled based general [[CRON jobs]] rules
-- **DaemonSet** runs a copy of a container pod an all or (selected subset of) nodes in the cluster (brings propagation). Good for monitoring, log aggregation or storage daemon. Does not target control plane
-- **Namespaces** separate resources like groups avoid name conflicts, but don't act as security/network boundary by default. 
+- **`Job`** is an ad-hoc (single use) work until completion container configuration, creates one or mode pods, completes. Pods also assigned random name Set backoffLimit![[Pasted image 20250528152516.png]]
+- **`CronJob`** is like job, but can be scheduled based general [[CRON jobs]] rules
+- **`DaemonSet`** runs a copy of a container pod an all or (selected subset of) nodes in the cluster (brings propagation). Good for monitoring, log aggregation or storage daemon. Does not target control plane
+- **`Namespaces`** separate resources like groups avoid name conflicts, but don't act as security/network boundary by default. 
 	- The list of default namespaces
 	- ![[Pasted image 20250527163846.png]]
-- **Node** - hosts pods
-- **Service** - [[#Networking - Service or Ingress]]
-- **Ingress** - helps setting up URL, secure protocol and domain name. 
+- **`Node`** - hosts pods
+- **`Service`** - [[#Networking - Service or Ingress]]
+- **`Ingress`** - helps setting up URL, secure protocol and domain name. 
 	- **Accepts requests and can route to multiple Services**
 	- Acts like an API Gateway (K8S slowly replaces Ingress with GatewayAPI element)
-- GatewayAPI - Evolves form GatewayAPI and support Network gateways![[Pasted image 20250612220443.png]]
-- **Configmap**: -  maps variables between pods and external services (like DBs credentials and URLs) property-key and file-like-keys![[Pasted image 20250528214152.png]]
+- **`GatewayAPI`** - Evolves form GatewayAPI and support Network gateways![[Pasted image 20250612220443.png]]
+- **`Configmap`**: -  maps variables between pods and external services (like DBs credentials and URLs) property-key and file-like-keys![[Pasted image 20250528214152.png]]
 	- Passwords are not stored in config map
-- **Secrets**: where you store credentials, encodes in base64, can be controlled via authorization policies.![[Pasted image 20250528220123.png]]
+- **`Secrets`**: where you store credentials, encodes in base64, can be controlled via authorization policies.![[Pasted image 20250528220123.png]]
 	- Not enabled by default.
-	- **Both Secrets and configmap can be used by app though env vars.**
-- **ReplicaSet** adds replication (Use deployments instead)
-	- **Labels link ReplicaSets and Pods**
+	- **Both `Secrets` and `configmap` can be used by app though env vars.**
+- **`ReplicaSet`** adds replication (a subset of a deployment)
+	- **`Labels` link `ReplicaSets` and `Pods`**
 	- ![[Pasted image 20250527172911.png|300]]
-- **(Persistent) Volumes** - stores data persistently, functions as emulated physical storage.
+- **`PersistentVolumes`** - stores data persistently, functions as emulated physical storage.
 	- How it's done![[Pasted image 20250422002746.png]]
 	- Provisioned via PVs, generally via user, via Storage Classes SC
 	- The basis can be local or remote like (s3)
-- **Deployment**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks
-	- Allows replication of pods. For example, via deploying a new node with same pods setup.
+- **`Deployment`**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks, adds revisions akin versioning, implement [[Resilience and Reliability#High availability (HA)]]
+	- When deployment created a rollout is triggered, each rollout creates a deployment revision which allows us to rollback in version.
+	- Utilizes `ReplicaSet` for replication of pods. For example, via deploying a new node with same pods setup.
 	- Can't replicate pod dbs, because they have state - data
-- **Statefulsets** - gives pods sticky identity (0,1,2.. naming), each pod mounts separate volumes and rollout is by order. helps preserve state, for example, helps DBs like primary vs read replica. Deployment for stateful application.
+- **`Statefulsets`** - gives pods sticky identity (0,1,2... naming), each pod mounts separate volumes and rollout is by order. Helps preserve state, for example, helps DBs like primary vs read replica. Deployment for stateful application.
 	- Pods created in order, one after another, when scaled down last created are deleted
 	- Pods get predictable names -0/1/2/3/4
 	- Either use this or deploy DB outside K8S in a highly available infra, like cloud.
 	- You cannot modify many of the created fields from YAML, like storage size/request!
 	- Has field serviceName, i.e. creating dns service for each replica independently (as if each pods got dns name), so in Service declaration you should make it **headless** with None clusterIP  ![[Pasted image 20250528213300.png]]
 	- **Why headless** Each connection to the service is forwarded to one randomly selected backing pod. But what if the client needs to connect to all of those pods? What if the backing pods themselves need to each connect to all the other backing pods. Connecting through the service clearly isn’t the way to do this. [Service \| Kubernetes](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services)
-	- StatefulSets currently require a [Headless Service](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services) to be responsible for the network identity of the Pods. You are responsible for creating this Service.
-- **PersistentVolume** and **PersistentVolumeClaim** PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV.![[Pasted image 20250612222656.png]]
-- RBAC (ServiceAccount, Role, RoleBinding) - Service account is an auth object, role if what pods address to and RoleBinding merges these two entities. Role is namespace level while ClusterRole is cluster level ![[Pasted image 20250612223255.png]]
-- Labels and Annotations:![[Pasted image 20250612224508.png]]
+	- `StatefulSets` currently require a [Headless Service](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services) to be responsible for the network identity of the Pods. You are responsible for creating this Service.
+- **`PersistentVolume`** and **`PersistentVolumeClaim`** PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV.![[Pasted image 20250612222656.png]]
+- `RBAC` (`ServiceAccount`, `Role`, `RoleBinding`) - Service account is an auth object, role if what pods address to and `RoleBinding` merges these two entities. Role is namespace level while ClusterRole is `cluster` level ![[Pasted image 20250612223255.png]]
+- `Labels` and `Annotations`:![[Pasted image 20250612224508.png]]
 You can get explanation of template formats via
 `kubectl explain <component>` or `kubectl explain <component>.<sub>
 [GitHub - BretFisher/podspec: Kubernetes Pod Specification Good Defaults](https://github.com/BretFisher/podspec) 

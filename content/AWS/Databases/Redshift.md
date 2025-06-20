@@ -9,7 +9,7 @@ One-AZ, uses node infrastructure:
 
 - [[Database Types#OLAP]] (Column based) not [[Database Types#OLTP]] (row/transaction)
 - Pay as you use ... similar structure to RDS
-- Direct Query [[S3]] using Redshift Spectrum
+- Direct Query [[S3 Simple Storage Service]] using Redshift Spectrum
 - Direct Query other DBs using federated query
 - Integrates with AWS tooling such as Quicksight
 - SQL-ike interface JDBC/ODBC connections

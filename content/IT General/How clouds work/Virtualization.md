@@ -1,4 +1,4 @@
-Related: [[AWS/EC2/EC2]], [[RDS]]
+Related: [[public/AWS/EC2/EC2]], [[content/AWS/RDS/RDS]]
 
 Virtualization is a solution for running multiple operating systems on under one computer.
 
