@@ -1,8 +1,10 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-21T03:19:29+04:00
-tags: [personal, docs, concept]
-title: About
+date modified: 2025-06-21T03:21:00+04:00
+tags:
+  - personal
+  - concept
+title: About this blog
 ---
 This is my personal Tech blog, here I share my articles, notes and opinions.
 
