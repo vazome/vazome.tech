@@ -60,6 +60,11 @@ const config: QuartzConfig = {
       Plugin.CreatedModifiedDate({
         priority: ["frontmatter", "git", "filesystem"],
       }),
+      Plugin.NotebookEmbedding({
+        cacheDir: ".quartz-cache/notebooks",
+        downloadFromGitHub: true,
+        downloadTimeout: 15000,
+      }),
       Plugin.SyntaxHighlighting({
         theme: {
           light: "github-light",
@@ -74,11 +79,6 @@ const config: QuartzConfig = {
       Plugin.Description(),
       Plugin.Latex({ renderEngine: "mathjax" }),
       Plugin.ClickableImages(),
-      Plugin.NotebookEmbedding({
-        cacheDir: ".quartz-cache/notebooks",
-        downloadFromGitHub: true,
-        downloadTimeout: 15000,
-      }),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [

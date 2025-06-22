@@ -98,8 +98,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     } catch (error) {
       return null
     }
-  }
-  // Convert notebook cell to HTML
+  }  // Convert notebook cell to HTML
   const cellToHtml = (cell: NotebookCell, index: number): string => {
     const cellId = `notebook-cell-${index}`
     let content = ''
@@ -109,19 +108,39 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       content = `<div class="notebook-markdown-cell">${markdownToHtml(source)}</div>`
     } else if (cell.cell_type === 'code') {
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
-      // Use normal code block styling (no wrapper div with gray background)
-      const codeBlock = `<pre><code class="language-python">${escapeHtml(source)}</code></pre>`
+      const executionCount = cell.execution_count
+      
+      // Create execution count display
+      const executionLabel = executionCount !== null && executionCount !== undefined 
+        ? `In [${executionCount}]:`
+        : 'In [ ]:'
+      
+      // Use normal code block styling with execution count
+      const codeBlock = `
+        <div class="notebook-code-input">
+          <div class="notebook-execution-count">${executionLabel}</div>
+          <div class="notebook-code-content">
+            <pre><code class="language-python">${escapeHtml(source)}</code></pre>
+          </div>
+        </div>`
       
       let outputsHtml = ''
       if (cell.outputs && cell.outputs.length > 0) {
-        outputsHtml = '<div class="notebook-outputs">'
+        // Add output execution count
+        const outputLabel = executionCount !== null && executionCount !== undefined 
+          ? `Out[${executionCount}]:`
+          : 'Out[ ]:'
+        
+        outputsHtml = `<div class="notebook-outputs">
+          <div class="notebook-output-label">${outputLabel}</div>
+          <div class="notebook-output-content">`
+        
         for (const output of cell.outputs) {
           outputsHtml += formatOutput(output)
         }
-        outputsHtml += '</div>'
+        outputsHtml += '</div></div>'
       }
       
-      // Don't wrap in notebook-code-cell div - just combine code and outputs
       content = `${codeBlock}${outputsHtml}`
     }
     
@@ -267,7 +286,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 
 .notebook-cell {
   border-bottom: 1px solid var(--lightgray);
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
 }
 
 .notebook-cell:last-child {
@@ -296,8 +315,56 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   padding-left: 1.5rem;
 }
 
+.notebook-code-input {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0.25rem 0;
+}
+
+.notebook-execution-count {
+  color: var(--secondary);
+  font-family: monospace;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-width: 85px;
+  padding-top: 0.75rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.notebook-code-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notebook-code-content pre {
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 .notebook-outputs {
-  margin-top: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.notebook-output-label {
+  color: var(--secondary);
+  font-family: monospace;
+  font-size: 0.9em;
+  font-weight: bold;
+  min-width: 85px;
+  padding-top: 0.5rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.notebook-output-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .notebook-text-output pre,
@@ -305,11 +372,14 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   background: var(--lightgray);
   border: 1px solid var(--gray);
   border-radius: 6px;
-  padding: 1rem;
+  padding: 0.75rem;
   margin: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   font-size: 0.9em;
   color: var(--dark);
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .notebook-image-output {
@@ -358,10 +428,14 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     background: var(--secondary);
     color: var(--light);
   }
-  
-  .notebook-link {
+    .notebook-link {
     color: var(--light);
     border-bottom-color: var(--light);
+  }
+  
+  .notebook-execution-count,
+  .notebook-output-label {
+    color: var(--tertiary);
   }
   
   .notebook-text-output pre,
@@ -396,12 +470,10 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       </style>
     `
   }
-
   // Favicon detection and fetching
   const getFaviconUrl = async (sourceUrl: string): Promise<string> => {
     try {
       const url = new URL(sourceUrl)
-      const domain = url.hostname
         // Try to fetch the HTML and parse favicon links
       const response = await fetch(`${url.protocol}//${url.hostname}`, {
         signal: AbortSignal.timeout(5000),
