@@ -4,7 +4,15 @@ import { visit } from "unist-util-visit"
 import { Element } from "hast"
 import path from "path"
 import fs from "fs/promises"
-import { marked } from "marked"
+import { unified } from "unified"
+import remarkParse from "remark-parse"
+import remarkBreaks from "remark-breaks"
+import remarkFrontmatter from "remark-frontmatter"
+import remarkGfm from "remark-gfm"
+import remarkMath from "remark-math"
+import remarkRehype from "remark-rehype"
+import remarkSmartypants from "remark-smartypants"
+import rehypeStringify from "rehype-stringify"
 import { fromHtml } from "hast-util-from-html"
 
 interface Options {
@@ -99,13 +107,13 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       return null
     }
   }  // Convert notebook cell to HTML
-  const cellToHtml = (cell: NotebookCell, index: number): string => {
+  const cellToHtml = async (cell: NotebookCell, index: number): Promise<string> => {
     const cellId = `notebook-cell-${index}`
     let content = ''
     
     if (cell.cell_type === 'markdown') {
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
-      content = `<div class="notebook-markdown-cell">${markdownToHtml(source)}</div>`
+      content = `<div class="notebook-markdown-cell">${await markdownToHtml(source)}</div>`
     } else if (cell.cell_type === 'code') {
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
       const executionCount = cell.execution_count
@@ -145,12 +153,26 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     }
     
     return `<div id="${cellId}" class="notebook-cell notebook-${cell.cell_type}-cell">${content}</div>`
-  }
-
-  // Simple markdown to HTML converter (basic implementation)
-  const markdownToHtml = (markdown: string): string => {
-    // Using `marked` library for better markdown rendering
-    return marked(markdown) as string
+  }  // Simple markdown to HTML converter using remark
+  const markdownToHtml = async (markdown: string): Promise<string> => {
+    try {
+      const processor = unified()
+        .use(remarkParse)
+        .use(remarkBreaks)
+        .use(remarkFrontmatter)
+        .use(remarkGfm)
+        .use(remarkMath)
+        .use(remarkSmartypants)
+        .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeStringify, { allowDangerousHtml: true })
+      
+      const result = await processor.process(markdown)
+      return String(result.value)
+    } catch (error) {
+      console.warn('Error processing markdown with remark:', error)
+      // Fallback to plain text wrapped in paragraph
+      return `<p>${escapeHtml(markdown)}</p>`
+    }
   }
 
   // Format notebook output
@@ -203,7 +225,8 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       .replace(/'/g, '&#x27;')
   }  // Convert notebook to HTML
   const notebookToHtml = async (notebook: NotebookData, sourceUrl: string): Promise<string> => {
-    const cells = notebook.cells.map((cell, index) => cellToHtml(cell, index)).join('\n')
+    const cellPromises = notebook.cells.map((cell, index) => cellToHtml(cell, index))
+    const cells = (await Promise.all(cellPromises)).join('\n')
     
     // Extract notebook filename from URL
     const notebookName = sourceUrl.split('/').pop() || 'notebook.ipynb'
