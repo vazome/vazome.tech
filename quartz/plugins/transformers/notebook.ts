@@ -443,53 +443,54 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   color: var(--gray);
 }
 
-@media (prefers-color-scheme: dark) {
-  .jupyter-notebook-embedded {
-    background: var(--darkgray);
-    border-color: var(--secondary);  }
-  
-  .notebook-header {
-    background: var(--secondary);
-    color: var(--light);
-  }
-    .notebook-link {
-    color: var(--light);
-    border-bottom-color: var(--light);
-  }
-  
-  .notebook-execution-count,
-  .notebook-output-label {
-    color: var(--tertiary);
-  }
-  
-  .notebook-text-output pre,
-  .notebook-stream-output pre {
-    background: var(--darkgray);
-    border-color: var(--gray);
-    color: var(--light);
-  }
-  
-  .notebook-image-output {
-    background: var(--darkgray);
-    border-color: var(--gray);
-  }
-  
-  .notebook-markdown-cell {
-    background: var(--darkgray);
-    color: var(--light);
-  }
-    .notebook-markdown-cell h1,
-  .notebook-markdown-cell h2,
-  .notebook-markdown-cell h3,
-  .notebook-markdown-cell h4 {
-    color: var(--light);
-  }
-  
-  .notebook-error-output pre {
-    background: #2d1b1b;
-    border-color: #991b1b;
-    color: #fca5a5;
-  }
+html[data-theme='dark'] .jupyter-notebook-embedded {
+  background: var(--darkgray);
+  border-color: var(--secondary);
+}
+
+html[data-theme='dark'] .notebook-header {
+  background: var(--secondary);
+  color: var(--light);
+}
+
+html[data-theme='dark'] .notebook-link {
+  color: var(--light);
+  border-bottom-color: var(--light);
+}
+
+html[data-theme='dark'] .notebook-execution-count,
+html[data-theme='dark'] .notebook-output-label {
+  color: var(--tertiary);
+}
+
+html[data-theme='dark'] .notebook-text-output pre,
+html[data-theme='dark'] .notebook-stream-output pre {
+  background: var(--darkgray);
+  border-color: var(--gray);
+  color: var(--light);
+}
+
+html[data-theme='dark'] .notebook-image-output {
+  background: var(--darkgray);
+  border-color: var(--gray);
+}
+
+html[data-theme='dark'] .notebook-markdown-cell {
+  background: var(--darkgray);
+  color: var(--light);
+}
+
+html[data-theme='dark'] .notebook-markdown-cell h1,
+html[data-theme='dark'] .notebook-markdown-cell h2,
+html[data-theme='dark'] .notebook-markdown-cell h3,
+html[data-theme='dark'] .notebook-markdown-cell h4 {
+  color: var(--light);
+}
+
+html[data-theme='dark'] .notebook-error-output pre {
+  background: #2d1b1b;
+  border-color: #991b1b;
+  color: #fca5a5;
 }
       </style>
     `
