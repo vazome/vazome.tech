@@ -61,7 +61,7 @@ const config: QuartzConfig = {
         priority: ["frontmatter", "git", "filesystem"],
       }),
       Plugin.NotebookEmbedding({
-        cacheDir: ".quartz-cache/notebooks",
+        cacheDir: "quartz/.quartz-cache/notebooks",
         downloadFromGitHub: true,
         downloadTimeout: 15000,
       }),

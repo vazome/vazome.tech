@@ -25,7 +25,7 @@ interface Options {
 }
 
 const defaultOptions: Options = {
-  cacheDir: ".quartz-cache/notebooks",
+  cacheDir: "quartz/.quartz-cache/notebooks",
   downloadFromGitHub: true,
   downloadTimeout: 10000,
 }
@@ -627,7 +627,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
                 const href = node.properties.href as string
                 
                 // Check if this is a notebook link
-                if (href.endsWith('.ipynb') || (href.includes('github.com') && href.includes('.ipynb'))) {
+                if (href.endsWith('.ipynb')) {
                   const promise = (async () => {
                     try {
                       // Try to load from cache first
