@@ -182,15 +182,28 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;')
-  }
-
-  // Convert notebook to HTML
-  const notebookToHtml = (notebook: NotebookData): string => {
+  }  // Convert notebook to HTML
+  const notebookToHtml = async (notebook: NotebookData, sourceUrl: string): Promise<string> => {
     const cells = notebook.cells.map((cell, index) => cellToHtml(cell, index)).join('\n')
+    
+    // Extract notebook filename from URL
+    const notebookName = sourceUrl.split('/').pop() || 'notebook.ipynb'
+    
+    // Get favicon URL using our detection logic
+    const faviconUrl = await getFaviconUrl(sourceUrl)
+    const siteName = new URL(sourceUrl).hostname
     
     return `
       <div class="jupyter-notebook-embedded">
-        <div class="notebook-header">Jupyter Notebook</div>
+        <div class="notebook-header">
+          <span class="notebook-title">Jupyter Notebook</span>
+          <div class="notebook-source">
+            <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer" class="notebook-link">
+              ${notebookName}
+            </a>
+            <img src="${faviconUrl}" alt="${siteName}" class="notebook-favicon" title="Source: ${siteName}">
+          </div>
+        </div>
         <div class="notebook-cells">
           ${cells}
         </div>
@@ -213,12 +226,39 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   color: var(--lightgray);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 
 .notebook-header::before {
   content: "📓";
   font-size: 1.2em;
+}
+
+.notebook-source {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  font-size: 0.9em;
+}
+
+.notebook-link {
+  color: var(--lightgray);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--lightgray);
+  transition: all 0.2s ease;
+}
+
+.notebook-link:hover {
+  border-bottom-style: solid;
+  opacity: 0.8;
+}
+
+.notebook-favicon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
 }
 
 .notebook-cells {
@@ -249,13 +289,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 
 .notebook-markdown-cell p {
   margin: 0.5rem 0;
-}
-
-.notebook-markdown-cell code {
-  background: var(--lightgray);
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  font-size: 0.9em;
 }
 
 .notebook-markdown-cell ul {
@@ -319,13 +352,19 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 @media (prefers-color-scheme: dark) {
   .jupyter-notebook-embedded {
     background: var(--darkgray);
-    border-color: var(--secondary);
-  }
-    .notebook-header {
+    border-color: var(--secondary);  }
+  
+  .notebook-header {
     background: var(--secondary);
     color: var(--light);
   }
-    .notebook-text-output pre,
+  
+  .notebook-link {
+    color: var(--light);
+    border-bottom-color: var(--light);
+  }
+  
+  .notebook-text-output pre,
   .notebook-stream-output pre {
     background: var(--darkgray);
     border-color: var(--gray);
@@ -341,16 +380,10 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     background: var(--darkgray);
     color: var(--light);
   }
-  
-  .notebook-markdown-cell h1,
+    .notebook-markdown-cell h1,
   .notebook-markdown-cell h2,
   .notebook-markdown-cell h3,
   .notebook-markdown-cell h4 {
-    color: var(--light);
-  }
-  
-  .notebook-markdown-cell code {
-    background: var(--dark);
     color: var(--light);
   }
   
@@ -362,6 +395,124 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 }
       </style>
     `
+  }
+
+  // Favicon detection and fetching
+  const getFaviconUrl = async (sourceUrl: string): Promise<string> => {
+    try {
+      const url = new URL(sourceUrl)
+      const domain = url.hostname
+        // Try to fetch the HTML and parse favicon links
+      const response = await fetch(`${url.protocol}//${url.hostname}`, {
+        signal: AbortSignal.timeout(5000),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; Quartz-NotebookEmbedder/1.0)'
+        }
+      })
+      
+      if (response.ok) {
+        const html = await response.text()
+        const icons = parseFaviconLinks(html, url)
+        
+        if (icons.length > 0) {
+          // Sort by size (largest first) and return the best one
+          const bestIcon = getBestIcon(icons)
+          return bestIcon
+        }
+      }    } catch (error) {
+      console.warn(`Failed to fetch favicon from HTML for ${sourceUrl}:`, error)
+    }
+    
+    // Fallback to alternative sources
+    const domain = new URL(sourceUrl).hostname
+    const fallbackSources = [
+      `https://www.google.com/s2/favicons?domain=${domain}&sz=32`,
+      `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+      `${new URL(sourceUrl).protocol}//${domain}/favicon.ico`
+    ]
+    
+    for (const fallbackUrl of fallbackSources) {
+      try {
+        const response = await fetch(fallbackUrl, {
+          signal: AbortSignal.timeout(3000),
+          method: 'HEAD' // Just check if it exists
+        })
+        if (response.ok) {
+          return fallbackUrl
+        }
+      } catch (error) {
+        // Continue to next fallback
+      }
+    }
+    
+    // Generate letter-based favicon as last resort
+    return generateLetterFavicon(domain)
+  }
+  
+  const parseFaviconLinks = (html: string, baseUrl: URL): Array<{sizes: string, href: string}> => {
+    const regex = /<link[^>]*rel=['"]?[^\s]*icon['"]?[^>]*?>/gi
+    const matches = Array.from(html.matchAll(regex))
+    const icons: Array<{sizes: string, href: string}> = []
+    
+    matches.forEach((match) => {
+      const linkTag = match[0]
+      
+      // Extract href value
+      const hrefMatch = linkTag.match(/href=['"]?([^\s>'"]*)['"]?/i)
+      const href = hrefMatch ? hrefMatch[1] : null
+      
+      // Extract sizes value
+      const sizesMatch = linkTag.match(/sizes=['"]?([^\s>'"]*)['"]?/i)
+      const sizes = sizesMatch ? sizesMatch[1] : 'unknown'
+      
+      if (href) {
+        // Convert relative URLs to absolute
+        let absoluteHref = href
+        if (!href.startsWith('http') && !href.startsWith('data:')) {
+          absoluteHref = href.startsWith('/') 
+            ? `${baseUrl.protocol}//${baseUrl.host}${href}`
+            : `${baseUrl.protocol}//${baseUrl.host}/${href}`
+        }
+        
+        icons.push({ sizes, href: absoluteHref })
+      }
+    })
+    
+    return icons
+  }
+  
+  const getBestIcon = (icons: Array<{sizes: string, href: string}>): string => {
+    // Sort by priority: known sizes first, then unknown
+    const sizeMap = new Map<string, number>()
+    
+    icons.forEach(icon => {
+      if (icon.sizes === 'unknown') {
+        sizeMap.set(icon.href, 16) // Default size
+      } else {
+        // Parse sizes like "32x32" or "16x16 32x32"
+        const sizeStr = icon.sizes.split(' ')[0] // Take first size if multiple
+        const size = parseInt(sizeStr.split('x')[0]) || 16
+        sizeMap.set(icon.href, size)
+      }
+    })
+    
+    // Sort by size (descending) and return the largest
+    const sortedIcons = icons.sort((a, b) => {
+      const sizeA = sizeMap.get(a.href) || 16
+      const sizeB = sizeMap.get(b.href) || 16
+      return sizeB - sizeA
+    })
+    
+    return sortedIcons[0].href
+  }
+  
+  const generateLetterFavicon = (domain: string): string => {
+    const firstLetter = domain.charAt(0).toUpperCase()
+    const svgContent = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#6366f1" rx="4"/>
+      <text x="50%" y="50%" font-size="18" font-family="system-ui,sans-serif" font-weight="600" text-anchor="middle" dominant-baseline="middle" fill="white">${firstLetter}</text>
+    </svg>`
+    return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`
   }
 
   // Main transformer function
@@ -392,11 +543,9 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
                         if (notebook) {
                           await cacheNotebook(href, notebook)
                         }
-                      }
-                      
-                      // If we have notebook data, embed it
+                      }                      // If we have notebook data, embed it
                       if (notebook) {
-                        const notebookHtml = notebookToHtml(notebook)
+                        const notebookHtml = await notebookToHtml(notebook, href)
                         
                         // Replace the link with embedded notebook
                         node.tagName = "div"
