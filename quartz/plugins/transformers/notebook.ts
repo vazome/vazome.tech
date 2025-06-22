@@ -247,6 +247,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  max-height: 2.5rem;
 }
 
 .notebook-header::before {
