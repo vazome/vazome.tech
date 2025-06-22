@@ -1,9 +1,8 @@
 ---
 date created: 2025-06-21T01:24:19+04:00
-date modified: 2025-06-21T01:33:25+04:00
+date modified: 2025-06-23T00:28:28+04:00
 tags:
   - concept/scale
-  - conce
 ---
 Related: [[IT Software Architectures]]
 # Vertical Scaling
