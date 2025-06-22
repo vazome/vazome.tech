@@ -74,6 +74,11 @@ const config: QuartzConfig = {
       Plugin.Description(),
       Plugin.Latex({ renderEngine: "mathjax" }),
       Plugin.ClickableImages(),
+      Plugin.NotebookEmbedding({
+        cacheDir: ".quartz-cache/notebooks",
+        downloadFromGitHub: true,
+        downloadTimeout: 15000,
+      }),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [
