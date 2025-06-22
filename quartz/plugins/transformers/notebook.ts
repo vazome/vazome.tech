@@ -273,11 +273,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   max-height: 2.5rem;
 }
 
-.notebook-header::before {
-  content: "📓";
-  font-size: 1.2em;
-}
-
 .notebook-source {
   display: flex;
   align-items: center;
