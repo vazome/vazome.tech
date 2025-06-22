@@ -99,7 +99,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       return null
     }
   }
-
   // Convert notebook cell to HTML
   const cellToHtml = (cell: NotebookCell, index: number): string => {
     const cellId = `notebook-cell-${index}`
@@ -110,8 +109,9 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       content = `<div class="notebook-markdown-cell">${markdownToHtml(source)}</div>`
     } else if (cell.cell_type === 'code') {
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
-      // Use Quartz's default code block styling (no extra wrapper)
+      // Use normal code block styling (no wrapper div with gray background)
       const codeBlock = `<pre><code class="language-python">${escapeHtml(source)}</code></pre>`
+      
       let outputsHtml = ''
       if (cell.outputs && cell.outputs.length > 0) {
         outputsHtml = '<div class="notebook-outputs">'
@@ -120,9 +120,11 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
         }
         outputsHtml += '</div>'
       }
-      // Only wrap outputs in the gray box, not the code input
+      
+      // Don't wrap in notebook-code-cell div - just combine code and outputs
       content = `${codeBlock}${outputsHtml}`
     }
+    
     return `<div id="${cellId}" class="notebook-cell notebook-${cell.cell_type}-cell">${content}</div>`
   }
 
@@ -261,33 +263,13 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   padding-left: 1.5rem;
 }
 
-.notebook-code-cell {
-  background: var(--lightgray);
-  border-left: 4px solid var(--secondary);
-}
-
-.notebook-input pre {
-  background: var(--darkgray);
-  border: 1px solid var(--gray);
-  border-radius: 6px;
-  padding: 1rem;
-  margin: 0;
-  overflow-x: auto;
-  font-size: 0.9em;
-  color: var(--light);
-}
-
-.notebook-input pre code {
-  background: transparent;
-  color: inherit;
-}
-
 .notebook-outputs {
   margin-top: 0.75rem;
 }
 
-.notebook-text-output pre {
-  background: var(--light);
+.notebook-text-output pre,
+.notebook-stream-output pre {
+  background: var(--lightgray);
   border: 1px solid var(--gray);
   border-radius: 6px;
   padding: 1rem;
@@ -300,7 +282,10 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 .notebook-image-output {
   text-align: center;
   padding: 1rem;
-  background: var(--light);
+  background: var(--lightgray);
+  border: 1px solid var(--gray);
+  border-radius: 6px;
+  margin: 0.5rem 0;
 }
 
 .notebook-image-output img {
@@ -320,16 +305,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   font-size: 0.9em;
 }
 
-.notebook-stream-output pre {
-  background: var(--lightgray);
-  border: 1px solid var(--gray);
-  border-radius: 6px;
-  padding: 1rem;
-  margin: 0;
-  color: var(--dark);
-  font-size: 0.9em;
-}
-
 .notebook-link-unavailable {
   color: var(--gray) !important;
   text-decoration: line-through;
@@ -346,27 +321,20 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     background: var(--darkgray);
     border-color: var(--secondary);
   }
-  
-  .notebook-header {
+    .notebook-header {
     background: var(--secondary);
     color: var(--light);
   }
-  
-  .notebook-code-cell {
-    background: var(--dark);
-  }
-  
-  .notebook-input pre {
-    background: #0d1117;
-    border-color: var(--gray);
-    color: #f0f6fc;
-  }
-  
-  .notebook-text-output pre,
+    .notebook-text-output pre,
   .notebook-stream-output pre {
     background: var(--darkgray);
     border-color: var(--gray);
     color: var(--light);
+  }
+  
+  .notebook-image-output {
+    background: var(--darkgray);
+    border-color: var(--gray);
   }
   
   .notebook-markdown-cell {
@@ -384,10 +352,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   .notebook-markdown-cell code {
     background: var(--dark);
     color: var(--light);
-  }
-  
-  .notebook-image-output {
-    background: var(--darkgray);
   }
   
   .notebook-error-output pre {
