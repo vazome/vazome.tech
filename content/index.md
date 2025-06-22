@@ -1,9 +1,7 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-21T03:21:00+04:00
-tags:
-  - personal
-  - concept
+date modified: 2025-06-22T15:16:45+04:00
+tags: [personal, concept]
 title: About this blog
 ---
 This is my personal Tech blog, here I share my articles, notes and opinions.
@@ -13,11 +11,9 @@ Click on tags #concept,. Backlinks or Graph to find similar or relevant material
 # About me
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub. I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia.
 ![[me.jpg|300]]
-
 I play drums, even have one at home!
 My *Alesis Nitro Max Kit*, I like it because it gives you all key things while not skipping on the features like MIDI, recording, changing drum sounds and a full kick pad (on the right) and it was affordable.
 ![[drums.jpg|300]]
-
 Back in high school I did photography (street, journalism) as a hobby two years, my camera was Sony Alpha 58 with kit, portrait, and Minolta f4/70-210mm (beer can) lenses. Here is a little showcase:
 
 | ![[35223634376_6f88fb2ef4_k.jpg]]Protestor being carried away | ![[35077105151_0fb18d9cf9_k.jpg]]A fan, chanting |
@@ -37,7 +33,6 @@ The original was a regular sized 3:4 photo, but if you crop it, it look much bet
 ![[35682922454_7b6a75a3cb_k.jpg]]
 ![[d11DxU7HHxY.jpg]]
 ![[auhELaEOjsU.jpg]]
-
 I may comeback one day, once I settle. More on my Flickr: [About Daniel Vazome \| Flickr](https://www.flickr.com/people/vasome/) 
 # Contacts
 Here are my contacts:

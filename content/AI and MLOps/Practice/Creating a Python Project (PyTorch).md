@@ -1,7 +1,9 @@
 ---
 date created: 2025-06-05T17:16:06+04:00
 date modified: 2025-06-18T09:09:25+04:00
-tags: [ml, code/python]
+tags:
+  - code/python
+  - practice
 ---
 We will create a project to run PyTorch for our #ml project
 # Setup

@@ -1,7 +1,8 @@
 ---
 date created: 2025-06-05T20:31:05+04:00
-date modified: 2025-06-18T05:03:07+04:00
-tags: [deployment, monitoring]
+date modified: 2025-06-22T00:10:58+04:00
+tags:
+  - concept/mlops
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)
 

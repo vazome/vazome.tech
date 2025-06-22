@@ -1,11 +1,7 @@
 ---
 date created: 2025-06-20T15:31:41+04:00
-date modified: 2025-06-20T16:09:31+04:00
+date modified: 2025-06-21T03:23:48+04:00
 ---
-### AWS Global and Regional Architecture
-
-Related:
-
 Regions are separate as isolated fault domains and geopolitically, location control.
 Regions have Availability Zone which have separate power, connection and are located in different locations. Can be multiple DCs in one AZ. They are isolated too.
 Creation of Virtual Private Cloud between AZs is possible
