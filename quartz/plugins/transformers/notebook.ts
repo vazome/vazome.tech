@@ -4,6 +4,8 @@ import { visit } from "unist-util-visit"
 import { Element } from "hast"
 import path from "path"
 import fs from "fs/promises"
+import { marked } from "marked"
+import { fromHtml } from "hast-util-from-html"
 
 interface Options {
   /** Cache directory for downloaded notebooks */
@@ -104,28 +106,22 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     let content = ''
     
     if (cell.cell_type === 'markdown') {
-      // Simple markdown to HTML conversion
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
       content = `<div class="notebook-markdown-cell">${markdownToHtml(source)}</div>`
     } else if (cell.cell_type === 'code') {
       const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
-      content = `
-        <div class="notebook-code-cell">
-          <div class="notebook-input">
-            <pre><code class="language-python">${escapeHtml(source)}</code></pre>
-          </div>
-      `
+      const codeBlock = `<pre><code class="language-python">${escapeHtml(source)}</code></pre>`
       
-      // Add outputs if they exist
+      let outputsHtml = ''
       if (cell.outputs && cell.outputs.length > 0) {
-        content += '<div class="notebook-outputs">'
+        outputsHtml = '<div class="notebook-outputs">'
         for (const output of cell.outputs) {
-          content += formatOutput(output)
+          outputsHtml += formatOutput(output)
         }
-        content += '</div>'
+        outputsHtml += '</div>'
       }
       
-      content += '</div>'
+      content = `<div class="notebook-code-cell">${codeBlock}${outputsHtml}</div>`
     }
     
     return `<div id="${cellId}" class="notebook-cell notebook-${cell.cell_type}-cell">${content}</div>`
@@ -133,14 +129,8 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 
   // Simple markdown to HTML converter (basic implementation)
   const markdownToHtml = (markdown: string): string => {
-    return markdown
-      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code>$1</code>')
-      .replace(/\n/g, '<br>')
+    // Using `marked` library for better markdown rendering
+    return marked(markdown) as string
   }
 
   // Format notebook output
@@ -198,17 +188,97 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     const cells = notebook.cells.map((cell, index) => cellToHtml(cell, index)).join('\n')
     
     return `
-      <div class="jupyter-notebook-embedded">
-        <div class="notebook-header">
-          <span class="notebook-title">Jupyter Notebook</span>
-        </div>
-        <div class="notebook-cells">
-          ${cells}
-        </div>
+      <div class="notebook-container">
+        ${cells}
       </div>
+      <style>
+        .notebook-container {
+          border: 1px solid var(--gray);
+          border-radius: 8px;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          background-color: var(--light);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Dark mode styles */
+        :root[saved-theme="dark"] .notebook-container {
+            background-color: var(--dark);
+            border-color: var(--dark-gray);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .notebook-cell {
+          margin-bottom: 1rem;
+        }
+        
+        .notebook-cell:last-child {
+            margin-bottom: 0;
+        }
+
+        .notebook-code-cell {
+          /* No special styling, so it inherits from the theme */
+          /* The <pre><code> block inside will be styled by Quartz's default styles */
+        }
+        
+        .notebook-outputs {
+          margin-top: 0.5rem;
+          padding-top: 0.5rem;
+          border-top: 1px solid var(--gray);
+        }
+
+        :root[saved-theme="dark"] .notebook-outputs {
+            border-top-color: var(--dark-gray);
+        }
+        
+        /* Gray boxes for outputs */
+        .notebook-stream-output pre,
+        .notebook-text-output pre {
+          padding: 0.75rem;
+          margin: 0;
+          overflow-x: auto;
+          border-radius: 4px;
+          background-color: var(--lightgray);
+          color: var(--dark);
+        }
+
+        .notebook-error-output pre {
+          padding: 0.75rem;
+          margin: 0;
+          overflow-x: auto;
+          border-radius: 4px;
+          background-color: #ffe6e6;
+          border: 1px solid #ff9999;
+          color: #d73a49;
+        }
+
+        :root[saved-theme="dark"] .notebook-stream-output pre,
+        :root[saved-theme="dark"] .notebook-text-output pre {
+          background-color: #2a2a2a;
+          border: 1px solid var(--dark-gray);
+          color: var(--light);
+        }
+
+        :root[saved-theme="dark"] .notebook-error-output pre {
+          background-color: #5a1d1d;
+          border: 1px solid #a83c3c;
+          color: #ffcccc;
+        }
+
+        .notebook-image-output img {
+          max-width: 100%;
+          height: auto;
+          display: block;
+          margin: 0.5rem auto;
+        }
+        .notebook-markdown-cell {
+          padding: 0.5rem;
+        }
+      </style>
     `
   }
 
+  // Main transformer function
   return {
     name: "NotebookEmbedding",
     htmlPlugins() {
@@ -245,21 +315,12 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
                         // Replace the link with embedded notebook
                         node.tagName = "div"
                         node.properties = {
-                          className: ["notebook-container"],
+                          className: ["notebook-wrapper-container"],
                           "data-notebook-url": href
                         }
-                        node.children = [{
-                          type: "element",
-                          tagName: "div",
-                          properties: { 
-                            className: ["notebook-placeholder"],
-                            "data-notebook-html": notebookHtml
-                          },
-                          children: [{
-                            type: "text",
-                            value: "Loading notebook..."
-                          }]
-                        } as any]
+
+                        const notebookAst = fromHtml(notebookHtml, { fragment: true })
+                        node.children = notebookAst.children as any
                       } else {
                         // Keep original link but add a class to indicate it's a notebook
                         if (Array.isArray(node.properties.className)) {
@@ -283,34 +344,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
           }
         }
       ]
-    },
-    externalResources() {
-      return {
-        css: [
-          {
-            content: `.jupyter-notebook-embedded{border:1px solid #e1e5e9;border-radius:8px;margin:1rem 0;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.1)}.notebook-header{background:#f8f9fa;padding:0.75rem 1rem;border-bottom:1px solid #e1e5e9;border-radius:8px 8px 0 0;font-weight:600;color:#586069}.notebook-cells{padding:0}.notebook-cell{border-bottom:1px solid #f0f0f0;padding:0.75rem 1rem}.notebook-cell:last-child{border-bottom:none}.notebook-code-cell{background:#f8f9fa}.notebook-input pre{background:#f6f8fa;border:1px solid #e1e5e9;border-radius:4px;padding:0.75rem;margin:0;overflow-x:auto;font-size:0.9em}.notebook-outputs{margin-top:0.5rem}.notebook-text-output pre{background:#fff;border:1px solid #e1e5e9;border-radius:4px;padding:0.75rem;margin:0;overflow-x:auto;font-size:0.9em}.notebook-image-output{text-align:center;padding:0.5rem}.notebook-image-output img{max-width:100%;height:auto;border-radius:4px}.notebook-error-output pre{background:#ffe6e6;border:1px solid #ff9999;border-radius:4px;padding:0.75rem;margin:0;color:#d73a49;font-size:0.9em}.notebook-markdown-cell{background:#fff}.notebook-link-unavailable{color:#586069!important;text-decoration:line-through}.notebook-link-unavailable::after{content:" (notebook unavailable)";font-size:0.8em;color:#999}@media (prefers-color-scheme:dark){.jupyter-notebook-embedded{background:#1a1a1a;border-color:#444}.notebook-header{background:#2a2a2a;border-color:#444;color:#ccc}.notebook-code-cell{background:#2a2a2a}.notebook-input pre,.notebook-text-output pre{background:#1e1e1e;border-color:#444;color:#e1e4e8}.notebook-markdown-cell{background:#1a1a1a;color:#e1e4e8}}`
-          },
-        ],
-        js: [
-          {
-            loadTime: "afterDOMReady",
-            contentType: "inline",
-            script: `
-              document.addEventListener('DOMContentLoaded', function() {
-                const placeholders = document.querySelectorAll('.notebook-placeholder');
-                placeholders.forEach(function(placeholder) {
-                  const notebookHtml = placeholder.getAttribute('data-notebook-html');
-                  if (notebookHtml) {
-                    placeholder.innerHTML = notebookHtml;
-                    placeholder.classList.remove('notebook-placeholder');
-                    placeholder.classList.add('notebook-embedded-content');
-                  }
-                });
-              });
-            `
-          }
-        ]
-      }
     },
   }
 }
