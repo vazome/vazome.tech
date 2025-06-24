@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-25T00:40:29+04:00
+date modified: 2025-06-25T01:19:04+04:00
 tags:
   - containers/kubernetes
 ---
@@ -136,8 +136,10 @@ Selectors link deployment configuration to specific pods. Matches selector to a 
 > **Namespaces** on are strictly separate resources in the cluster, so they have separate RBAC, quota and network policies
 
 Standard practice name key as app if you deploy application, so `app: nginx`
-#### Networking - Service, Ingress and Gateway API 
-Kubernetes expects us that nodes and pods within a cluster can communicate with one another without relying on [[NAT]]
+#### Networking - Services, Ingress, and Gateway API
+The ultimate purpose of these networking components is to enable users/edge devices to access our application, though they achieve it differently.
+> [!info] Low Level Networking
+> Kubernetes expects that nodes and pods within a cluster can communicate with one another without relying on [[NAT]]. There are solutions to enable this, [CNI overview \| Ubuntu](https://ubuntu.com/kubernetes/charmed-k8s/docs/cni-overview#:~:text=Supported%20CNI%20options) if you want to self host Kubernetes, the list is not full. Cloud providers use something on their end. In the end your K8S Cluster allocates IPs and setups necessary routing between nodes under the hood.
 
 ![[Pasted image 20250528140816.png|500]]
 1. Kind: **Service** (based on selector match with labels defined in Deployment)
