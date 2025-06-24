@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-20T15:04:22+04:00
+date modified: 2025-06-24T21:40:17+04:00
 tags:
   - containers/kubernetes
 ---
@@ -17,9 +17,10 @@ Both combined with [[Docker]] allows us to deploy immutable infrastructure where
 - Cloud specific plus cert manager and sercret store CSI Driver
 ![[Pasted image 20250527093053.png|400]]
 # Theory
-![[Pasted image 20230122040407.png|600]]
 ## Architecture (control plane)
-**Cluster control plane manages** all scheduling, application, scaling, and deploying Kubernetes. **Nodes** serve as workers in the K8S cluster. Required components which must be installed on every node are:
+![[Pasted image 20250624211714.png]]
+### Cluster control plane
+Manages all scheduling, application, scaling, and deploying Kubernetes. **Nodes** serve as workers in the K8S cluster. Required components which must be installed on every node are:
 
 - **Container runtime** - runs the container
 - **Kubelet** - intermediary between container and node. Executes operations on pods in the node
@@ -32,10 +33,10 @@ Services are used to connect between nodes.
 - **Scheduler (kube-scheduler)** - balances new deployments and scale requirements via load balancing on computing resources.
 - **Controller Manager (kube-controller-manager)** - detects state changes of pods and redeploys them via Scheduler communication.
 - **etcd** - key-value store, cluster brain, changes written there. Has data on load, usage, etc. Does not store app data.
-![[Pasted image 20230122043740.png]]
-![[kubernetes-cluster-architecture.svg]]
-It all works in scales motion where when you create a deployment it also create replicaset which creates pods. Also if there is already a stray pod with matching label it will be removed by deployment since  pods will be created regardless and stray pod will hit with limit condition
 
+![[kubernetes-cluster-architecture.svg]]
+It all works in scales motion where when you create a deployment it also create `ReplicaSet` which creates `pods`. Also if there is already a stray pod with matching label it will be removed by deployment since pods will be created regardless and stray pod will hit with limit condition
+### Data Plane
 - **`Pod`** - an abstraction over containers, can contain multiple containers
 	- e.g. Init container (run before), plus sidecars (run along) and primary
 	- Usually 1 app/DB per pod
@@ -66,7 +67,13 @@ It all works in scales motion where when you create a deployment it also create 
 	- How it's done![[Pasted image 20250422002746.png]]
 	- Provisioned via PVs, generally via user, via Storage Classes SC
 	- The basis can be local or remote like (s3)
-- **`Deployment`**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks, adds revisions akin versioning, implement [[Resilience and Reliability#High availability (HA)]]
+> [!Example] `PersistentVolume` and `PersistentVolumeClaim` on
+> | Resource                    | Namespaced? | Visible across Namespaces? | Notes                                |
+| --------------------------- | ----------- | -------------------------- | ------------------------------------ |
+| PersistentVolume (PV)       | ❌ No        | ✅ Yes                      | Like shared storage pool             |
+| PersistentVolumeClaim (PVC) | ✅ Yes       | ❌ No                       | Tied to 1 namespace                  |
+| Pod                         | ✅ Yes       | ❌ No                       | Must mount PVCs in its own namespace |
+- **`Deployment`**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks, adds revisions akin versioning, implements [[Resilience and Reliability#High availability (HA)]].
 	- When deployment created a rollout is triggered, each rollout creates a deployment revision which allows us to rollback in version.
 	- Utilizes `ReplicaSet` for replication of pods. For example, via deploying a new node with same pods setup.
 	- Can't replicate pod dbs, because they have state - data
@@ -75,27 +82,33 @@ It all works in scales motion where when you create a deployment it also create 
 	- Pods get predictable names -0/1/2/3/4
 	- Either use this or deploy DB outside K8S in a highly available infra, like cloud.
 	- You cannot modify many of the created fields from YAML, like storage size/request!
-	- Has field serviceName, i.e. creating dns service for each replica independently (as if each pods got dns name), so in Service declaration you should make it **headless** with None clusterIP  ![[Pasted image 20250528213300.png]]
+	- Has field `serviceName`, i.e. creating dns service for each replica independently (as if each pods got dns name), so in Service declaration you should make it **headless** with `type: ClusterIP` and `ClusterIP: None` ![[Pasted image 20250528213300.png]]
 	- **Why headless** Each connection to the service is forwarded to one randomly selected backing pod. But what if the client needs to connect to all of those pods? What if the backing pods themselves need to each connect to all the other backing pods. Connecting through the service clearly isn’t the way to do this. [Service \| Kubernetes](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services)
 	- `StatefulSets` currently require a [Headless Service](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services) to be responsible for the network identity of the Pods. You are responsible for creating this Service.
 - **`PersistentVolume`** and **`PersistentVolumeClaim`** PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV.![[Pasted image 20250612222656.png]]
-- `RBAC` (`ServiceAccount`, `Role`, `RoleBinding`) - Service account is an auth object, role if what pods address to and `RoleBinding` merges these two entities. Role is namespace level while ClusterRole is `cluster` level ![[Pasted image 20250612223255.png]]
+- `RBAC` (`ServiceAccount`, `Role`, `RoleBinding`) - Service account is an auth object, role if what pods address to and `RoleBinding` merges these two entities. `Role` is `namespace` level while `ClusterRole` is `cluster` level ![[Pasted image 20250612223255.png]]
 - `Labels` and `Annotations`:![[Pasted image 20250612224508.png]]
 You can get explanation of template formats via
-`kubectl explain <component>` or `kubectl explain <component>.<sub>
+`kubectl explain <component>` or `kubectl explain <component>.<sub>`
 [GitHub - BretFisher/podspec: Kubernetes Pod Specification Good Defaults](https://github.com/BretFisher/podspec) 
-![[Pasted image 20250527170641.png]]`
+![[Pasted image 20250527170641.png]]
+#### Deployment
+Two ways of scaling down the deployments:
+- Reduce `replicas` parameter in manifest and `kubectl replace -f xx.yaml`
+- `kubectl scale <type> --replicas=6` or `kubectl scale -replicas=6 -f xx.yaml
 
-## Helm
-Distribution and versioning of Kubernetes applications.
-![[Pasted image 20250612225045.png]]
-It is good at templating.
-![[Pasted image 20250612225407.png]]
-`values.yaml` can have a supplementary `values.schema.json` to define a schema for values. Useful for error prevention
+In deployment labels work as additional identifiers, for example you can distinguish environment (prod, dev, stage, test) with it.
 
-Helm history of the releases in secrets of the clusters
+Selectors link deployment configuration to specific pods. Matches selector to a pod's `template: metadata: label:`
 
-## Networking - Service or Ingress 
+> [!tip] Labels, Selectors & Namespaces
+> **Labels** are classic key-value pairs, modifiable.
+> **Selectors** are used in manifests, to filter and act on resources under the label.
+> ![[Pasted image 20250422004946.png]]
+> **Namespaces** on are strictly separate resources in the cluster, so they have separate RBAC, quota and network policies
+
+Standard practice name key as app if you deploy application, so `app: nginx`
+#### Networking - Service or Ingress 
 ![[Pasted image 20250528140816.png|500]]
 1. Kind: **Service** (based on selector match with labels defined in Deployment)
 	1. **ClusterIP**: Internal to Cluster. Services are reachable by pods/services in the Cluster.
@@ -111,9 +124,24 @@ If you are within the same namespace you can resolve short name
 ![[Pasted image 20250528143121.png]]
 If you are reaching over namespaces, use [[DNS#^FQDN]]
 ![[Pasted image 20250528144320.png]]
+
+#### Service
+Also matches labels to know with pod to be linked with.
+port = service port / targetPort = (Container port usually)
+port and targetPort in common practice can be same, to keep things simpler
+
+# Helm
+Distribution and versioning of Kubernetes applications.
+![[Pasted image 20250612225045.png]]
+It is good at templating.
+![[Pasted image 20250612225407.png]]
+`values.yaml` can have a supplementary `values.schema.json` to define a schema for values. Useful for error prevention
+
+Helm history of the releases in secrets of the clusters
+
 # In practice
 
-## kubectl
+## CLI - kubectl
 
 List all pods in the namespace
 `kubectl get pods -n new-prod`
@@ -143,34 +171,6 @@ Direct monitoring with , but better to use Prometheus and Grafana
 
 To apply multiple:
 `kubectl apply -f 01_pods.yml -f 02_pvc.yml`
-## Deployment
-Two ways of scaling down the deployments:
-- Reduce `replicas` parameter in manifest and `kubectl replace -f xx.yaml`
-- `kubectl scale <type> --replicas=6` or `kubectl scale -replicas=6 -f xx.yaml
-
-In deployment labels work as additional identifiers, for example you can distinguish environment (prod, dev, stage, test) with it.
-
-Selectors lots deployment know to which deployment a pod is related to. Matches selector to a pod template-metadata-label
-
-> [!tip] Labels, Selectors & Namespaces
-> **Labels** are classic key-value pairs, modifiable.
-> **Selectors** are used in manifests, to filter and act on resources under the label.
-> ![[Pasted image 20250422004946.png]]
-> **Namespaces** on are strictly separate resources in the cluster, so they have separate RBAC, quota and network policies
-> 
-| Resource                    | Namespaced? | Visible across Namespaces? | Notes                                |
-| --------------------------- | ----------- | -------------------------- | ------------------------------------ |
-| PersistentVolume (PV)       | ❌ No        | ✅ Yes                      | Like shared storage pool             |
-| PersistentVolumeClaim (PVC) | ✅ Yes       | ❌ No                       | Tied to 1 namespace                  |
-| Pod                         | ✅ Yes       | ❌ No                       | Must mount PVCs in its own namespace |
-
-
-Standard practice name key as app if you deploy application, so app: nginx
-## Service
-Also matches labels to know with pod to be linked with.
-port = service port / targetPort = (Container port usually)
-port and targetPort in common practice can be same, to keep things simpler
-
 ## Status to Errors
 
 > [!tip]

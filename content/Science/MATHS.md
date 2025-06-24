@@ -1,6 +1,6 @@
 ---
 date created: 2025-06-18T05:20:40+04:00
-date modified: 2025-06-19T07:01:55+04:00
+date modified: 2025-06-23T04:15:09+04:00
 tags:
   - math
 ---
@@ -238,11 +238,16 @@ $$\frac{2 \times 60}{15} = 2 \times \frac{60}{15}, \quad \text{so} \quad \frac{6
 ![[Pasted image 20250601023638.png]]
 # Advanced Math
 
-## Vectors
+# Statistics
+## Standard Deviation
+![[Pasted image 20250623041837.png]]
+
+# Vectors
+==fix headers==
 ### What is a Vector?
 There are try approaches on what is a vector, mainly:
 ![[Perspectives.svg]]
-Keep in mind, negative numbers in visual representation, also indicates motion. positive numbers - rightward or upwards; negative numbers - leftward or downward. Each pair of numbers gives you one and only vector. 
+Keep in mind, negative numbers in visual representation, also indicates motion. Positive numbers - rightward or upwards; negative numbers - leftward or downward. Each pair of numbers gives you one and only vector. 
 #### Physics perspective
 Vector is an arrow that points in space, defined by its length (magnitude) and direction. As long as these values don't change, you can move this arrow around (like left/right/up/down).
 ![[MagnitudeAndDirection.svg]]
@@ -251,11 +256,10 @@ Vector is an arrow that points in space, defined by its length (magnitude) and d
 Vector is an ordered list of numbers, dimensions defined by amount of elements in the list, this is a two dimensional vector, order matters:
 $$\begin{bmatrix} 2600m^2 \\ $300,000 \end{bmatrix}$$
 #### Mathematician's Perspective
-Generalizes abovementioned views, saying vector can be anything when there is a notion of adding two vectors or multiplying a vector by a number.![[MathematiciansPerspective.svg]]
+Generalizes aforementioned views, saying vector can be anything when there is a notion of adding two vectors or multiplying a vector by a number.![[MathematiciansPerspective.svg]]
 This view seems abstract and it's better implement this when you are more knowledgeable on the topic.
 ### Vector theory over geometry
 It's essential to know that geometrical view translates to CS view this way:  $\begin{bmatrix} \text{x-axis} \\ \text{y-axis} \end{bmatrix} \text{sign "-" is dash}$
-
 
 **What about 3D space?**
 In 3D, we add Z axis which is [perpendicular](https://en.wikipedia.org/wiki/Perpendicular) to both X and Y. 
