@@ -1,5 +1,6 @@
-#it_theory/osi
-
+---
+tags: concept/networking
+---
 Protocol which allows host to know IP address  for the given MAC address via L2 Broadcast message.
 Sends broadcast by using all FFs MAC address, end host received the message and gives answer that it's that MAC with specified IP.
 # ARP Request

@@ -1,8 +1,8 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
 date modified: 2025-06-09T20:05:20+04:00
+tags: concept/networking
 ---
-#it_theory/osi
 # Calculating subnet size
 
 Imagine boundaries 8-16-24-32. Start from smaller boundary, if subnet is smaller than the boundary, subtract subnet from boundary. Example: 133.33.86.7/18

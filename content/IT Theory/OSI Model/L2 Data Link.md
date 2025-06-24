@@ -1,5 +1,6 @@
-#it_theory/osi
-
+---
+tags: concept/networking
+---
 Uses Physical layer for device to device communication
 
 Common protocol: Ethernet

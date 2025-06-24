@@ -1,5 +1,8 @@
-#it_theory/osi
-
+---
+tags: concept/networking
+date created: 2025-06-25T00:31:21+04:00
+date modified: 2025-06-25T01:00:38+04:00
+---
 VLAN helps to divide LAN. So broadcast calls are separate for each lane. 4000 vlans limit.
 There are 2 types of VLAN
 - 802.1Q - dot1q, adds 32 bit field into Ethernet frame, helps distinct LANs

@@ -1,5 +1,8 @@
-#it_theory/osi
-
+---
+tags: concept/networking/global
+date created: 2025-06-24T21:42:32+04:00
+date modified: 2025-06-25T00:41:26+04:00
+---
 Used to connect distinct L2 networks - Interlink to make Internet possible
 
 Device example: Routers

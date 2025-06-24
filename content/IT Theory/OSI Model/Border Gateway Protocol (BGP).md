@@ -1,3 +1,6 @@
+---
+tags: concept/networking/global
+---
 Basically helps with [Dynamic routing - Wikipedia](https://en.wikipedia.org/wiki/Dynamic_routing)
 
 Path-vector protocol, it exchanges best path to a destination between peers. The path is called **ASPATH**. 

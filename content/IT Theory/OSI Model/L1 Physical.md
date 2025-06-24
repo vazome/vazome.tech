@@ -1,5 +1,6 @@
-#it_theory/osi
-
+---
+tags: concept/networking
+---
 DUMB.
 
 Device example: RJ-45 port, cable

@@ -1,6 +1,11 @@
+---
+date created: 2025-06-25T00:31:21+04:00
+date modified: 2025-06-25T00:41:07+04:00
+tags: concept/networking/global
+---
 Related: [[L3 Network]]
 
-NAT is a crutch that was designed to overcome IPv4 shortages, and consequentially provides some security. Does not needed for IPv6.
+NAT is a crutch that was designed to overcome IPv4 shortcomings, and consequentially provides some security. Is not needed for IPv6.
 
 Translates Private IP Address into Public
 

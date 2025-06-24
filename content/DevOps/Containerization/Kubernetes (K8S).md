@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-24T22:01:58+04:00
+date modified: 2025-06-25T00:40:29+04:00
 tags:
   - containers/kubernetes
 ---
@@ -8,15 +8,15 @@ Automates (orchestrates) Docker to scale, check for errored out containers and e
 
 Both combined with [[Docker]] allows us to deploy immutable infrastructure where both system and the application can be represented as a single artifact. Combining with [[git]] such artifacts can be represented in "single source of truth" - a repository which contains underlying configuration
 [CNCF Landscape](https://landscape.cncf.io/)
-![[Pasted image 20250527095536.png]]
-- CRI used to execute and tun container processes in system
-	- Mostly containerd and cri-o
-- CNI user to define networking
-	- Cloud specific or Open Source Calico, Flannel, Cilium
-- CSI managing storage and volumes
-- Cloud specific plus cert manager and sercret store CSI Driver
-![[Pasted image 20250527093053.png|400]]
 # Theory
+
+![[Pasted image 20250527095536.png]]
+- CRI used to execute and run container processes in pods.
+	- Mostly `containerd` and `cri-o`
+- CNI user to define networking.
+	- Cloud specific or Open Source Calico, Flannel, Cilium
+- CSI managing storage and volumes.
+	- Cloud specific plus cert manager and secrets store CSI Driver
 ## Architecture (control plane)
 ![[Pasted image 20250624211714.png]]
 ### Cluster control plane
@@ -136,7 +136,9 @@ Selectors link deployment configuration to specific pods. Matches selector to a 
 > **Namespaces** on are strictly separate resources in the cluster, so they have separate RBAC, quota and network policies
 
 Standard practice name key as app if you deploy application, so `app: nginx`
-#### Networking - Service or Ingress 
+#### Networking - Service, Ingress and Gateway API 
+Kubernetes expects us that nodes and pods within a cluster can communicate with one another without relying on [[NAT]]
+
 ![[Pasted image 20250528140816.png|500]]
 1. Kind: **Service** (based on selector match with labels defined in Deployment)
 	1. **ClusterIP**: Internal to Cluster. Services are reachable by pods/services in the Cluster.

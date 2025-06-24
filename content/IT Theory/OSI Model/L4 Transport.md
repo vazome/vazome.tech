@@ -1,5 +1,8 @@
-#it_theory/osi
-
+---
+tags: concept/networking/global
+date created: 2025-06-25T00:31:21+04:00
+date modified: 2025-06-25T01:00:26+04:00
+---
 Fixes L3 intermittent IP packet delivery:
 - Because L3 work per packet, you cannot guarantee that packets will arrive in order or not be lost.
 - L3 does not distinguish IP packet designation, L3 does not know for which App or Channel a packet is designated.
