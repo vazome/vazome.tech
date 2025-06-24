@@ -170,7 +170,7 @@ ALTER VIEW ...
 
 They can be materialized and non-materialized, meaning whether it stores the resulting data on disk or not.
 `CREATE MATERIALIZED VIEW top_15 AS` and to refresh them `REFRESH MATERIALIZED VIEW` 
-There is no SQL command to create an auto-refreshing views in PGSQL, but can be accomplished via [[CRON jobs]]. Materialized views have more dependency implications since if original view is updated earlier than materialized view then it's output is out-of-date.
+There is no SQL command to create an auto-refreshing views in PGSQL, but can be accomplished via [[CRON Scheduler]]. Materialized views have more dependency implications since if original view is updated earlier than materialized view then it's output is out-of-date.
 
 Nowadays there are tools that use DAG, like in [[Apache Spark#DAG and how it works]] and pipeline schedulers, Like Apache Airflow or Luigi to track dependencies of views.
 ## SQL Permission control

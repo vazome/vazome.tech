@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-24T21:40:17+04:00
+date modified: 2025-06-24T22:01:58+04:00
 tags:
   - containers/kubernetes
 ---
@@ -44,7 +44,7 @@ It all works in scales motion where when you create a deployment it also create 
 	- ![[Pasted image 20250527170116.png|300]]
 	- ![[Pasted image 20250615013217.png|300]]
 - **`Job`** is an ad-hoc (single use) work until completion container configuration, creates one or mode pods, completes. Pods also assigned random name Set backoffLimit![[Pasted image 20250528152516.png]]
-- **`CronJob`** is like job, but can be scheduled based general [[CRON jobs]] rules
+- **`CronJob`** is like job, but can be scheduled based general [[CRON Scheduler]] rules
 - **`DaemonSet`** runs a copy of a container pod an all or (selected subset of) nodes in the cluster (brings propagation). Good for monitoring, log aggregation or storage daemon. Does not target control plane
 - **`Namespaces`** separate resources like groups avoid name conflicts, but don't act as security/network boundary by default. 
 	- The list of default namespaces
@@ -63,17 +63,7 @@ It all works in scales motion where when you create a deployment it also create 
 - **`ReplicaSet`** adds replication (a subset of a deployment)
 	- **`Labels` link `ReplicaSets` and `Pods`**
 	- ![[Pasted image 20250527172911.png|300]]
-- **`PersistentVolumes`** - stores data persistently, functions as emulated physical storage.
-	- How it's done![[Pasted image 20250422002746.png]]
-	- Provisioned via PVs, generally via user, via Storage Classes SC
-	- The basis can be local or remote like (s3)
-> [!Example] `PersistentVolume` and `PersistentVolumeClaim` on
-> | Resource                    | Namespaced? | Visible across Namespaces? | Notes                                |
-| --------------------------- | ----------- | -------------------------- | ------------------------------------ |
-| PersistentVolume (PV)       | ❌ No        | ✅ Yes                      | Like shared storage pool             |
-| PersistentVolumeClaim (PVC) | ✅ Yes       | ❌ No                       | Tied to 1 namespace                  |
-| Pod                         | ✅ Yes       | ❌ No                       | Must mount PVCs in its own namespace |
-- **`Deployment`**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks, adds revisions akin versioning, implements [[Resilience and Reliability#High availability (HA)]].
+- **`Deployment`**: creates blueprints for pods, automates replication adds concepts of rollout and rollbacks, adds revisions akin versioning, implements [[Business Resilience and Reliability#High availability (HA)]].
 	- When deployment created a rollout is triggered, each rollout creates a deployment revision which allows us to rollback in version.
 	- Utilizes `ReplicaSet` for replication of pods. For example, via deploying a new node with same pods setup.
 	- Can't replicate pod dbs, because they have state - data
@@ -85,7 +75,15 @@ It all works in scales motion where when you create a deployment it also create 
 	- Has field `serviceName`, i.e. creating dns service for each replica independently (as if each pods got dns name), so in Service declaration you should make it **headless** with `type: ClusterIP` and `ClusterIP: None` ![[Pasted image 20250528213300.png]]
 	- **Why headless** Each connection to the service is forwarded to one randomly selected backing pod. But what if the client needs to connect to all of those pods? What if the backing pods themselves need to each connect to all the other backing pods. Connecting through the service clearly isn’t the way to do this. [Service \| Kubernetes](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services)
 	- `StatefulSets` currently require a [Headless Service](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services) to be responsible for the network identity of the Pods. You are responsible for creating this Service.
-- **`PersistentVolume`** and **`PersistentVolumeClaim`** PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV.![[Pasted image 20250612222656.png]]
+- **`PersistentVolume`** and **`PersistentVolumeClaim`** stores data persistently, functions as emulated physical storage. PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV. ![[Pasted image 20250612222656.png]]
+	- Provisioned via PVs, generally via user, via Storage Classes SC
+	- The basis can be local or remote like (s3)
+> [!Example] `PersistentVolume` and `PersistentVolumeClaim` on
+> | Resource                    | Namespaced? | Visible across Namespaces? | Notes                                |
+| --------------------------- | ----------- | -------------------------- | ------------------------------------ |
+| PersistentVolume (PV)       | ❌ No        | ✅ Yes                      | Like shared storage pool             |
+| PersistentVolumeClaim (PVC) | ✅ Yes       | ❌ No                       | Tied to 1 namespace                  |
+| Pod                         | ✅ Yes       | ❌ No                       | Must mount PVCs in its own namespace |
 - `RBAC` (`ServiceAccount`, `Role`, `RoleBinding`) - Service account is an auth object, role if what pods address to and `RoleBinding` merges these two entities. `Role` is `namespace` level while `ClusterRole` is `cluster` level ![[Pasted image 20250612223255.png]]
 - `Labels` and `Annotations`:![[Pasted image 20250612224508.png]]
 You can get explanation of template formats via
@@ -93,9 +91,39 @@ You can get explanation of template formats via
 [GitHub - BretFisher/podspec: Kubernetes Pod Specification Good Defaults](https://github.com/BretFisher/podspec) 
 ![[Pasted image 20250527170641.png]]
 #### Deployment
-Two ways of scaling down the deployments:
+There are two deployment strategies, these are defined in `.spec.strategy.type`
+- `RollingUpdate`: gradually replace old pods with new ones.
+	- Logs: gradual scale down of old `ReplicaSet` and scale up of new `ReplicaSet`
+- `Recreate`: terminate all pods, create new ones.
+	- Logs: total scale down of old `ReplicaSet` and scale up of new `ReplicaSet`.
+``` mermaid
+flowchart TD
+    subgraph Recreate Strategy
+        A1("Old Pods: nginx:1.7.0") -->|Terminate All Pods| B1["Application Down"]
+        B1 -->|Start New Pods| C1("New Pods: nginx:1.7.1")
+    end
+
+    subgraph Rolling Update Strategy
+        A2("Old Pods: nginx:1.7.0") -->|Terminate 1 Pod| B2("New Pod: nginx:1.7.1")
+        B2 -->|Repeat Stepwise| C2("All Pods: nginx:1.7.1")
+        A2 -.->|Continue Serving Traffic| C2
+    end
+```
+Check rollout status with `kubectl rollout status` and history with `kubectl rollout history`.
+
+Rolling back is possible via `kubectl rollout undo deployment/myapp-deployment`. For these actions you can see the difference in `ReplicaSet` behavior, for example, before and after `rollout undo`:
+![[Pasted image 20250624220522.png]]
+
+You can add `--record` to command affecting deployments which will register the use of the command in `kubectl rollout history`.
+
+You can perform ad-hoc update of the deployment configuration with `kubectl set image deployment/frontend simple-webapp=kodekloud/webapp-color:v2`, but this **won't update** the definition file, so it's better to change config in file, GitOps way.![[Pasted image 20250625002550.png]]
+
+There are two ways of manually scaling down the deployment:
 - Reduce `replicas` parameter in manifest and `kubectl replace -f xx.yaml`
 - `kubectl scale <type> --replicas=6` or `kubectl scale -replicas=6 -f xx.yaml
+
+> [!question] apply vs replace
+> `apply` acts as incremental update and does not change selectors. `replace` completely sets a new deployment.
 
 In deployment labels work as additional identifiers, for example you can distinguish environment (prod, dev, stage, test) with it.
 

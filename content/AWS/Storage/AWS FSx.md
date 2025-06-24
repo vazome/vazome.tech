@@ -10,7 +10,7 @@ The Windows' [[AWS EFS]],
 - Native windows file system.
 	- For example support shadow copies (VSS) and DFS and ..
 - Integrates with [[Directory Service]] and self managed AD.
-- Resilient and [[Resilience and Reliability#High availability (HA)]], backed replicates data to enable that.
+- Resilient and [[Business Resilience and Reliability#High availability (HA)]], backed replicates data to enable that.
 - Can work in Single and Multi-AZ modes.
 - On-demand and Scheduled backups
 - Accessible using VPC, Peering, VPN ([[AWS Site-to-Site VPN]]) and [[AWS Direct Connect (DX)]]

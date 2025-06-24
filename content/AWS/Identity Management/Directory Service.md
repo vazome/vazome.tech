@@ -3,7 +3,7 @@ Related: [[Active Directory]]
 ![[Pasted image 20230304225018.png|400]]
 Some services require Directory Service, like [[Amazon Workspaces]]
 
-Run in VPC, to implement [[Resilience and Reliability#High availability (HA)]], deploy multiple AZs
+Run in VPC, to implement [[Business Resilience and Reliability#High availability (HA)]], deploy multiple AZs
 Can be Isolated (Like being AWS only) or integrated or act as a proxy in connector mode.
 
 # Simple AD Mode
