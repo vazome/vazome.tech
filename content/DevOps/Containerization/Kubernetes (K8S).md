@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-25T01:19:04+04:00
+date modified: 2025-06-25T17:37:28+04:00
 tags:
   - containers/kubernetes
 ---
@@ -142,11 +142,12 @@ The ultimate purpose of these networking components is to enable users/edge devi
 > Kubernetes expects that nodes and pods within a cluster can communicate with one another without relying on [[NAT]]. There are solutions to enable this, [CNI overview \| Ubuntu](https://ubuntu.com/kubernetes/charmed-k8s/docs/cni-overview#:~:text=Supported%20CNI%20options) if you want to self host Kubernetes, the list is not full. Cloud providers use something on their end. In the end your K8S Cluster allocates IPs and setups necessary routing between nodes under the hood.
 
 ![[Pasted image 20250528140816.png|500]]
+ A Service uses selectors to determine which Pods it should route traffic to, based on the labels those Pods have.
 1. Kind: **Service** (based on selector match with labels defined in Deployment)
 	1. **ClusterIP**: Internal to Cluster. Services are reachable by pods/services in the Cluster.
-	2. **NodePort**: Listens on each node in cluster. Services are reachable by clients on the same LAN/clients who can ping the K8s Host Nodes (and pods/services in the cluster). Note for security your k8s host nodes should be on a private subnet, thus clients on the internet won't be able to reach this service)
-	3. **LoadBalancer**: Provisions external LB. Services are reachable by everyone connected to the internet (Common architecture is L4 LB is publicly accessible on the internet by putting it in a DMZ. Or giving it both a private and public IP and k8s host nodes are on a private subnet) (sudo $(which cloud-provider-kind) for local k8s so that LB works)
-	4. ***A Service uses selectors to determine which Pods it should route traffic to, based on the labels those Pods have.***
+	2. **NodePort**: Can multi-node. Balancing Algorithm: Random. 
+	   Services are reachable by clients on the same LAN. Note for security your k8s host nodes should be on a private subnet, thus clients on the internet won't be able to reach this service. ![[Pasted image 20250625012955.png|500]]
+	3. **LoadBalancer**: Provisions external facing LB. Services are reachable by everyone connected to the internet (Common architecture is L4 LB is publicly accessible on the internet by putting it in a DMZ. Or giving it both a private and public IP and k8s host nodes are on a private subnet) (sudo $(which cloud-provider-kind) for local k8s so that LB works)
 2. Kind: **Ingress**
 	1. Expose to internet, route to multiple services, setup advances HTTP stuff, works similarly to an API.
 
@@ -154,10 +155,10 @@ Kubernetes has internal DNS service like [[Docker#Docker Compose]] so you can re
 ![[Pasted image 20250528142410.png]]
 If you are within the same namespace you can resolve short name
 ![[Pasted image 20250528143121.png]]
-If you are reaching over namespaces, use [[DNS#^FQDN]]
+If you are reaching over namespaces, use [[DNS#^d3c822|DNS FQDN]]
 ![[Pasted image 20250528144320.png]]
 
-#### Service
+##### Service
 Also matches labels to know with pod to be linked with.
 port = service port / targetPort = (Container port usually)
 port and targetPort in common practice can be same, to keep things simpler
