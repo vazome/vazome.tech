@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-25T17:37:28+04:00
+date modified: 2025-06-25T17:41:03+04:00
 tags:
   - containers/kubernetes
 ---
@@ -150,6 +150,8 @@ The ultimate purpose of these networking components is to enable users/edge devi
 	3. **LoadBalancer**: Provisions external facing LB. Services are reachable by everyone connected to the internet (Common architecture is L4 LB is publicly accessible on the internet by putting it in a DMZ. Or giving it both a private and public IP and k8s host nodes are on a private subnet) (sudo $(which cloud-provider-kind) for local k8s so that LB works)
 2. Kind: **Ingress**
 	1. Expose to internet, route to multiple services, setup advances HTTP stuff, works similarly to an API.
+> [!tip]
+> Generally people tend to assign same values to `port` and `targetPort` , to keep things simpler.
 
 Kubernetes has internal DNS service like [[Docker#Docker Compose]] so you can resolve a Service within a pod.
 ![[Pasted image 20250528142410.png]]
@@ -157,12 +159,6 @@ If you are within the same namespace you can resolve short name
 ![[Pasted image 20250528143121.png]]
 If you are reaching over namespaces, use [[DNS#^d3c822|DNS FQDN]]
 ![[Pasted image 20250528144320.png]]
-
-##### Service
-Also matches labels to know with pod to be linked with.
-port = service port / targetPort = (Container port usually)
-port and targetPort in common practice can be same, to keep things simpler
-
 # Helm
 Distribution and versioning of Kubernetes applications.
 ![[Pasted image 20250612225045.png]]
