@@ -1,6 +1,6 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-22T15:16:45+04:00
+date modified: 2025-06-26T06:17:47+04:00
 tags: [personal, concept]
 title: About this blog
 ---
@@ -12,7 +12,7 @@ Click on tags #concept,. Backlinks or Graph to find similar or relevant material
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub. I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia.
 ![[me.jpg|300]]
 I play drums, even have one at home!
-My *Alesis Nitro Max Kit*, I like it because it gives you all key things while not skipping on the features like MIDI, recording, changing drum sounds and a full kick pad (on the right) and it was affordable.
+My *Alesis Nitro Max Kit* — it gives you all key things and not skipping on the features like MIDI, recording, samples, and a full kick pad (on the right).
 ![[drums.jpg|300]]
 Back in high school I did photography (street, journalism) as a hobby two years, my camera was Sony Alpha 58 with kit, portrait, and Minolta f4/70-210mm (beer can) lenses. Here is a little showcase:
 

@@ -1,6 +1,6 @@
 ---
 date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-25T17:41:03+04:00
+date modified: 2025-06-25T17:54:26+04:00
 tags:
   - containers/kubernetes
 ---
@@ -17,9 +17,9 @@ Both combined with [[Docker]] allows us to deploy immutable infrastructure where
 	- Cloud specific or Open Source Calico, Flannel, Cilium
 - CSI managing storage and volumes.
 	- Cloud specific plus cert manager and secrets store CSI Driver
-## Architecture (control plane)
+## Architecture
 ![[Pasted image 20250624211714.png]]
-### Cluster control plane
+### Control Plane
 Manages all scheduling, application, scaling, and deploying Kubernetes. **Nodes** serve as workers in the K8S cluster. Required components which must be installed on every node are:
 
 - **Container runtime** - runs the container
@@ -200,7 +200,7 @@ Direct monitoring with , but better to use Prometheus and Grafana
 
 To apply multiple:
 `kubectl apply -f 01_pods.yml -f 02_pvc.yml`
-## Status to Errors
+## Status and Errors
 
 > [!tip]
 > `BackOff` is incremental increase of wait time before retry
