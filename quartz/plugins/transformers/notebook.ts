@@ -62,14 +62,12 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     try {
       // Convert GitHub URL to raw URL if needed
       let rawUrl = url
-      if (url.includes('github.com') && !url.includes('raw.githubusercontent.com')) {
-        rawUrl = url
-          .replace('github.com', 'raw.githubusercontent.com')
-          .replace('/blob/', '/')
+      if (url.includes("github.com") && !url.includes("raw.githubusercontent.com")) {
+        rawUrl = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
       }
 
       const response = await fetch(rawUrl, {
-        signal: AbortSignal.timeout(opts.downloadTimeout)
+        signal: AbortSignal.timeout(opts.downloadTimeout),
       })
 
       if (!response.ok) {
@@ -88,7 +86,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   // Cache notebook locally
   const cacheNotebook = async (url: string, data: NotebookData): Promise<void> => {
     try {
-      const urlHash = Buffer.from(url).toString('base64').replace(/[/+=]/g, '_')
+      const urlHash = Buffer.from(url).toString("base64").replace(/[/+=]/g, "_")
       const cachePath = path.join(opts.cacheDir, `${urlHash}.json`)
       await fs.writeFile(cachePath, JSON.stringify(data, null, 2))
     } catch (error) {
@@ -99,29 +97,30 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   // Load cached notebook
   const loadCachedNotebook = async (url: string): Promise<NotebookData | null> => {
     try {
-      const urlHash = Buffer.from(url).toString('base64').replace(/[/+=]/g, '_')
+      const urlHash = Buffer.from(url).toString("base64").replace(/[/+=]/g, "_")
       const cachePath = path.join(opts.cacheDir, `${urlHash}.json`)
-      const data = await fs.readFile(cachePath, 'utf-8')
+      const data = await fs.readFile(cachePath, "utf-8")
       return JSON.parse(data) as NotebookData
     } catch (error) {
       return null
     }
-  }  // Convert notebook cell to HTML
+  } // Convert notebook cell to HTML
   const cellToHtml = async (cell: NotebookCell, index: number): Promise<string> => {
     const cellId = `notebook-cell-${index}`
-    let content = ''
+    let content = ""
 
-    if (cell.cell_type === 'markdown') {
-      const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
+    if (cell.cell_type === "markdown") {
+      const source = Array.isArray(cell.source) ? cell.source.join("") : cell.source
       content = `<div class="notebook-markdown-cell">${await markdownToHtml(source)}</div>`
-    } else if (cell.cell_type === 'code') {
-      const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source
+    } else if (cell.cell_type === "code") {
+      const source = Array.isArray(cell.source) ? cell.source.join("") : cell.source
       const executionCount = cell.execution_count
 
       // Create execution count display
-      const executionLabel = executionCount !== null && executionCount !== undefined
-        ? `In [${executionCount}]:`
-        : 'In [ ]:'
+      const executionLabel =
+        executionCount !== null && executionCount !== undefined
+          ? `In [${executionCount}]:`
+          : "In [ ]:"
 
       // Use normal code block styling with execution count
       const codeBlock = `
@@ -132,12 +131,13 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
           </div>
         </div>`
 
-      let outputsHtml = ''
+      let outputsHtml = ""
       if (cell.outputs && cell.outputs.length > 0) {
         // Add output execution count
-        const outputLabel = executionCount !== null && executionCount !== undefined
-          ? `Out[${executionCount}]:`
-          : 'Out[ ]:'
+        const outputLabel =
+          executionCount !== null && executionCount !== undefined
+            ? `Out[${executionCount}]:`
+            : "Out[ ]:"
 
         outputsHtml = `<div class="notebook-outputs">
           <div class="notebook-output-label">${outputLabel}</div>
@@ -146,14 +146,14 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
         for (const output of cell.outputs) {
           outputsHtml += formatOutput(output)
         }
-        outputsHtml += '</div></div>'
+        outputsHtml += "</div></div>"
       }
 
       content = `${codeBlock}${outputsHtml}`
     }
 
     return `<div id="${cellId}" class="notebook-cell notebook-${cell.cell_type}-cell">${content}</div>`
-  }  // Simple markdown to HTML converter using remark
+  } // Simple markdown to HTML converter using remark
   const markdownToHtml = async (markdown: string): Promise<string> => {
     try {
       const processor = unified()
@@ -169,7 +169,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       const result = await processor.process(markdown)
       return String(result.value)
     } catch (error) {
-      console.warn('Error processing markdown with remark:', error)
+      console.warn("Error processing markdown with remark:", error)
       // Fallback to plain text wrapped in paragraph
       return `<p>${escapeHtml(markdown)}</p>`
     }
@@ -177,59 +177,59 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
 
   // Format notebook output
   const formatOutput = (output: any): string => {
-    if (output.output_type === 'stream') {
-      const text = Array.isArray(output.text) ? output.text.join('') : output.text
+    if (output.output_type === "stream") {
+      const text = Array.isArray(output.text) ? output.text.join("") : output.text
       return `<div class="notebook-stream-output"><pre>${escapeHtml(text)}</pre></div>`
-    } else if (output.output_type === 'execute_result' || output.output_type === 'display_data') {
+    } else if (output.output_type === "execute_result" || output.output_type === "display_data") {
       if (output.data) {
-        let content = ''
+        let content = ""
 
         // Handle text/plain
-        if (output.data['text/plain']) {
-          const text = Array.isArray(output.data['text/plain'])
-            ? output.data['text/plain'].join('')
-            : output.data['text/plain']
+        if (output.data["text/plain"]) {
+          const text = Array.isArray(output.data["text/plain"])
+            ? output.data["text/plain"].join("")
+            : output.data["text/plain"]
           content += `<div class="notebook-text-output"><pre>${escapeHtml(text)}</pre></div>`
         }
 
         // Handle image/png
-        if (output.data['image/png']) {
-          content += `<div class="notebook-image-output"><img src="data:image/png;base64,${output.data['image/png']}" alt="Plot output" /></div>`
+        if (output.data["image/png"]) {
+          content += `<div class="notebook-image-output"><img src="data:image/png;base64,${output.data["image/png"]}" alt="Plot output" /></div>`
         }
 
         // Handle text/html
-        if (output.data['text/html']) {
-          const html = Array.isArray(output.data['text/html'])
-            ? output.data['text/html'].join('')
-            : output.data['text/html']
+        if (output.data["text/html"]) {
+          const html = Array.isArray(output.data["text/html"])
+            ? output.data["text/html"].join("")
+            : output.data["text/html"]
           content += `<div class="notebook-html-output">${html}</div>`
         }
 
         return content
       }
-    } else if (output.output_type === 'error') {
-      const traceback = output.traceback ? output.traceback.join('\n') : ''
+    } else if (output.output_type === "error") {
+      const traceback = output.traceback ? output.traceback.join("\n") : ""
       return `<div class="notebook-error-output"><pre>${escapeHtml(traceback)}</pre></div>`
     }
 
-    return ''
+    return ""
   }
 
   // Escape HTML
   const escapeHtml = (text: string): string => {
     return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-  }  // Convert notebook to HTML
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+  } // Convert notebook to HTML
   const notebookToHtml = async (notebook: NotebookData, sourceUrl: string): Promise<string> => {
     const cellPromises = notebook.cells.map((cell, index) => cellToHtml(cell, index))
-    const cells = (await Promise.all(cellPromises)).join('\n')
+    const cells = (await Promise.all(cellPromises)).join("\n")
 
     // Extract notebook filename from URL
-    const notebookName = sourceUrl.split('/').pop() || 'notebook.ipynb'
+    const notebookName = sourceUrl.split("/").pop() || "notebook.ipynb"
 
     // Get favicon URL using our detection logic
     const faviconUrl = await getFaviconUrl(sourceUrl)
@@ -498,8 +498,8 @@ html[data-theme='dark'] .notebook-error-output pre {
       const response = await fetch(`${url.protocol}//${url.hostname}`, {
         signal: AbortSignal.timeout(5000),
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; Quartz-NotebookEmbedder/1.0)'
-        }
+          "User-Agent": "Mozilla/5.0 (compatible; Quartz-NotebookEmbedder/1.0)",
+        },
       })
 
       if (response.ok) {
@@ -521,14 +521,14 @@ html[data-theme='dark'] .notebook-error-output pre {
     const fallbackSources = [
       `https://www.google.com/s2/favicons?domain=${domain}&sz=32`,
       `https://icons.duckduckgo.com/ip3/${domain}.ico`,
-      `${new URL(sourceUrl).protocol}//${domain}/favicon.ico`
+      `${new URL(sourceUrl).protocol}//${domain}/favicon.ico`,
     ]
 
     for (const fallbackUrl of fallbackSources) {
       try {
         const response = await fetch(fallbackUrl, {
           signal: AbortSignal.timeout(3000),
-          method: 'HEAD' // Just check if it exists
+          method: "HEAD", // Just check if it exists
         })
         if (response.ok) {
           return fallbackUrl
@@ -542,10 +542,13 @@ html[data-theme='dark'] .notebook-error-output pre {
     return generateLetterFavicon(domain)
   }
 
-  const parseFaviconLinks = (html: string, baseUrl: URL): Array<{ sizes: string, href: string }> => {
+  const parseFaviconLinks = (
+    html: string,
+    baseUrl: URL,
+  ): Array<{ sizes: string; href: string }> => {
     const regex = /<link[^>]*rel=['"]?[^\s]*icon['"]?[^>]*?>/gi
     const matches = Array.from(html.matchAll(regex))
-    const icons: Array<{ sizes: string, href: string }> = []
+    const icons: Array<{ sizes: string; href: string }> = []
 
     matches.forEach((match) => {
       const linkTag = match[0]
@@ -556,7 +559,7 @@ html[data-theme='dark'] .notebook-error-output pre {
 
       // Extract sizes value
       const sizesMatch = linkTag.match(/sizes=['"]?([^\s>'"]*)['"]?/i)
-      const sizes = sizesMatch ? sizesMatch[1] : 'unknown'
+      const sizes = sizesMatch ? sizesMatch[1] : "unknown"
 
       if (href) {
         // Convert relative URLs to absolute using helper
@@ -577,17 +580,17 @@ html[data-theme='dark'] .notebook-error-output pre {
     }
   }
 
-  const getBestIcon = (icons: Array<{ sizes: string, href: string }>): string => {
+  const getBestIcon = (icons: Array<{ sizes: string; href: string }>): string => {
     // Sort by priority: known sizes first, then unknown
     const sizeMap = new Map<string, number>()
 
-    icons.forEach(icon => {
-      if (icon.sizes === 'unknown') {
+    icons.forEach((icon) => {
+      if (icon.sizes === "unknown") {
         sizeMap.set(icon.href, 16) // Default size
       } else {
         // Parse sizes like "32x32" or "16x16 32x32"
-        const sizeStr = icon.sizes.split(' ')[0] // Take first size if multiple
-        const size = parseInt(sizeStr.split('x')[0]) || 16
+        const sizeStr = icon.sizes.split(" ")[0] // Take first size if multiple
+        const size = parseInt(sizeStr.split("x")[0]) || 16
         sizeMap.set(icon.href, size)
       }
     })
@@ -608,7 +611,7 @@ html[data-theme='dark'] .notebook-error-output pre {
       <rect width="100%" height="100%" fill="#6366f1" rx="4"/>
       <text x="50%" y="50%" font-size="18" font-family="system-ui,sans-serif" font-weight="600" text-anchor="middle" dominant-baseline="middle" fill="white">${firstLetter}</text>
     </svg>`
-    return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString('base64')}`
+    return `data:image/svg+xml;base64,${Buffer.from(svgContent).toString("base64")}`
   }
 
   // Main transformer function
@@ -627,7 +630,7 @@ html[data-theme='dark'] .notebook-error-output pre {
                 const href = node.properties.href as string
 
                 // Check if this is a notebook link
-                if (href.endsWith('.ipynb')) {
+                if (href.endsWith(".ipynb")) {
                   const promise = (async () => {
                     try {
                       // Try to load from cache first
@@ -639,7 +642,7 @@ html[data-theme='dark'] .notebook-error-output pre {
                         if (notebook) {
                           await cacheNotebook(href, notebook)
                         }
-                      }                      // If we have notebook data, embed it
+                      } // If we have notebook data, embed it
                       if (notebook) {
                         const notebookHtml = await notebookToHtml(notebook, href)
 
@@ -647,7 +650,7 @@ html[data-theme='dark'] .notebook-error-output pre {
                         node.tagName = "div"
                         node.properties = {
                           className: ["notebook-wrapper-container"],
-                          "data-notebook-url": href
+                          "data-notebook-url": href,
                         }
 
                         const notebookAst = fromHtml(notebookHtml, { fragment: true })
@@ -656,7 +659,7 @@ html[data-theme='dark'] .notebook-error-output pre {
                         // Show the original link but mark it as unavailable
                         node.properties = {
                           ...node.properties,
-                          className: ["notebook-link-unavailable"]
+                          className: ["notebook-link-unavailable"],
                         }
                         // Optionally, you can keep the original children or set a message:
                         // node.children = [{ type: "text", value: "Notebook unavailable" }] as any
@@ -674,7 +677,7 @@ html[data-theme='dark'] .notebook-error-output pre {
             // Wait for all notebook processing to complete
             await Promise.all(promises)
           }
-        }
+        },
       ]
     },
   }

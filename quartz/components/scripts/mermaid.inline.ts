@@ -127,18 +127,18 @@ class DiagramPanZoom {
 
   private resetTransform() {
     this.scale = 1
-    
+
     // Get container and SVG dimensions
     const containerRect = this.container.getBoundingClientRect()
     const svg = this.content.querySelector("svg")!
     const svgRect = svg.getBoundingClientRect()
-    
+
     // Calculate center position relative to container
     this.currentPan = {
       x: (containerRect.width - svgRect.width) / 2,
       y: (containerRect.height - svgRect.height) / 2,
     }
-    
+
     this.updateTransform()
   }
 }
