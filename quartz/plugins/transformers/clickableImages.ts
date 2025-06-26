@@ -54,7 +54,7 @@ export const ClickableImages: QuartzTransformerPlugin = () => {
   display: inline-block;
   cursor: pointer;
   transition: transform 0.2s ease;
-  margin: 1rem 0;
+  margin: 0;
 }
 
 .lightbox-wrapper:hover {
