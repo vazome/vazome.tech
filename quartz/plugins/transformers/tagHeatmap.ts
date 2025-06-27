@@ -383,16 +383,40 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
 }
 
 .showcase-button {
-  font-size: 0.8rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  border: 1px solid var(--border-dark);
-  background: var(--lightgray);
-  border-radius: 4px;
-  transition: background 0.3s ease;
+  border: 2px solid var(--secondary);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  user-select: none;
+  min-width: 100px;
 }
+
 .showcase-button:hover {
-  background: var(--gray);
+  background: var(--secondary);
+  color: var(--light);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.showcase-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+[saved-theme="dark"] .showcase-button {
+  background: var(--darkgray);
+  color: var(--light);
+  border-color: var(--secondary);
+}
+
+[saved-theme="dark"] .showcase-button:hover {
+  background: var(--secondary);
+  color: var(--dark);
 }
 
 /* Disable animations for reduced motion */
@@ -825,25 +849,184 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
     const allColormaps = [
       'viridis','inferno','magma','plasma','warm','rainbow','rainbow-soft','hsv','jet','hot','cool','spring','summer','autumn','winter','blackbody','bone','copper','greys','bluered','RdBu','picnic','earth','ocean','portland','bathymetry','cdom','chlorophyll','density','freesurface-blue','freesurface-red','oxygen','par','phase','salinity','temperature','turbidity','velocity-blue','velocity-green','YIGnBu','greens','YIOrRd','electric'
     ];
-    // Discover current colormap index
+    
+    // Pre-computed colormap data - this would need to be generated server-side
+    const colormapData = {};
+    
     let currentIndex = allColormaps.indexOf('${options.colormap}');
     if (currentIndex < 0) currentIndex = 0;
 
-    function cycleColormap(delta) {
-      currentIndex = (currentIndex + delta + allColormaps.length) % allColormaps.length
-      const newMap = allColormaps[currentIndex]
-      // Reload page or update the query param to re-render with new colormap
-      const url = new URL(window.location.href)
-      url.searchParams.set('colormap', newMap)
-      window.location.href = url.toString()
+    function generateColors(colormapName, nshades = 256) {
+      // Simplified colormap generation - in a real implementation, 
+      // you'd want the full colormap library data
+      const maps = {
+        'viridis': ['#440154', '#414287', '#2a788e', '#22a884', '#7ad151', '#fde725'],
+        'inferno': ['#000004', '#420a68', '#932667', '#dd513a', '#fca50a', '#fcffa4'],
+        'magma': ['#000004', '#3b0f70', '#8c2981', '#de4968', '#fe9f6d', '#fcfdbf'],
+        'plasma': ['#0d0887', '#6a00a8', '#b12a90', '#e16462', '#fca636', '#f0f921'],
+        'warm': ['#000080', '#0000ff', '#00ffff', '#00ff00', '#ffff00', '#ff0000'],
+        'rainbow': ['#ff0000', '#ff8000', '#ffff00', '#80ff00', '#00ff00', '#00ff80', '#00ffff', '#0080ff', '#0000ff', '#8000ff', '#ff00ff'],
+        'cool': ['#00ffff', '#80ff80', '#ffff00', '#ff8080', '#ff00ff'],
+        'hot': ['#000000', '#ff0000', '#ffff00', '#ffffff'],
+        'jet': ['#000080', '#0000ff', '#00ffff', '#80ff00', '#ffff00', '#ff8000', '#ff0000', '#800000']
+      };
+      
+      const baseColors = maps[colormapName] || maps['viridis'];
+      const colors = [];
+      
+      for (let i = 0; i < nshades; i++) {
+        const t = i / (nshades - 1);
+        const segmentIndex = Math.floor(t * (baseColors.length - 1));
+        const segmentT = (t * (baseColors.length - 1)) - segmentIndex;
+        
+        if (segmentIndex >= baseColors.length - 1) {
+          colors.push(baseColors[baseColors.length - 1]);
+        } else {
+          const color1 = baseColors[segmentIndex];
+          const color2 = baseColors[segmentIndex + 1];
+          colors.push(interpolateColor(color1, color2, segmentT));
+        }
+      }
+      
+      return colors;
+    }
+    
+    function interpolateColor(color1, color2, t) {
+      const r1 = parseInt(color1.slice(1, 3), 16);
+      const g1 = parseInt(color1.slice(3, 5), 16);
+      const b1 = parseInt(color1.slice(5, 7), 16);
+      
+      const r2 = parseInt(color2.slice(1, 3), 16);
+      const g2 = parseInt(color2.slice(3, 5), 16);
+      const b2 = parseInt(color2.slice(5, 7), 16);
+      
+      const r = Math.round(r1 + (r2 - r1) * t);
+      const g = Math.round(g1 + (g2 - g1) * t);
+      const b = Math.round(b1 + (b2 - b1) * t);
+      
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+    
+    function getLuminance(hexColor) {
+      const r = parseInt(hexColor.slice(1, 3), 16);
+      const g = parseInt(hexColor.slice(3, 5), 16);
+      const b = parseInt(hexColor.slice(5, 7), 16);
+      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    }
+    
+    function getTextColor(hexColor) {
+      return getLuminance(hexColor) < 0.6 ? '#ffffff' : '#1a1a1a';
     }
 
-    document.getElementById('showcase-prev').addEventListener('click', function() {
-      cycleColormap(-1)
-    })
-    document.getElementById('showcase-next').addEventListener('click', function() {
-      cycleColormap(+1)
-    })
+    function cycleColormap(delta) {
+      currentIndex = (currentIndex + delta + allColormaps.length) % allColormaps.length;
+      const newColormapName = allColormaps[currentIndex];
+      
+      // Generate new colors
+      const colors = generateColors(newColormapName, 256);
+      
+      // Get all tag data from the existing cells
+      const cells = document.querySelectorAll('.heatmap-cell');
+      const tagData = [];
+      
+      cells.forEach(cell => {
+        const title = cell.getAttribute('title');
+        if (title) {
+          const match = title.match(/^(.+): (\\d+) posts$/);
+          if (match) {
+            tagData.push({
+              element: cell,
+              tag: match[1],
+              count: parseInt(match[2])
+            });
+          }
+        }
+      });
+      
+      if (tagData.length === 0) return;
+      
+      // Calculate min/max for normalization
+      const counts = tagData.map(item => item.count);
+      const maxCount = Math.max(...counts);
+      const minCount = Math.min(...counts);
+      
+      // Update each cell with new colors
+      tagData.forEach(item => {
+        let normalizedValue;
+        if (maxCount === minCount) {
+          normalizedValue = 0;
+        } else {
+          normalizedValue = (item.count - minCount) / (maxCount - minCount);
+        }
+        
+        const colorIndex = Math.floor(normalizedValue * (colors.length - 1));
+        const backgroundColor = colors[colorIndex];
+        const textColor = getTextColor(backgroundColor);
+        
+        item.element.style.backgroundColor = backgroundColor;
+        item.element.style.borderColor = backgroundColor;
+        item.element.style.color = textColor;
+        
+        const link = item.element.querySelector('a');
+        if (link) {
+          link.style.color = textColor + ' !important';
+        }
+      });
+      
+      // Update legend gradient
+      const legendGradient = document.querySelector('.legend-gradient');
+      if (legendGradient) {
+        const gradientStops = [];
+        for (let i = 0; i <= 20; i++) {
+          const normalizedValue = i / 20;
+          const colorIndex = Math.floor(normalizedValue * (colors.length - 1));
+          const percentage = (i / 20 * 100).toFixed(1);
+          gradientStops.push(colors[colorIndex] + ' ' + percentage + '%');
+        }
+        const gradientCSS = 'linear-gradient(to right, ' + gradientStops.join(', ') + ')';
+        legendGradient.style.background = gradientCSS;
+      }
+      
+      // Add a subtle animation to indicate the change
+      cells.forEach((cell, index) => {
+        setTimeout(() => {
+          cell.style.transform = cell.style.transform + ' scale(1.1)';
+          setTimeout(() => {
+            cell.style.transform = cell.style.transform.replace(' scale(1.1)', '');
+          }, 150);
+        }, index * 20);
+      });
+    }
+
+    // Wait for DOM to be ready
+    function initShowcaseControls() {
+      const prevBtn = document.getElementById('showcase-prev');
+      const nextBtn = document.getElementById('showcase-next');
+      
+      if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          cycleColormap(-1);
+        });
+        
+        nextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          cycleColormap(+1);
+        });
+        
+        console.log('Showcase controls initialized');
+      } else {
+        // Try again after a short delay
+        setTimeout(initShowcaseControls, 100);
+      }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initShowcaseControls);
+    } else {
+      initShowcaseControls();
+    }
   })();
 </script>
 ` : ''
