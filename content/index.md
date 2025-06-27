@@ -1,6 +1,6 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-26T21:53:03+04:00
+date modified: 2025-06-26T22:11:46+04:00
 tags: [personal, concept, containers/docker]
 title: About this blog
 ---
@@ -8,6 +8,10 @@ This is my personal Tech blog, here I share my articles, lecture notes and opini
 
 **How to navigate**:
 Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials.
+
+```tag-heatmap
+```
+
 # About me
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub. I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia. 
 ![[me.jpg|300]]

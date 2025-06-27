@@ -1,3 +1,9 @@
+---
+date created: 2025-06-26T07:15:28+04:00
+date modified: 2025-06-27T09:35:22+04:00
+tags:
+  - concept/security
+---
 # Authentication
 **Authentication** is a confirmation of identity, that you is you.
 # Authorization

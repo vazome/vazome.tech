@@ -1,3 +1,9 @@
+---
+date created: 2025-06-26T07:15:28+04:00
+date modified: 2025-06-27T09:35:21+04:00
+tags:
+  - concept/security
+---
 Signing is needed because encryption does not prove the identity.
 Without signing anybody can pretend to be your partner to whom you send data.
 Signing with private key is producing a hash "stamp" with your data, which can be verified with public key.
