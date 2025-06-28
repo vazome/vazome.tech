@@ -17,7 +17,7 @@ const config: QuartzConfig = {
     },
     locale: "en-US",
     baseUrl: "vazome.tech",
-    ignorePatterns: ["private", "templates", ".obsidian", "content/(maintenance)"],
+    ignorePatterns: ["private", "templates", ".obsidian", "**/(maintenance)/**"],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
@@ -79,6 +79,15 @@ const config: QuartzConfig = {
       Plugin.Description(),
       Plugin.Latex({ renderEngine: "mathjax" }),
       Plugin.ClickableImages(),
+      Plugin.TagHeatmap({
+        colormap: 'viridis',                       // 🔥 FIXED: Use supported colormap (viridis is closest to cividis)
+        maxTags: 50,
+        gridColumns: 8,
+        cellSize: 'md',                            // 🔥 NEW: Control cell size (xs=25px, sm=35px, md=45px, lg=50px, xl=60px)
+        deduplication: 'hierarchical-split',       // 🔥 NEW: Enable interactive navigation
+        animationEffect: 'load-in'               // 🔥 NEW: Animation effect options: 'cosmic', 'slide-in', 'none'
+        //title: 'Global Tag Heatmap'
+      }),
     ],
     filters: [Plugin.RemoveDrafts()],
     emitters: [
@@ -96,7 +105,7 @@ const config: QuartzConfig = {
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      //Plugin.CustomOgImages(),
     ],
   },
 }
