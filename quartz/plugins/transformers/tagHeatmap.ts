@@ -7,47 +7,18 @@ import colormap from "colormap"
 
 /**
  * TagHeatmap Transformer Plugin
- *
- * Usage examples:
- * - Split layout with viridis: Plugin.TagHeatmap({ colormap: 'viridis', deduplication: 'hierarchical-split' })
- * - Compact cells: Plugin.TagHeatmap({ cellSize: 'sm', gridColumns: 10 })
- * - Large cells: Plugin.TagHeatmap({ cellSize: 'lg', gridColumns: 6 })
- * - Smart hybrid: Plugin.TagHeatmap({ deduplication: 'smart' })
- * - Leaf-only tags: Plugin.TagHeatmap({ deduplication: 'leaf-only' })
- * - No deduplication: Plugin.TagHeatmap({ deduplication: 'none' })
- * - Slide-in animation: Plugin.TagHeatmap({ animationEffect: 'slide-in' })
- * - Showcase demo: Plugin.TagHeatmap({ animationEffect: 'showcase' })
- *
+ * 
  * Deduplication modes:
  * - 'hierarchical-split': 1/3 for parent categories, 2/3 for children/leaf tags (recommended)
  * - 'smart': Shows tags exactly as written in frontmatter (respects author intent)
  * - 'leaf-only': Only shows tags that have no children (most specific tags)
  * - 'none': Shows all hierarchical combinations (original behavior)
- *
+ * 
  * Animation effects:
  * - 'cosmic': 3D rotations, scaling, and blur effects with staggered timing
  * - 'slide-in': Cells slide in from random edges (top, bottom, left, right) in random order
- * - 'showcase': Cycles through all colormap themes (now controlled with manual navigation arrows)
- *
- * Cell sizes (actual cell dimensions):
- * - 'xs': 40px cells, 2px gaps, very compact
- * - 'sm': 50px cells, 3px gaps, compact
- * - 'md': 60px cells, 4px gaps, balanced (default)
- * - 'lg': 75px cells, 5px gaps, spacious
- * - 'xl': 90px cells, 6px gaps, extra spacious
- *
- * Text sizes use container query units (cqw) for perfect scaling with cell size.
- *
- * Available colormaps:
- * Scientific: viridis, inferno, magma, plasma, warm
- * Rainbow/Spectrum: rainbow, rainbow-soft, hsv, jet
- * Temperature: hot, cool, spring, summer, autumn, winter, blackbody
- * Grayscale: bone, copper, greys
- * Diverging: bluered, RdBu, picnic
- * Natural: earth, ocean, portland
- * Scientific ocean: bathymetry, cdom, chlorophyll, density, freesurface-blue, freesurface-red,
- *                   oxygen, par, phase, salinity, temperature, turbidity, velocity-blue, velocity-green
- * Additional: YIGnBu, greens, YIOrRd, electric
+ * - 'showcase': Cycles through all colormap themes
+
  */
 
 // Configuration interface for TagHeatmap options
@@ -62,8 +33,9 @@ interface TagHeatmapOptions {
 }
 
 // Global tag counter - this will accumulate tags as files are processed
+// We'll track both direct tag usage and hierarchical relationships
 const globalTagCounts = new Map<string, number>()
-const directTagUsage = new Map<string, number>() // Tags used exactly as written
+const directTagUsage = new Map<string, number>() // Tags used exactly as written (not derived from hierarchy)
 let debugLogs: string[] = []
 
 function writeDebugLog(message: string) {
@@ -78,33 +50,33 @@ function writeDebugLog(message: string) {
 // Get cell size configuration
 function getCellSizeConfig(size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') {
   const configs = {
-    xs: {
+    xs: { 
       baseSize: '40px',
       gap: '2px',
       fontSize: { base: '0.6rem', parent: '0.7rem', child: '0.55rem' },
       maxWidth: '400px'
     },
-    sm: {
-      baseSize: '50px',
-      gap: '3px',
+    sm: { 
+      baseSize: '50px', 
+      gap: '3px', 
       fontSize: { base: '0.7rem', parent: '0.8rem', child: '0.65rem' },
       maxWidth: '500px'
     },
-    md: {
-      baseSize: '60px',
-      gap: '4px',
+    md: { 
+      baseSize: '60px', 
+      gap: '4px', 
       fontSize: { base: '0.75rem', parent: '0.9rem', child: '0.7rem' },
       maxWidth: '600px'
     },
-    lg: {
-      baseSize: '75px',
-      gap: '5px',
+    lg: { 
+      baseSize: '75px', 
+      gap: '5px', 
       fontSize: { base: '0.85rem', parent: '1rem', child: '0.8rem' },
       maxWidth: '750px'
     },
-    xl: {
-      baseSize: '80px',
-      gap: '5px',
+    xl: { 
+      baseSize: '80px', 
+      gap: '5px', 
       fontSize: { base: '0.9rem', parent: '1.05rem', child: '0.85rem' },
       maxWidth: '800px'
     }
@@ -116,7 +88,7 @@ function getCellSizeConfig(size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') {
 function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   if (effect === 'slide-in') {
     return `
-/* Slide-in animations from random directions */
+/* Slide-in animations from random directions using CSS variables for composability */
 @keyframes slideInFromTop {
   0% {
     opacity: 0;
@@ -276,13 +248,17 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
 }
 
 .heatmap-cell {
+  /* Initial state for slide-in animation */
   opacity: 0;
+  /* CSS variables for composable transforms */
   --slide-x: 0px;
   --slide-y: 0px;
   --hover-scale: 1;
   --anim-scale: 1;
   --anim-rotate: 0deg;
+  /* Composable transform using CSS variables */
   transform: translateX(var(--slide-x)) translateY(var(--slide-y)) scale(calc(var(--hover-scale) * var(--anim-scale))) rotate(var(--anim-rotate));
+  /* Animation will be applied via inline style with random direction */
 }
 
 .section-title {
@@ -301,14 +277,38 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   transform-origin: left center;
   animation: gradientCalibration 1.2s ease-out 1.3s forwards;
 }
-`
+
+/* Disable all animations for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .heatmap-cell {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .section-title {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .heatmap-legend {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .legend-gradient {
+    animation: none;
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}`
   }
 
   if (effect === 'showcase') {
-    // We'll remove the auto-run hue rotation and replace it with a manual approach
-    // controlled by arrow buttons. The fade-in for each cell remains.
     return `
-/* Showcase effect, now with manual cycling. */
+/* Showcase effect - cycles through all colormap themes */
 @keyframes fadeInScale {
   0% {
     opacity: 0;
@@ -331,7 +331,7 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   }
   100% {
     opacity: 1;
-    transform: translateY(0); 
+    transform: translateY(0);
   }
 }
 
@@ -346,13 +346,24 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   }
 }
 
+/* This can remain a hue rotation approach or be replaced by a more advanced JavaScript cycling. 
+   For simplicity, we keep a rotation so there's visible color shifting effect. */
+@keyframes cycleAllColormaps {
+  0% {
+    filter: hue-rotate(0deg) saturate(1) brightness(1);
+  }
+  100% {
+    filter: hue-rotate(360deg) saturate(1) brightness(1);
+  }
+}
+
 .heatmap-cell {
   opacity: 0;
   --slide-x: 0px;
   --slide-y: 0px;
   --hover-scale: 1;
   transform: translateX(var(--slide-x)) translateY(var(--slide-y)) scale(var(--hover-scale)) translateZ(0);
-  animation: fadeInScale 0.5s ease-out forwards;
+  animation: fadeInScale 0.5s ease-out forwards, cycleAllColormaps 6s linear infinite 1s;
   will-change: transform, opacity, filter;
 }
 
@@ -370,53 +381,8 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   opacity: 0;
   transform: scaleX(0) translateZ(0);
   transform-origin: left center;
-  animation: fadeInTitle 0.8s ease-out 0.5s forwards;
-  will-change: transform, opacity;
-}
-
-/* Buttons for manual colormap cycling */
-.showcase-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  gap: 1rem;
-}
-
-.showcase-button {
-  font-size: 0.85rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border: 2px solid var(--secondary);
-  background: var(--light);
-  color: var(--dark);
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  user-select: none;
-  min-width: 100px;
-}
-
-.showcase-button:hover {
-  background: var(--secondary);
-  color: var(--light);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.showcase-button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-
-[saved-theme="dark"] .showcase-button {
-  background: var(--darkgray);
-  color: var(--light);
-  border-color: var(--secondary);
-}
-
-[saved-theme="dark"] .showcase-button:hover {
-  background: var(--secondary);
-  color: var(--dark);
+  animation: cycleAllColormaps 6s linear infinite 1s, fadeInTitle 0.8s ease-out 0.5s forwards;
+  will-change: transform, opacity, filter;
 }
 
 /* Disable animations for reduced motion */
@@ -438,13 +404,12 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
     animation: fadeInTitle 0.8s ease-out 1s forwards;
     filter: none;
   }
-}
-`
+}`
   }
 
   // Default: cosmic effect
   return `
-/* Cosmic animations */
+/* Optimized cosmic loading animations - GPU accelerated, no bloat */
 @keyframes fadeInScale {
   0% {
     opacity: 0;
@@ -538,7 +503,7 @@ function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
   will-change: transform, opacity;
 }
 
-/* Disable all animations for reduced motion */
+/* Disable all animations for reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .heatmap-cell {
     animation: none;
@@ -581,16 +546,17 @@ function getSlideInAnimationStyle(
     const totalDelay = baseDelay + randomOffset
     return `animation: ${randomDirection} 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${totalDelay}s forwards;`
   }
+
   if (effect === 'showcase') {
-    // For "showcase", we skip auto-hue rotation and simply do a fade-in
-    // We'll manage color changes with the arrow buttons
     return `animation-delay: ${Math.min(index * 0.03, 1)}s;`
   }
-  // Default cosmic
+
+  // Default cosmic effect
   return `animation-delay: ${Math.min(index * 0.05, 1.5)}s;`
 }
 
 export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: TagHeatmapOptions) => {
+  // Merge user options with defaults
   const options: Required<TagHeatmapOptions> = {
     colormap: opts?.colormap ?? 'magma',
     maxTags: opts?.maxTags ?? 40,
@@ -614,9 +580,10 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                 return
               }
 
-              // Collect tags
+              // First, collect tags from this file
               if (file?.data?.frontmatter?.tags) {
                 let tags = file.data.frontmatter.tags
+                
                 if (typeof tags === 'string') {
                   tags = [tags]
                 } else if (Array.isArray(tags)) {
@@ -626,25 +593,28 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                 }
 
                 writeDebugLog(`TagHeatmap: Found tags in ${file.data.slug || 'unknown file'}: ${JSON.stringify(tags)}`)
+                
                 for (const tag of tags) {
                   directTagUsage.set(tag, (directTagUsage.get(tag) || 0) + 1)
+                  
                   const parts = tag.split("/")
                   for (let i = 0; i < parts.length; i++) {
                     const currentTag = parts.slice(0, i + 1).join("/")
                     globalTagCounts.set(currentTag, (globalTagCounts.get(currentTag) || 0) + 1)
                   }
                 }
-                writeDebugLog(`TagHeatmap: Direct usage: ${JSON.stringify([...directTagUsage.entries()])}`)
-                writeDebugLog(`TagHeatmap: Global count: ${JSON.stringify([...globalTagCounts.entries()])}`)
+                writeDebugLog(`TagHeatmap: Direct tag usage: ${JSON.stringify([...directTagUsage.entries()])}`)
+                writeDebugLog(`TagHeatmap: Global tag counts: ${JSON.stringify([...globalTagCounts.entries()])}`)
               }
               
               visit(tree, "code", (node, index, parent) => {
                 try {
                   if (!parent || typeof index !== "number") return
                   if (node.lang === "tag-heatmap") {
-                    writeDebugLog(`TagHeatmap: found tag-heatmap block in ${file?.data?.slug || 'unknown file'}`)
+                    writeDebugLog(`TagHeatmap: Processing tag-heatmap block in ${file?.data?.slug || 'unknown file'}. Current tag count: ${globalTagCounts.size}`)
+                    
                     if (globalTagCounts.size === 0) {
-                      writeDebugLog(`TagHeatmap: No tags found, returning placeholder`)
+                      writeDebugLog(`TagHeatmap: No tags found yet, rendering placeholder`)
                       const htmlNode = {
                         type: "html" as const,
                         value: `<div class="tag-heatmap-grid"><p>No tags found yet. Processing...</p></div>`,
@@ -653,7 +623,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                       return
                     }
 
-                    // Dedup strategy
+                    // Apply deduplication strategy
                     let tagsToDisplay: Map<string, number>
                     let parentTags: Map<string, number> = new Map()
                     let childAndLeafTags: Map<string, number> = new Map()
@@ -662,9 +632,10 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                       const allTags = [...directTagUsage.keys()]
                       for (const [tag, count] of directTagUsage.entries()) {
                         const isTopLevel = !tag.includes('/')
-                        const hasChildren = allTags.some(otherTag =>
+                        const hasChildren = allTags.some(otherTag => 
                           otherTag !== tag && otherTag.startsWith(tag + '/')
                         )
+                        
                         if (isTopLevel && hasChildren) {
                           const hierarchicalCount = globalTagCounts.get(tag) || count
                           parentTags.set(tag, hierarchicalCount)
@@ -673,38 +644,47 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                           childAndLeafTags.set(tag, hierarchicalCount)
                         }
                       }
+                      
                       tagsToDisplay = new Map([...parentTags.entries(), ...childAndLeafTags.entries()])
-                      writeDebugLog(`TagHeatmap: hierarchical-split -> parent: ${[...parentTags.entries()]}, child/leaf: ${[...childAndLeafTags.entries()]}`)
+                      writeDebugLog(`TagHeatmap: Hierarchical split - parents: ${JSON.stringify([...parentTags.entries()])}, children/leaf: ${JSON.stringify([...childAndLeafTags.entries()])}`)
+                      
                     } else if (options.deduplication === 'smart') {
                       tagsToDisplay = new Map()
                       for (const [tag, count] of directTagUsage.entries()) {
                         tagsToDisplay.set(tag, count)
                       }
-                      writeDebugLog(`TagHeatmap: smart dedup -> direct usage only: ${[...tagsToDisplay.entries()]}`)
+                      writeDebugLog(`TagHeatmap: Smart deduplication - direct tags: ${JSON.stringify([...tagsToDisplay.entries()])}`)
+                      
                     } else if (options.deduplication === 'leaf-only') {
                       tagsToDisplay = new Map()
                       const allTags = [...globalTagCounts.keys()]
+                      
                       for (const [tag, count] of globalTagCounts.entries()) {
-                        const hasChildren = allTags.some(otherTag =>
+                        const hasChildren = allTags.some(otherTag => 
                           otherTag !== tag && otherTag.startsWith(tag + '/')
                         )
                         if (!hasChildren) {
                           tagsToDisplay.set(tag, count)
                         }
                       }
-                      writeDebugLog(`TagHeatmap: leaf-only -> ${[...tagsToDisplay.entries()]}`)
+                      writeDebugLog(`TagHeatmap: Leaf-only deduplication: ${JSON.stringify([...tagsToDisplay.entries()])}`)
+                      
                     } else {
-                      // none
                       tagsToDisplay = new Map(globalTagCounts)
-                      writeDebugLog(`TagHeatmap: no dedup -> full global usage -> ${[...tagsToDisplay.entries()]}`)
+                      writeDebugLog(`TagHeatmap: No deduplication: ${JSON.stringify([...tagsToDisplay.entries()])}`)
                     }
 
                     const sortedTags = [...tagsToDisplay.entries()].sort((a, b) => b[1] - a[1])
+
                     if (tagsToDisplay.size === 0) {
                       return
                     }
 
                     let chosenColormap = options.colormap
+                    // For "showcase", we could randomize or do more advanced logic,
+                    // but here we simply proceed with the user-supplied colormap as is.
+                    // (Animation visually cycles colors in CSS.)
+                    
                     const colors = colormap({
                       colormap: chosenColormap,
                       nshades: 256,
@@ -718,7 +698,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
 
                     let parentMaxCount = maxCount
                     let parentMinCount = minCount
-                    let childMaxCount = maxCount
+                    let childMaxCount = maxCount 
                     let childMinCount = minCount
 
                     if (
@@ -728,6 +708,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                     ) {
                       const parentCounts = [...parentTags.values()]
                       const childCounts = [...childAndLeafTags.values()]
+                      
                       parentMaxCount = Math.max(...parentCounts)
                       parentMinCount = Math.min(...parentCounts)
                       childMaxCount = Math.max(...childCounts)
@@ -771,41 +752,47 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
 
                     const gridCols = options.gridColumns
                     let heatmapContent: string
-
+                    
                     if (options.deduplication === 'hierarchical-split') {
                       const sortedParents = [...parentTags.entries()].sort((a, b) => b[1] - a[1])
                       const sortedChildrenLeaf = [...childAndLeafTags.entries()].sort((a, b) => b[1] - a[1])
+                      
                       const totalParentCells = sortedParents.length
-
                       const parentCells = sortedParents.map(([tag, count], idx) => {
                         const backgroundColor = getColorForParent(count)
                         const textColor = getTextColor(backgroundColor)
                         const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
                         const tagUrl = `./tags/${tag}`
-                        const animationStyle = getSlideInAnimationStyle(idx, totalParentCells, options.animationEffect)
+                        const animationStyle = getSlideInAnimationStyle(
+                          idx,
+                          totalParentCells,
+                          options.animationEffect
+                        )
+                        
                         return `<div class="heatmap-cell parent-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
                           <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
                         </div>`
                       }).join('')
-
-                      const childLeafSlice = sortedChildrenLeaf.slice(0, Math.floor(options.maxTags * 2 / 3))
+                      
+                      const childLeafSlice = sortedChildrenLeaf.slice(0, Math.floor(options.maxTags * 2/3))
                       const totalChildCells = childLeafSlice.length
-
                       const childLeafCells = childLeafSlice.map(([tag, count], idx) => {
                         const backgroundColor = getColorForChild(count)
                         const textColor = getTextColor(backgroundColor)
                         const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
                         const tagUrl = `./tags/${tag}`
+                        // offset idx by totalParentCells so delays are continuous
                         const animationStyle = getSlideInAnimationStyle(
                           idx + totalParentCells,
                           totalChildCells,
                           options.animationEffect
                         )
+                        
                         return `<div class="heatmap-cell child-leaf-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
                           <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
                         </div>`
                       }).join('')
-
+                      
                       heatmapContent = `
                         <div class="heatmap-split-layout">
                           <div class="parent-section">
@@ -817,18 +804,26 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                             <div class="child-leaf-grid">${childLeafCells}</div>
                           </div>
                         </div>`
+                        
                     } else {
                       const displayTags = sortedTags.slice(0, options.maxTags)
+                      
                       const heatmapCells = displayTags.map(([tag, count], idx) => {
                         const backgroundColor = getColorForCount(count)
                         const textColor = getTextColor(backgroundColor)
                         const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
                         const tagUrl = `./tags/${tag}`
-                        const animationStyle = getSlideInAnimationStyle(idx, displayTags.length, options.animationEffect)
+                        const animationStyle = getSlideInAnimationStyle(
+                          idx,
+                          displayTags.length,
+                          options.animationEffect
+                        )
+                        
                         return `<div class="heatmap-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
                           <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
                         </div>`
                       }).join('')
+                      
                       heatmapContent = `<div class="heatmap-grid">${heatmapCells}</div>`
                     }
 
@@ -839,198 +834,10 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                       const percentage = (i / 20 * 100).toFixed(1)
                       gradientStops.push(`${colors[colorIndex]} ${percentage}%`)
                     }
+                    
                     const gradientCSS = `linear-gradient(to right, ${gradientStops.join(', ')})`
 
                     const cellConfig = getCellSizeConfig(options.cellSize)
-                    // We'll insert manual colormap cycle script for "showcase" effect
-                    const manualShowcaseScript = options.animationEffect === 'showcase' ? `
-<script>
-  (function() {
-    const allColormaps = [
-      'viridis','inferno','magma','plasma','warm','rainbow','rainbow-soft','hsv','jet','hot','cool','spring','summer','autumn','winter','blackbody','bone','copper','greys','bluered','RdBu','picnic','earth','ocean','portland','bathymetry','cdom','chlorophyll','density','freesurface-blue','freesurface-red','oxygen','par','phase','salinity','temperature','turbidity','velocity-blue','velocity-green','YIGnBu','greens','YIOrRd','electric'
-    ];
-    
-    // Pre-computed colormap data - this would need to be generated server-side
-    const colormapData = {};
-    
-    let currentIndex = allColormaps.indexOf('${options.colormap}');
-    if (currentIndex < 0) currentIndex = 0;
-
-    function generateColors(colormapName, nshades = 256) {
-      // Simplified colormap generation - in a real implementation, 
-      // you'd want the full colormap library data
-      const maps = {
-        'viridis': ['#440154', '#414287', '#2a788e', '#22a884', '#7ad151', '#fde725'],
-        'inferno': ['#000004', '#420a68', '#932667', '#dd513a', '#fca50a', '#fcffa4'],
-        'magma': ['#000004', '#3b0f70', '#8c2981', '#de4968', '#fe9f6d', '#fcfdbf'],
-        'plasma': ['#0d0887', '#6a00a8', '#b12a90', '#e16462', '#fca636', '#f0f921'],
-        'warm': ['#000080', '#0000ff', '#00ffff', '#00ff00', '#ffff00', '#ff0000'],
-        'rainbow': ['#ff0000', '#ff8000', '#ffff00', '#80ff00', '#00ff00', '#00ff80', '#00ffff', '#0080ff', '#0000ff', '#8000ff', '#ff00ff'],
-        'cool': ['#00ffff', '#80ff80', '#ffff00', '#ff8080', '#ff00ff'],
-        'hot': ['#000000', '#ff0000', '#ffff00', '#ffffff'],
-        'jet': ['#000080', '#0000ff', '#00ffff', '#80ff00', '#ffff00', '#ff8000', '#ff0000', '#800000']
-      };
-      
-      const baseColors = maps[colormapName] || maps['viridis'];
-      const colors = [];
-      
-      for (let i = 0; i < nshades; i++) {
-        const t = i / (nshades - 1);
-        const segmentIndex = Math.floor(t * (baseColors.length - 1));
-        const segmentT = (t * (baseColors.length - 1)) - segmentIndex;
-        
-        if (segmentIndex >= baseColors.length - 1) {
-          colors.push(baseColors[baseColors.length - 1]);
-        } else {
-          const color1 = baseColors[segmentIndex];
-          const color2 = baseColors[segmentIndex + 1];
-          colors.push(interpolateColor(color1, color2, segmentT));
-        }
-      }
-      
-      return colors;
-    }
-    
-    function interpolateColor(color1, color2, t) {
-      const r1 = parseInt(color1.slice(1, 3), 16);
-      const g1 = parseInt(color1.slice(3, 5), 16);
-      const b1 = parseInt(color1.slice(5, 7), 16);
-      
-      const r2 = parseInt(color2.slice(1, 3), 16);
-      const g2 = parseInt(color2.slice(3, 5), 16);
-      const b2 = parseInt(color2.slice(5, 7), 16);
-      
-      const r = Math.round(r1 + (r2 - r1) * t);
-      const g = Math.round(g1 + (g2 - g1) * t);
-      const b = Math.round(b1 + (b2 - b1) * t);
-      
-      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-    }
-    
-    function getLuminance(hexColor) {
-      const r = parseInt(hexColor.slice(1, 3), 16);
-      const g = parseInt(hexColor.slice(3, 5), 16);
-      const b = parseInt(hexColor.slice(5, 7), 16);
-      return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    }
-    
-    function getTextColor(hexColor) {
-      return getLuminance(hexColor) < 0.6 ? '#ffffff' : '#1a1a1a';
-    }
-
-    function cycleColormap(delta) {
-      currentIndex = (currentIndex + delta + allColormaps.length) % allColormaps.length;
-      const newColormapName = allColormaps[currentIndex];
-      
-      // Generate new colors
-      const colors = generateColors(newColormapName, 256);
-      
-      // Get all tag data from the existing cells
-      const cells = document.querySelectorAll('.heatmap-cell');
-      const tagData = [];
-      
-      cells.forEach(cell => {
-        const title = cell.getAttribute('title');
-        if (title) {
-          const match = title.match(/^(.+): (\\d+) posts$/);
-          if (match) {
-            tagData.push({
-              element: cell,
-              tag: match[1],
-              count: parseInt(match[2])
-            });
-          }
-        }
-      });
-      
-      if (tagData.length === 0) return;
-      
-      // Calculate min/max for normalization
-      const counts = tagData.map(item => item.count);
-      const maxCount = Math.max(...counts);
-      const minCount = Math.min(...counts);
-      
-      // Update each cell with new colors
-      tagData.forEach(item => {
-        let normalizedValue;
-        if (maxCount === minCount) {
-          normalizedValue = 0;
-        } else {
-          normalizedValue = (item.count - minCount) / (maxCount - minCount);
-        }
-        
-        const colorIndex = Math.floor(normalizedValue * (colors.length - 1));
-        const backgroundColor = colors[colorIndex];
-        const textColor = getTextColor(backgroundColor);
-        
-        item.element.style.backgroundColor = backgroundColor;
-        item.element.style.borderColor = backgroundColor;
-        item.element.style.color = textColor;
-        
-        const link = item.element.querySelector('a');
-        if (link) {
-          link.style.color = textColor + ' !important';
-        }
-      });
-      
-      // Update legend gradient
-      const legendGradient = document.querySelector('.legend-gradient');
-      if (legendGradient) {
-        const gradientStops = [];
-        for (let i = 0; i <= 20; i++) {
-          const normalizedValue = i / 20;
-          const colorIndex = Math.floor(normalizedValue * (colors.length - 1));
-          const percentage = (i / 20 * 100).toFixed(1);
-          gradientStops.push(colors[colorIndex] + ' ' + percentage + '%');
-        }
-        const gradientCSS = 'linear-gradient(to right, ' + gradientStops.join(', ') + ')';
-        legendGradient.style.background = gradientCSS;
-      }
-      
-      // Add a subtle animation to indicate the change
-      cells.forEach((cell, index) => {
-        setTimeout(() => {
-          cell.style.transform = cell.style.transform + ' scale(1.1)';
-          setTimeout(() => {
-            cell.style.transform = cell.style.transform.replace(' scale(1.1)', '');
-          }, 150);
-        }, index * 20);
-      });
-    }
-
-    // Wait for DOM to be ready
-    function initShowcaseControls() {
-      const prevBtn = document.getElementById('showcase-prev');
-      const nextBtn = document.getElementById('showcase-next');
-      
-      if (prevBtn && nextBtn) {
-        prevBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          cycleColormap(-1);
-        });
-        
-        nextBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          cycleColormap(+1);
-        });
-        
-        console.log('Showcase controls initialized');
-      } else {
-        // Try again after a short delay
-        setTimeout(initShowcaseControls, 100);
-      }
-    }
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initShowcaseControls);
-    } else {
-      initShowcaseControls();
-    }
-  })();
-</script>
-` : ''
-
                     const cssStyles = `
 <style>
 .heatmap-container {
@@ -1051,21 +858,24 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
   transition: color 0.3s ease;
 }
 
-/* Split layout */
+/* Split layout styles */
 .heatmap-split-layout {
   display: flex;
   gap: 1rem;
   max-width: 800px;
   margin: 0 auto;
 }
+
 .parent-section {
   flex: 1;
   min-width: 0;
 }
+
 .child-leaf-section {
   flex: 2;
   min-width: 0;
 }
+
 .section-title {
   font-size: 1rem;
   font-weight: 600;
@@ -1073,6 +883,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
   color: var(--darkgray);
   text-align: center;
 }
+
 .parent-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1081,6 +892,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
   max-width: calc(2 * calc(${cellConfig.baseSize} * 1.5) + ${cellConfig.gap});
   margin: 0 auto;
 }
+
 .child-leaf-grid {
   display: grid;
   grid-template-columns: repeat(${Math.floor(gridCols * 2/3)}, 1fr);
@@ -1137,6 +949,15 @@ ${getAnimationCSS(options.animationEffect)}
   max-height: ${cellConfig.baseSize};
 }
 
+/* Container-based responsive sizing */
+.parent-section .heatmap-cell {
+  container-type: inline-size;
+}
+
+.child-leaf-section .heatmap-cell {
+  container-type: inline-size;
+}
+
 .heatmap-cell a {
   text-decoration: none !important;
   color: inherit !important;
@@ -1148,6 +969,7 @@ ${getAnimationCSS(options.animationEffect)}
   width: 100%;
   height: 100%;
   font-weight: 600 !important;
+  opacity: 1 !important;
   background: transparent !important;
   position: relative;
   z-index: 1;
@@ -1157,6 +979,7 @@ ${getAnimationCSS(options.animationEffect)}
 .heatmap-cell a:hover {
   color: inherit !important;
   text-decoration: none !important;
+  opacity: 1 !important;
 }
 
 .heatmap-cell:hover {
@@ -1167,15 +990,15 @@ ${getAnimationCSS(options.animationEffect)}
   filter: blur(0) !important;
 }
 
-/* Dark mode */
+/* Dark mode specific styles */
 [saved-theme="dark"] .heatmap-cell:hover {
   box-shadow: 0 4px 16px rgba(255,255,255,0.1);
 }
+
 [saved-theme="dark"] .section-title {
   color: var(--lightgray);
 }
 
-/* Legend */
 .heatmap-legend {
   display: flex;
   align-items: center;
@@ -1186,6 +1009,7 @@ ${getAnimationCSS(options.animationEffect)}
   margin-top: 1rem;
   transition: color 0.3s ease;
 }
+
 .legend-gradient {
   width: 200px;
   height: 16px;
@@ -1197,9 +1021,11 @@ ${getAnimationCSS(options.animationEffect)}
   display: flex;
   align-items: center;
 }
+
 [saved-theme="dark"] .legend-gradient {
   border-color: var(--gray);
 }
+
 .legend-text {
   margin: 0;
   font-weight: 600;
@@ -1210,6 +1036,7 @@ ${getAnimationCSS(options.animationEffect)}
   align-items: center;
   line-height: 1;
 }
+
 [saved-theme="dark"] .legend-text {
   color: var(--light);
 }
@@ -1218,50 +1045,42 @@ ${getAnimationCSS(options.animationEffect)}
   outline: 2px solid var(--secondary);
   outline-offset: 2px;
 }
+
 .heatmap-cell a:focus {
   outline: none;
 }
 
-/* Responsive */
+/* Responsive design */
 @media (max-width: 768px) {
   .heatmap-split-layout {
     flex-direction: column;
   }
+  
   .parent-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  
   .child-leaf-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>`
 
-                    // If "showcase" effect, add manual arrows UI
-                    const manualArrowsHTML = options.animationEffect === 'showcase' ? `
-<div class="showcase-controls">
-  <button id="showcase-prev" class="showcase-button">← Previous</button>
-  <button id="showcase-next" class="showcase-button">Next →</button>
-</div>
-` : ''
-
                     const htmlNode = {
                       type: "html" as const,
-                      value: `
-${cssStyles}
-<div class="heatmap-container">
-  ${options.title ? `<div class="heatmap-title">${options.title}</div>` : ''}
-  ${heatmapContent}
-  <div class="heatmap-legend">
-    <span class="legend-text">Less</span>
-    <div class="legend-gradient" style="background: ${gradientCSS};"></div>
-    <span class="legend-text">More</span>
-  </div>
-  ${manualArrowsHTML}
-</div>
-${manualShowcaseScript}
-`
+                      value: `${cssStyles}
+                        <div class="heatmap-container">
+                          ${options.title ? `<div class="heatmap-title">${options.title}</div>` : ''}
+                          ${heatmapContent}
+                          <div class="heatmap-legend">
+                            <span class="legend-text">Less</span>
+                            <div class="legend-gradient" style="background: ${gradientCSS};"></div>
+                            <span class="legend-text">More</span>
+                          </div>
+                        </div>`
                     }
                     parent.children.splice(index, 1, htmlNode)
+                    writeDebugLog(`TagHeatmap: Rendered heatmap with ${sortedTags.length} tags`)
                   }
                 } catch (err) {
                   writeDebugLog(`TagHeatmap: Error processing code block: ${err}`)
