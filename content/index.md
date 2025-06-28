@@ -1,19 +1,26 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-26T22:11:46+04:00
+date modified: 2025-06-28T10:44:09+04:00
 tags: [personal, concept, containers/docker]
 title: About this blog
 ---
 This is my personal Tech blog, here I share my articles, lecture notes and opinions.
 
 **How to navigate**:
-Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials.
+Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials. 
 
 ```tag-heatmap
 ```
 
 # About me
-Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub. I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia. 
+## Technical
+Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub.
+
+Occasional open-source contributor. Obsidian and Quartz are my go-to stack for note taking and blogging. Member of [Quartz community](https://discord.gg/vbxtMV4u), I have published couple of useful plugins:
+- [GitHub - vazome/quartz-jupyter-embed-plugin: A minimal Quartz plugin for embedding and displaying Jupyter notebooks](https://github.com/vazome/quartz-jupyter-embed-plugin)
+- [GitHub - vazome/quartz-clickable-images-zoom-plugin: Enabled Lightbox zoom for Quartz built websites](https://github.com/vazome/quartz-clickable-images-zoom-plugin)
+## Personal
+I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia.
 ![[me.jpg|300]]
 
 I play drums, even have one at home!
