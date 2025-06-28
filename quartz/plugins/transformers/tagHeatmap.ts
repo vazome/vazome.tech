@@ -15,8 +15,8 @@ import colormap from "colormap"
  * - 'none': Shows all hierarchical combinations (original behavior)
  * 
  * Animation effects:
- * - 'cosmic': 3D rotations, scaling, and blur effects with staggered timing
- * - 'slide-in': Cells slide in from random edges (top, bottom, left, right) in random order
+ * - 'load-in': 3D rotations, scaling, and blur effects with staggered timing
+ * - 'pop-in': Cells slide in from random edges (top, bottom, left, right) in random order
  * - 'showcase': Cycles through all colormap themes
 
  */
@@ -29,7 +29,7 @@ interface TagHeatmapOptions {
   cellSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   title?: string
   deduplication?: 'none' | 'smart' | 'leaf-only' | 'hierarchical-split'
-  animationEffect?: 'cosmic' | 'slide-in' | 'showcase'
+  animationEffect?: 'load-in' | 'pop-in' | 'showcase'
 }
 
 // Global tag counter - this will accumulate tags as files are processed
@@ -84,475 +84,284 @@ function getCellSizeConfig(size: 'xs' | 'sm' | 'md' | 'lg' | 'xl') {
   return configs[size]
 }
 
-// Get animation CSS based on the selected effect
-function getAnimationCSS(effect: 'cosmic' | 'slide-in' | 'showcase') {
-  if (effect === 'slide-in') {
+// We reuse the previous animation CSS logic
+function getAnimationCSS(effect: 'load-in' | 'pop-in' | 'showcase') {
+  if (effect === 'pop-in') {
     return `
-/* Slide-in animations from random directions using CSS variables for composability */
-@keyframes slideInFromTop {
+/* Clean pop-in Effect - smooth scale from small to final size with accelerating easing */
+@keyframes popIn {
   0% {
     opacity: 0;
-    --slide-x: 0px;
-    --slide-y: -50px;
-    --anim-scale: 0.8;
-    --anim-rotate: -2deg;
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.9;
-    --slide-x: 0px;
-    --slide-y: 5px;
-    --anim-scale: 1.05;
-    --anim-rotate: 1deg;
-    filter: blur(0.5px);
+    transform: scale(0.3);
   }
   100% {
     opacity: 1;
-    --slide-x: 0px;
-    --slide-y: 0px;
-    --anim-scale: 1;
-    --anim-rotate: 0deg;
-    filter: blur(0);
-  }
-}
-
-@keyframes slideInFromBottom {
-  0% {
-    opacity: 0;
-    --slide-x: 0px;
-    --slide-y: 50px;
-    --anim-scale: 0.8;
-    --anim-rotate: 2deg;
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.9;
-    --slide-x: 0px;
-    --slide-y: -5px;
-    --anim-scale: 1.05;
-    --anim-rotate: -1deg;
-    filter: blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    --slide-x: 0px;
-    --slide-y: 0px;
-    --anim-scale: 1;
-    --anim-rotate: 0deg;
-    filter: blur(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    --slide-x: -50px;
-    --slide-y: 0px;
-    --anim-scale: 0.8;
-    --anim-rotate: -3deg;
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.9;
-    --slide-x: 5px;
-    --slide-y: 0px;
-    --anim-scale: 1.05;
-    --anim-rotate: 1.5deg;
-    filter: blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    --slide-x: 0px;
-    --slide-y: 0px;
-    --anim-scale: 1;
-    --anim-rotate: 0deg;
-    filter: blur(0);
-  }
-}
-
-@keyframes slideInFromRight {
-  0% {
-    opacity: 0;
-    --slide-x: 50px;
-    --slide-y: 0px;
-    --anim-scale: 0.8;
-    --anim-rotate: 3deg;
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.9;
-    --slide-x: -5px;
-    --slide-y: 0px;
-    --anim-scale: 1.05;
-    --anim-rotate: -1.5deg;
-    filter: blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    --slide-x: 0px;
-    --slide-y: 0px;
-    --anim-scale: 1;
-    --anim-rotate: 0deg;
-    filter: blur(0);
+    transform: scale(var(--hover-scale, 1));
   }
 }
 
 @keyframes fadeInTitle {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes legendSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes gradientCalibration {
-  0% {
-    opacity: 0;
-    transform: scaleX(0);
-    filter: hue-rotate(0deg) brightness(0.5);
-  }
-  25% {
-    opacity: 0.7;
-    transform: scaleX(0.3);
-    filter: hue-rotate(90deg) brightness(1.2);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scaleX(0.7);
-    filter: hue-rotate(180deg) brightness(1.5);
-  }
-  75% {
-    opacity: 0.95;
-    transform: scaleX(0.9);
-    filter: hue-rotate(270deg) brightness(1.2);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-    filter: hue-rotate(360deg) brightness(1);
-  }
+  0% { opacity: 0; transform: scaleX(0); }
+  100% { opacity: 1; transform: scaleX(1); }
 }
 
 .heatmap-cell {
-  /* Initial state for slide-in animation */
-  opacity: 0;
-  /* CSS variables for composable transforms */
-  --slide-x: 0px;
-  --slide-y: 0px;
+  opacity: 1;
   --hover-scale: 1;
-  --anim-scale: 1;
-  --anim-rotate: 0deg;
-  /* Composable transform using CSS variables */
-  transform: translateX(var(--slide-x)) translateY(var(--slide-y)) scale(calc(var(--hover-scale) * var(--anim-scale))) rotate(var(--anim-rotate));
-  /* Animation will be applied via inline style with random direction */
+  transform: scale(var(--hover-scale));
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  animation: popIn 1.0s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+  will-change: transform, opacity, box-shadow;
 }
 
 .section-title {
-  opacity: 0;
-  animation: fadeInTitle 0.8s ease-out 0.2s forwards;
+  opacity: 0; animation: fadeInTitle 0.8s ease-out 0.2s forwards;
 }
 
 .heatmap-legend {
-  opacity: 0;
-  animation: legendSlideIn 0.8s ease-out 1s forwards;
+  opacity: 0; animation: legendSlideIn 1.0s ease-out both;
 }
 
 .legend-gradient {
-  opacity: 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  animation: gradientCalibration 1.2s ease-out 1.3s forwards;
+  opacity: 0; transform: scaleX(0); transform-origin: left center;
+  animation: gradientCalibration 1.0s ease-out both;
 }
 
-/* Disable all animations for reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .heatmap-cell {
-    animation: none;
-    opacity: 1;
-    transform: none;
+  .heatmap-cell { 
+    animation: none; 
+    opacity: 1; 
+    transform: scale(1); 
+    box-shadow: none; 
+    border-radius: 3px; 
   }
-  
-  .section-title {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .heatmap-legend {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .legend-gradient {
-    animation: none;
-    opacity: 1;
-    transform: scaleX(1);
-  }
+  .section-title { animation: none; opacity: 1; transform: none; }
+  .heatmap-legend { animation: none; opacity: 1; transform: none; }
+  .legend-gradient { animation: none; opacity: 1; transform: scaleX(1); }
 }`
   }
 
   if (effect === 'showcase') {
     return `
-/* Showcase effect - cycles through all colormap themes */
+/* Showcase effect - cycles through all colormap themes with theme name display */
 @keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateZ(0);
-  }
-  60% {
-    opacity: 0.9;
-    transform: scale(1.05) translateZ(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateZ(0);
-  }
+  0% { opacity: 0; transform: scale(0.8) translateZ(0); }
+  60% { opacity: 0.9; transform: scale(1.05) translateZ(0); }
+  100% { opacity: 1; transform: scale(var(--hover-scale, 1)) translateZ(0); }
 }
 
 @keyframes fadeInTitle {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes legendSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-/* This can remain a hue rotation approach or be replaced by a more advanced JavaScript cycling. 
-   For simplicity, we keep a rotation so there's visible color shifting effect. */
+/* Theme name indicator animations */
+@keyframes themeNameFade {
+  0% { opacity: 0; transform: translateY(-5px) scale(0.95); }
+  10% { opacity: 1; transform: translateY(0) scale(1); }
+  90% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(5px) scale(0.95); }
+}
+
+/* Slower color cycling with longer pauses for analysis */
 @keyframes cycleAllColormaps {
-  0% {
-    filter: hue-rotate(0deg) saturate(1) brightness(1);
-  }
-  100% {
-    filter: hue-rotate(360deg) saturate(1) brightness(1);
-  }
+  0% { filter: hue-rotate(0deg) saturate(1) brightness(1); }
+  12.5% { filter: hue-rotate(45deg) saturate(1.1) brightness(1.1); }
+  25% { filter: hue-rotate(90deg) saturate(1.2) brightness(1.2); }
+  37.5% { filter: hue-rotate(135deg) saturate(1.1) brightness(1.1); }
+  50% { filter: hue-rotate(180deg) saturate(1) brightness(1); }
+  62.5% { filter: hue-rotate(225deg) saturate(1.1) brightness(0.9); }
+  75% { filter: hue-rotate(270deg) saturate(1.2) brightness(0.8); }
+  87.5% { filter: hue-rotate(315deg) saturate(1.1) brightness(0.9); }
+  100% { filter: hue-rotate(360deg) saturate(1) brightness(1); }
 }
 
 .heatmap-cell {
-  opacity: 0;
+  opacity: 1;
   --slide-x: 0px;
   --slide-y: 0px;
   --hover-scale: 1;
   transform: translateX(var(--slide-x)) translateY(var(--slide-y)) scale(var(--hover-scale)) translateZ(0);
-  animation: fadeInScale 0.5s ease-out forwards, cycleAllColormaps 6s linear infinite 1s;
+  animation: fadeInScale 0.5s ease-out forwards, cycleAllColormaps 12s ease-in-out infinite 1s;
   will-change: transform, opacity, filter;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .section-title {
-  opacity: 0;
-  animation: fadeInTitle 0.8s ease-out 0.2s forwards;
+  opacity: 0; animation: fadeInTitle 0.8s ease-out 0.2s forwards;
 }
 
 .heatmap-legend {
-  opacity: 0;
-  animation: legendSlideIn 0.8s ease-out 1s forwards;
+  opacity: 0; animation: legendSlideIn 0.8s ease-out 1s forwards;
 }
 
 .legend-gradient {
-  opacity: 0;
-  transform: scaleX(0) translateZ(0);
-  transform-origin: left center;
-  animation: cycleAllColormaps 6s linear infinite 1s, fadeInTitle 0.8s ease-out 0.5s forwards;
+  opacity: 0; transform: scaleX(0) translateZ(0); transform-origin: left center;
+  animation: cycleAllColormaps 12s ease-in-out infinite 1s, fadeInTitle 0.8s ease-out 0.5s forwards;
   will-change: transform, opacity, filter;
 }
 
-/* Disable animations for reduced motion */
+.showcase-theme-indicator {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  margin: 20px auto 0 auto;
+  width: fit-content;
+  background: var(--bg);
+  color: var(--dark);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 12px var(--shadow);
+  z-index: 100;
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: 0.5px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+[saved-theme="dark"] .showcase-theme-indicator {
+  background: var(--darkgray);
+  color: var(--light);
+  border-color: var(--gray);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .heatmap-cell {
-    animation: fadeInScale 0.5s ease-out forwards;
-    filter: none;
+    animation: fadeInScale 0.5s ease-out forwards; filter: none;
   }
-  
-  .section-title {
-    animation: fadeInTitle 0.8s ease-out 0.2s forwards;
-  }
-  
-  .heatmap-legend {
-    animation: legendSlideIn 0.8s ease-out 1s forwards;
-  }
-  
+  .section-title { animation: fadeInTitle 0.8s ease-out 0.2s forwards; }
+  .heatmap-legend { animation: legendSlideIn 0.8s ease-out 1s forwards; }
   .legend-gradient {
-    animation: fadeInTitle 0.8s ease-out 1s forwards;
-    filter: none;
+    animation: fadeInTitle 0.8s ease-out 1s forwards; filter: none;
+  }
+  .showcase-theme-indicator {
+    animation: none;
+    opacity: 1;
   }
 }`
   }
 
-  // Default: cosmic effect
+  // Default load-in - optimized without 3D transforms for better performance
   return `
-/* Optimized cosmic loading animations - GPU accelerated, no bloat */
-@keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateZ(0);
+/* load-in effect - smooth fade with subtle scaling */
+@keyframes load-inFadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(15px) scale(0.95);
   }
-  60% {
-    opacity: 0.9;
-    transform: scale(1.05) translateZ(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateZ(0);
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(var(--hover-scale, 1));
   }
 }
 
 @keyframes fadeInTitle {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes legendSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes gradientCalibration {
-  0% {
-    opacity: 0;
-    transform: scaleX(0);
-    filter: hue-rotate(0deg) brightness(0.5);
+@keyframes gradientGlow {
+  0% { 
+    opacity: 0; 
+    transform: scaleX(0); 
   }
-  25% {
-    opacity: 0.7;
-    transform: scaleX(0.3);
-    filter: hue-rotate(90deg) brightness(1.2);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scaleX(0.7);
-    filter: hue-rotate(180deg) brightness(1.5);
-  }
-  75% {
-    opacity: 0.95;
-    transform: scaleX(0.9);
-    filter: hue-rotate(270deg) brightness(1.2);
-  }
-  100% {
-    opacity: 1;
+  100% { 
+    opacity: 1; 
     transform: scaleX(1);
-    filter: hue-rotate(360deg) brightness(1);
   }
 }
 
 .heatmap-cell {
   opacity: 0;
-  --slide-x: 0px;
-  --slide-y: 0px;
   --hover-scale: 1;
-  transform: translateX(var(--slide-x)) translateY(var(--slide-y)) scale(var(--hover-scale)) translateZ(0);
-  animation: fadeInScale 0.5s ease-out forwards;
+  transform: translateY(15px) scale(0.95);
+  animation: load-inFadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   will-change: transform, opacity;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .section-title {
-  opacity: 0;
+  opacity: 0; 
   animation: fadeInTitle 0.8s ease-out 0.2s forwards;
 }
 
 .heatmap-legend {
-  opacity: 0;
-  animation: legendSlideIn 0.8s ease-out 1s forwards;
+  opacity: 0; 
+  animation: legendSlideIn 0.8s ease-out 0.4s forwards;
 }
 
 .legend-gradient {
-  opacity: 0;
-  transform: scaleX(0) translateZ(0);
+  opacity: 0; 
+  transform: scaleX(0); 
   transform-origin: left center;
-  animation: gradientCalibration 0.8s ease-out 1s forwards;
+  animation: gradientGlow 0.8s ease-out 0.6s forwards;
   will-change: transform, opacity;
 }
 
-/* Disable all animations for reduced motion preference */
+/* Simple hover for load-in theme */
+.heatmap-cell:hover {
+  --hover-scale: 1.05;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .heatmap-cell {
-    animation: none;
-    opacity: 1;
-    transform: none;
+  .heatmap-cell { 
+    animation: none; 
+    opacity: 1; 
+    transform: scale(1);
   }
-  
-  .section-title {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .heatmap-legend {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .legend-gradient {
-    animation: none;
-    opacity: 1;
-    transform: scaleX(1);
-  }
+  .section-title { animation: none; opacity: 1; transform: none; }
+  .heatmap-legend { animation: none; opacity: 1; transform: none; }
+  .legend-gradient { animation: none; opacity: 1; transform: scaleX(1); }
 }`
 }
 
-// Helper function to get animation style for slide-in effect
+// For the load-in effect, create a wave-like staggered delay
 function getSlideInAnimationStyle(
   index: number,
   totalCells: number,
-  effect: 'cosmic' | 'slide-in' | 'showcase'
+  effect: 'load-in' | 'pop-in' | 'showcase'
 ): string {
-  if (effect === 'slide-in') {
-    const directions = ['slideInFromTop', 'slideInFromBottom', 'slideInFromLeft', 'slideInFromRight']
-    const randomDirection = directions[Math.floor(Math.random() * directions.length)]
-    const randomOrder = Math.floor(Math.random() * totalCells)
-    const baseDelay = randomOrder * 0.03
-    const randomOffset = Math.random() * 0.08
-    const totalDelay = baseDelay + randomOffset
-    return `animation: ${randomDirection} 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${totalDelay}s forwards;`
+  if (effect === 'pop-in') {
+    // All cells use the same animation with no delay - simultaneous pop-in
+    const duration = '1.0s';
+    const easing = 'cubic-bezier(0.25, 0.1, 0.25, 1)'; // Slow start, fast finish
+    
+    return `animation: popIn ${duration} ${easing} both;`;
   }
-
   if (effect === 'showcase') {
-    return `animation-delay: ${Math.min(index * 0.03, 1)}s;`
+    return `animation-delay: ${Math.min(index * 0.03, 1)}s;`;
   }
-
-  // Default cosmic effect
-  return `animation-delay: ${Math.min(index * 0.05, 1.5)}s;`
+  // load-in effect - create a wave pattern with staggered delays
+  const row = Math.floor(index / 8); // Assuming 8 columns
+  const col = index % 8;
+  const waveDelay = (row * 0.08) + (col * 0.04); // Create diagonal wave effect
+  return `animation-delay: ${Math.min(waveDelay, 1.2)}s;`;
 }
 
 export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: TagHeatmapOptions) => {
@@ -564,7 +373,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
     cellSize: opts?.cellSize ?? 'sm',
     title: opts?.title ?? '',
     deduplication: opts?.deduplication ?? 'hierarchical-split',
-    animationEffect: opts?.animationEffect ?? 'cosmic'
+    animationEffect: opts?.animationEffect ?? 'load-in'
   }
 
   return {
@@ -680,11 +489,7 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                       return
                     }
 
-                    let chosenColormap = options.colormap
-                    // For "showcase", we could randomize or do more advanced logic,
-                    // but here we simply proceed with the user-supplied colormap as is.
-                    // (Animation visually cycles colors in CSS.)
-                    
+                    const chosenColormap = options.colormap
                     const colors = colormap({
                       colormap: chosenColormap,
                       nshades: 256,
@@ -696,53 +501,29 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                     const maxCount = Math.max(...allCounts)
                     const minCount = Math.min(...allCounts)
 
-                    let parentMaxCount = maxCount
-                    let parentMinCount = minCount
-                    let childMaxCount = maxCount 
-                    let childMinCount = minCount
-
-                    if (
-                      options.deduplication === 'hierarchical-split' &&
-                      parentTags.size > 0 &&
-                      childAndLeafTags.size > 0
-                    ) {
-                      const parentCounts = [...parentTags.values()]
-                      const childCounts = [...childAndLeafTags.values()]
-                      
-                      parentMaxCount = Math.max(...parentCounts)
-                      parentMinCount = Math.min(...parentCounts)
-                      childMaxCount = Math.max(...childCounts)
-                      childMinCount = Math.min(...childCounts)
-                    }
-
-                    const getColorForParent = (count: number): string => {
-                      if (parentMaxCount === parentMinCount) {
-                        return colors[0]
+                    // For hierarchical-split, we can break out parent vs. child if needed
+                    if (options.deduplication === 'hierarchical-split') {
+                      const keysList = [...tagsToDisplay.keys()]
+                      for (const [tg, ct] of tagsToDisplay.entries()) {
+                        const isTopLevel = !tg.includes('/')
+                        const hasChildren = keysList.some(o => o !== tg && o.startsWith(tg + '/'))
+                        if (isTopLevel && hasChildren) {
+                          parentTags.set(tg, ct)
+                        } else {
+                          childAndLeafTags.set(tg, ct)
+                        }
                       }
-                      const normalizedValue = (count - parentMinCount) / (parentMaxCount - parentMinCount)
-                      const colorIndex = Math.floor(normalizedValue * (colors.length - 1))
-                      return colors[colorIndex]
                     }
 
-                    const getColorForChild = (count: number): string => {
-                      if (childMaxCount === childMinCount) {
-                        return colors[0]
-                      }
-                      const normalizedValue = (count - childMinCount) / (childMaxCount - childMinCount)
-                      const colorIndex = Math.floor(normalizedValue * (colors.length - 1))
-                      return colors[colorIndex]
+                    // Color mapping
+                    const getColorForCount = (count: number, min: number, max: number): string => {
+                      if (max === min) return colors[0]
+                      const norm = (count - min) / (max - min)
+                      const idx = Math.floor(norm * (colors.length - 1))
+                      return colors[idx]
                     }
 
-                    const getColorForCount = (count: number): string => {
-                      if (maxCount === minCount) {
-                        return colors[0]
-                      }
-                      const normalizedValue = (count - minCount) / (maxCount - minCount)
-                      const colorIndex = Math.floor(normalizedValue * (colors.length - 1))
-                      return colors[colorIndex]
-                    }
-
-                    const getTextColor = (hexColor: string): string => {
+                    function getTextColor(hexColor: string): string {
                       const r = parseInt(hexColor.slice(1, 3), 16)
                       const g = parseInt(hexColor.slice(3, 5), 16)
                       const b = parseInt(hexColor.slice(5, 7), 16)
@@ -751,49 +532,42 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                     }
 
                     const gridCols = options.gridColumns
-                    let heatmapContent: string
-                    
+                    let heatmapContent = ""
+
                     if (options.deduplication === 'hierarchical-split') {
                       const sortedParents = [...parentTags.entries()].sort((a, b) => b[1] - a[1])
-                      const sortedChildrenLeaf = [...childAndLeafTags.entries()].sort((a, b) => b[1] - a[1])
-                      
-                      const totalParentCells = sortedParents.length
-                      const parentCells = sortedParents.map(([tag, count], idx) => {
-                        const backgroundColor = getColorForParent(count)
-                        const textColor = getTextColor(backgroundColor)
-                        const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
-                        const tagUrl = `./tags/${tag}`
-                        const animationStyle = getSlideInAnimationStyle(
-                          idx,
-                          totalParentCells,
-                          options.animationEffect
-                        )
-                        
-                        return `<div class="heatmap-cell parent-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
-                          <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
+                      const sortedChildLeaf = [...childAndLeafTags.entries()].sort((a, b) => b[1] - a[1])
+
+                      const parentMax = Math.max(...sortedParents.map(([_t, c]) => c), 0)
+                      const parentMin = Math.min(...sortedParents.map(([_t, c]) => c), parentMax)
+                      const childMax = Math.max(...sortedChildLeaf.map(([_t, c]) => c), 0)
+                      const childMin = Math.min(...sortedChildLeaf.map(([_t, c]) => c), childMax)
+
+                      // We only display up to 1/3 of maxTags for parents, 2/3 for child tags
+                      const parentSlice = sortedParents.slice(0, Math.floor(options.maxTags / 3))
+                      const childSlice = sortedChildLeaf.slice(0, Math.floor(options.maxTags * 2 / 3))
+
+                      const parentCells = parentSlice.map(([tg, ct], idx) => {
+                        const bg = getColorForCount(ct, parentMin, parentMax)
+                        const txt = getTextColor(bg)
+                        const animStyle = getSlideInAnimationStyle(idx, parentSlice.length, options.animationEffect)
+                        return `<div class="heatmap-cell parent-cell" style="background-color: ${bg}; color: ${txt}; border-color: ${bg}; ${animStyle}" title="${tg}: ${ct} posts">
+                          <a href="./tags/${tg}" style="color: ${txt} !important;">${tg}</a>
                         </div>`
                       }).join('')
-                      
-                      const childLeafSlice = sortedChildrenLeaf.slice(0, Math.floor(options.maxTags * 2/3))
-                      const totalChildCells = childLeafSlice.length
-                      const childLeafCells = childLeafSlice.map(([tag, count], idx) => {
-                        const backgroundColor = getColorForChild(count)
-                        const textColor = getTextColor(backgroundColor)
-                        const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
-                        const tagUrl = `./tags/${tag}`
-                        // offset idx by totalParentCells so delays are continuous
-                        const animationStyle = getSlideInAnimationStyle(
-                          idx + totalParentCells,
-                          totalChildCells,
-                          options.animationEffect
-                        )
-                        
-                        return `<div class="heatmap-cell child-leaf-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
-                          <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
+
+                      const childCells = childSlice.map(([tg, ct], idx) => {
+                        const bg = getColorForCount(ct, childMin, childMax)
+                        const txt = getTextColor(bg)
+                        const offsetIdx = idx + parentSlice.length
+                        const animStyle = getSlideInAnimationStyle(offsetIdx, childSlice.length, options.animationEffect)
+                        return `<div class="heatmap-cell child-leaf-cell" style="background-color: ${bg}; color: ${txt}; border-color: ${bg}; ${animStyle}" title="${tg}: ${ct} posts">
+                          <a href="./tags/${tg}" style="color: ${txt} !important;">${tg}</a>
                         </div>`
                       }).join('')
-                      
+
                       heatmapContent = `
+
                         <div class="heatmap-split-layout">
                           <div class="parent-section">
                             <div class="section-title">Parent Categories</div>
@@ -801,293 +575,197 @@ export const TagHeatmap: QuartzTransformerPlugin<TagHeatmapOptions> = (opts?: Ta
                           </div>
                           <div class="child-leaf-section">
                             <div class="section-title">Sub Categories</div>
-                            <div class="child-leaf-grid">${childLeafCells}</div>
+                            <div class="child-leaf-grid">${childCells}</div>
                           </div>
                         </div>`
-                        
                     } else {
+                      // Just take top N tags
                       const displayTags = sortedTags.slice(0, options.maxTags)
-                      
-                      const heatmapCells = displayTags.map(([tag, count], idx) => {
-                        const backgroundColor = getColorForCount(count)
-                        const textColor = getTextColor(backgroundColor)
-                        const escapedTag = tag.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
-                        const tagUrl = `./tags/${tag}`
-                        const animationStyle = getSlideInAnimationStyle(
-                          idx,
-                          displayTags.length,
-                          options.animationEffect
-                        )
-                        
-                        return `<div class="heatmap-cell" style="background-color: ${backgroundColor}; color: ${textColor}; border-color: ${backgroundColor}; ${animationStyle}" title="${escapedTag}: ${count} posts">
-                          <a href="${tagUrl}" style="color: ${textColor} !important;">${tag}</a>
+                      const heatmapCells = displayTags.map(([tg, ct], idx) => {
+                        const bg = getColorForCount(ct, minCount, maxCount)
+                        const txt = getTextColor(bg)
+                        const animStyle = getSlideInAnimationStyle(idx, displayTags.length, options.animationEffect)
+                        return `<div class="heatmap-cell" style="background-color: ${bg}; color: ${txt}; border-color: ${bg}; ${animStyle}" title="${tg}: ${ct} posts">
+                          <a href="./tags/${tg}" style="color: ${txt} !important;">${tg}</a>
                         </div>`
                       }).join('')
-                      
                       heatmapContent = `<div class="heatmap-grid">${heatmapCells}</div>`
                     }
 
+                    // Build gradient for legend
                     const gradientStops = []
                     for (let i = 0; i <= 20; i++) {
-                      const normalizedValue = i / 20
-                      const colorIndex = Math.floor(normalizedValue * (colors.length - 1))
-                      const percentage = (i / 20 * 100).toFixed(1)
-                      gradientStops.push(`${colors[colorIndex]} ${percentage}%`)
+                      const norm = i / 20
+                      const colorIdx = Math.floor(norm * (colors.length - 1))
+                      const pct = (norm * 100).toFixed(1)
+                      gradientStops.push(`${colors[colorIdx]} ${pct}%`)
                     }
-                    
                     const gradientCSS = `linear-gradient(to right, ${gradientStops.join(', ')})`
 
+                    // Apply style
                     const cellConfig = getCellSizeConfig(options.cellSize)
-                    const cssStyles = `
+                    const styleBlock = `
 <style>
 .heatmap-container {
-  margin: 2rem 0;
-  padding: 1rem;
+  margin: 2rem 0; padding: 1rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background-color: var(--bg);
+  border-radius: 8px; background-color: var(--bg);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-
 .heatmap-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-align: center;
-  color: var(--dark);
-  transition: color 0.3s ease;
+  font-size: 1.2rem; font-weight: bold;
+  margin-bottom: 1rem; text-align: center;
+  color: var(--dark); transition: color 0.3s ease;
 }
-
-/* Split layout styles */
 .heatmap-split-layout {
-  display: flex;
-  gap: 1rem;
-  max-width: 800px;
-  margin: 0 auto;
+  display: flex; gap: 1rem; max-width: 800px; margin: 0 auto;
 }
-
-.parent-section {
-  flex: 1;
-  min-width: 0;
-}
-
-.child-leaf-section {
-  flex: 2;
-  min-width: 0;
-}
-
+.parent-section { flex: 1; min-width: 0; }
+.child-leaf-section { flex: 2; min-width: 0; }
 .section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: var(--darkgray);
-  text-align: center;
+  font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;
+  color: var(--darkgray); text-align: center;
 }
-
 .parent-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: ${cellConfig.gap};
-  justify-content: center;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: ${cellConfig.gap}; justify-content: center;
   max-width: calc(2 * calc(${cellConfig.baseSize} * 1.5) + ${cellConfig.gap});
   margin: 0 auto;
 }
-
 .child-leaf-grid {
-  display: grid;
-  grid-template-columns: repeat(${Math.floor(gridCols * 2/3)}, 1fr);
-  gap: ${cellConfig.gap};
-  justify-content: center;
+  display: grid; grid-template-columns: repeat(${Math.floor(gridCols * 2/3)}, 1fr);
+  gap: ${cellConfig.gap}; justify-content: center;
   max-width: calc(${Math.floor(gridCols * 2/3)} * ${cellConfig.baseSize} + ${Math.floor(gridCols * 2/3) - 1} * ${cellConfig.gap});
   margin: 0 auto;
 }
-
-/* Standard grid layout */
 .heatmap-grid {
-  display: grid;
-  grid-template-columns: repeat(${gridCols}, 1fr);
-  gap: ${cellConfig.gap};
-  max-width: ${cellConfig.maxWidth};
-  margin: 0 auto;
-  justify-content: center;
+  display: grid; grid-template-columns: repeat(${gridCols}, 1fr);
+  gap: ${cellConfig.gap}; max-width: ${cellConfig.maxWidth};
+  margin: 0 auto; justify-content: center;
 }
-
-/* Animations */
 ${getAnimationCSS(options.animationEffect)}
-
 .heatmap-cell {
-  aspect-ratio: 1;
-  min-height: ${cellConfig.baseSize};
-  max-height: ${cellConfig.baseSize};
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: ${cellConfig.fontSize.base};
-  font-weight: 500;
-  text-align: center;
-  padding: 4px;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  border: 1px solid;
-  position: relative;
-  container-type: inline-size;
+  aspect-ratio: 1; min-height: ${cellConfig.baseSize}; max-height: ${cellConfig.baseSize};
+  border-radius: 3px; display: flex; align-items: center; justify-content: center;
+  font-size: ${cellConfig.fontSize.base}; font-weight: 500;
+  text-align: center; padding: 4px;
+  border: 1px solid; position: relative; container-type: inline-size;
 }
-
 .parent-cell {
-  font-size: ${cellConfig.fontSize.parent};
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: ${cellConfig.fontSize.parent}; font-weight: 700; line-height: 1.1;
   min-height: calc(${cellConfig.baseSize} * 1.5);
   max-height: calc(${cellConfig.baseSize} * 1.5);
 }
-
 .child-leaf-cell {
-  font-size: ${cellConfig.fontSize.child};
-  font-weight: 600;
-  line-height: 1.2;
-  min-height: ${cellConfig.baseSize};
-  max-height: ${cellConfig.baseSize};
+  font-size: ${cellConfig.fontSize.child}; font-weight: 600; line-height: 1.2;
 }
-
-/* Container-based responsive sizing */
-.parent-section .heatmap-cell {
-  container-type: inline-size;
-}
-
-.child-leaf-section .heatmap-cell {
-  container-type: inline-size;
-}
-
 .heatmap-cell a {
   text-decoration: none !important;
-  color: inherit !important;
-  word-break: break-word;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  font-weight: 600 !important;
-  opacity: 1 !important;
-  background: transparent !important;
-  position: relative;
-  z-index: 1;
+  color: inherit !important; word-break: break-word; line-height: 1.2;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%; font-weight: 600 !important; opacity: 1 !important;
+  background: transparent !important; position: relative; z-index: 1;
   transition: color 0.2s ease;
 }
-
-.heatmap-cell a:hover {
-  color: inherit !important;
-  text-decoration: none !important;
-  opacity: 1 !important;
-}
-
+.heatmap-cell a:hover { color: inherit !important; text-decoration: none !important; opacity: 1 !important; }
 .heatmap-cell:hover {
-  --hover-scale: 1.05;
-  z-index: 10;
-  box-shadow: 0 4px 12px var(--shadow);
-  position: relative;
-  filter: blur(0) !important;
+  --hover-scale: 1.05; z-index: 10; box-shadow: 0 4px 12px var(--shadow);
+  filter: blur(0) !important; position: relative;
 }
-
-/* Dark mode specific styles */
 [saved-theme="dark"] .heatmap-cell:hover {
   box-shadow: 0 4px 16px rgba(255,255,255,0.1);
 }
-
 [saved-theme="dark"] .section-title {
   color: var(--lightgray);
 }
-
 .heatmap-legend {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--gray);
-  margin-top: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 0.8rem; color: var(--gray); margin-top: 1rem;
   transition: color 0.3s ease;
 }
-
 .legend-gradient {
-  width: 200px;
-  height: 16px;
-  border-radius: 8px;
-  border: 1px solid var(--lightgray);
-  transition: border-color 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
+  width: 200px; height: 16px; border-radius: 8px;
+  border: 1px solid var(--lightgray); transition: border-color 0.3s ease;
+  position: relative; overflow: hidden; display: flex; align-items: center;
+  background: ${gradientCSS};
 }
-
-[saved-theme="dark"] .legend-gradient {
-  border-color: var(--gray);
-}
-
+[saved-theme="dark"] .legend-gradient { border-color: var(--gray); }
 .legend-text {
-  margin: 0;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--dark);
-  transition: color 0.3s ease;
-  display: flex;
-  align-items: center;
-  line-height: 1;
+  margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--dark);
+  transition: color 0.3s ease; display: flex; align-items: center; line-height: 1;
 }
-
-[saved-theme="dark"] .legend-text {
-  color: var(--light);
-}
-
+[saved-theme="dark"] .legend-text { color: var(--light); }
 .heatmap-cell:focus-within {
-  outline: 2px solid var(--secondary);
-  outline-offset: 2px;
+  outline: 2px solid var(--secondary); outline-offset: 2px;
 }
-
-.heatmap-cell a:focus {
-  outline: none;
-}
-
-/* Responsive design */
+.heatmap-cell a:focus { outline: none; }
 @media (max-width: 768px) {
-  .heatmap-split-layout {
-    flex-direction: column;
-  }
-  
-  .parent-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .child-leaf-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  .heatmap-split-layout { flex-direction: column; }
+  .parent-grid { grid-template-columns: repeat(3, 1fr); }
+  .child-leaf-grid { grid-template-columns: repeat(4, 1fr); }
 }
 </style>`
 
-                    const htmlNode = {
-                      type: "html" as const,
-                      value: `${cssStyles}
-                        <div class="heatmap-container">
-                          ${options.title ? `<div class="heatmap-title">${options.title}</div>` : ''}
-                          ${heatmapContent}
-                          <div class="heatmap-legend">
-                            <span class="legend-text">Less</span>
-                            <div class="legend-gradient" style="background: ${gradientCSS};"></div>
-                            <span class="legend-text">More</span>
-                          </div>
-                        </div>`
-                    }
+                    const heatmapHTML = `
+                      ${styleBlock}
+                      <div class="heatmap-container" style="position: relative;">
+                        ${options.animationEffect === 'showcase' ? '<div class="showcase-theme-indicator" id="showcase-theme-indicator">Base Colormap</div>' : ''}
+                        ${options.title ? `<div class="heatmap-title">${options.title}</div>` : ''}
+                        ${heatmapContent}
+                        <div class="heatmap-legend">
+                          <span class="legend-text">Less</span>
+                          <div class="legend-gradient"></div>
+                          <span class="legend-text">More</span>
+                        </div>
+                      </div>
+                      ${options.animationEffect === 'showcase' ? `
+                      <script>
+                        (function() {
+                          const themeNames = [
+                            'Base ${chosenColormap}', 'Warm Shift', 'Vibrant Boost', 'Cool Tone', 
+                            'Neutral', 'Deep Contrast', 'Moody Dark', 'Balanced'
+                          ];
+                          const indicator = document.getElementById('showcase-theme-indicator');
+                          if (indicator) {
+                            let currentIndex = 0;
+                            
+                            // Set initial theme name immediately
+                            indicator.textContent = themeNames[currentIndex];
+                            
+                            setInterval(() => {
+                              // Animate out current text
+                              indicator.style.opacity = '0';
+                              indicator.style.transform = 'translateY(-10px) scale(0.9)';
+                              
+                              setTimeout(() => {
+                                // Change text while invisible
+                                currentIndex = (currentIndex + 1) % themeNames.length;
+                                indicator.textContent = themeNames[currentIndex];
+                                
+                                // Reset position for animation in
+                                indicator.style.transform = 'translateY(10px) scale(0.9)';
+                                
+                                // Force reflow
+                                indicator.offsetHeight;
+                                
+                                // Animate in new text
+                                indicator.style.opacity = '1';
+                                indicator.style.transform = 'translateY(0) scale(1)';
+                              }, 200); // Text swap during fade
+                            }, 1500); // 1.5 second intervals to match CSS animation
+                          }
+                        })();
+                      </script>` : ''}
+                    `
+                    const htmlNode = { type: "html" as const, value: heatmapHTML }
                     parent.children.splice(index, 1, htmlNode)
-                    writeDebugLog(`TagHeatmap: Rendered heatmap with ${sortedTags.length} tags`)
                   }
                 } catch (err) {
-                  writeDebugLog(`TagHeatmap: Error processing code block: ${err}`)
+                  writeDebugLog(`TagHeatmap: Error processing tag-heatmap node in ${file?.data?.slug || 'unknown file'}: ${err}`)
                 }
               })
             } catch (err) {
-              writeDebugLog(`TagHeatmap: Error processing tree: ${err}`)
+              writeDebugLog(`TagHeatmap: Error processing file ${file?.data?.slug || 'unknown'}: ${err}`)
             }
           }
         },

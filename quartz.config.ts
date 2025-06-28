@@ -83,9 +83,9 @@ const config: QuartzConfig = {
         colormap: 'viridis',                       // 🔥 FIXED: Use supported colormap (viridis is closest to cividis)
         maxTags: 50,
         gridColumns: 8,
-        cellSize: 'xl',                            // 🔥 NEW: Control cell size (xs=25px, sm=35px, md=45px, lg=50px, xl=60px)
+        cellSize: 'md',                            // 🔥 NEW: Control cell size (xs=25px, sm=35px, md=45px, lg=50px, xl=60px)
         deduplication: 'hierarchical-split',       // 🔥 NEW: Enable interactive navigation
-        animationEffect: 'showcase'               // 🔥 NEW: Animation effect options: 'cosmic', 'slide-in', 'none'
+        animationEffect: 'load-in'               // 🔥 NEW: Animation effect options: 'cosmic', 'slide-in', 'none'
         //title: 'Global Tag Heatmap'
       }),
     ],
