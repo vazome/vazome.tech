@@ -1,18 +1,18 @@
 ---
 date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-28T10:44:09+04:00
+date modified: 2025-06-28T23:19:34+04:00
 tags: [personal, concept, containers/docker]
 title: About this blog
 ---
 This is my personal Tech blog, here I share my articles, lecture notes and opinions.
+# About
 
 **How to navigate**:
-Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials. 
+Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials. Here is a tag heatmap I built for easier navigation:
 
 ```tag-heatmap
 ```
 
-# About me
 ## Technical
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub.
 
@@ -28,7 +28,7 @@ My *Alesis Nitro Max Kit* — it gives you all key things and not skipping on th
 
 ![[drums.jpg|300]]
 
-I had a dream to be a scientist, in 2012 we even were [one of the laureates](https://integraciya.org/sborniki/uneko/UNEKO-2013.pdf) of National Science and Ecology Competition, for local radiation pollution research project. Though, later I figured, it's too much for me.
+I had a dream to be a scientist, in 2012 we even were [one of the laureates](https://integraciya.org/sborniki/uneko/UNEKO-2013.pdf) of National Science and Ecology Competition, for local radiation pollution research project. Though, later I figured, biological stuff was too much for me.
 
 Then I did photography (street, journalism) as a hobby, my camera setup was Sony Alpha 58 with kit, portrait, and Minolta f4/70-210mm (beer can) lenses. Here is a little showcase:
 
