@@ -1,8 +1,13 @@
 ---
 date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T03:13:32+04:00
+date modified: 2025-06-29T17:12:28+04:00
 ---
-S3 is a region-based, resilient object storage service. Bucket names are unique, can't represent IP addresses. Soft limit 100 per account, hard limit 1000 per account. Does not have "folders", it represents folders but it's actually a prefix + key (filename). Object size 0B to 5TB. S3 does not have a filesystem (no files or blocks), can't mount to it, just holds files. Great for offload and distribution. S3 is a default to store data in large quantities. ![[Pasted image 20230122224511.png|500]]
+
+S3 is a region-based, resilient object storage service. Bucket names are unique, can't represent IP addresses. Soft limit 100 per account, hard limit 1000 per account. Does not have "folders", it represents folders but it's actually a prefix + key (filename). Object size 0B to 5TB. S3 does not have a filesystem (no files or blocks), can't mount to it, just holds files. Great for offload and distribution. S3 is a default to store data in large quantities. 
+
+==S3 charges you for unauthorized requests including 4xx, but now [only the ones you initiated](https://aws.amazon.com/about-aws/whats-new/2024/05/amazon-s3-no-charge-http-error-codes/) after an [incident](https://medium.com/@maciej.pocwierz/how-an-empty-s3-bucket-can-make-your-aws-bill-explode-934a383cb8b1)..., when executing many S3 requests specify region explicitly, so you don't pay for API redirects ==
+
+![[Pasted image 20230122224511.png|500]]
 Also AWS Objects can have Metadata (key/value pair), Tags, Version ID.
 
 # S3 Storage Classes

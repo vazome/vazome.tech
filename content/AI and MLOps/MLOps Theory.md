@@ -1,11 +1,11 @@
 ---
 date created: 2025-06-05T20:31:05+04:00
-date modified: 2025-06-22T00:10:58+04:00
+date modified: 2025-06-29T19:59:45+04:00
 tags:
   - concept/mlops
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)
-
+# ML in Production
 In reality creating a model does not equate to production deployment.
 You need a lot more than just a working PoC.![[Pasted image 20250605203444.png]]
 ![[Pasted image 20250605203952.png]]
@@ -14,7 +14,7 @@ Speech-to-Text model:
 - Modeling, includes code, data and hyperparameters. Error analysis can help you with which data you do need to collect.
 - Deployment, take microphone recording put it in voice outputting detection (which takes only human speech audio), sending data to prediction server, transcript, and search results returned. It's important to have ability to reflect on data model.
 
-# Deployment
+## Deployment
 From building the software to creating the underlying infrastructure, including software maintenance.
 - **Concept drift**
 	- Teenagers will use speech model, but we trained it on adult voices, performance may degrade.
@@ -31,7 +31,7 @@ What should we check before release:
 - **Security and privacy:** what are the requirements for cloud/edge? Are we within PCI DSS, HIPAA standards? How can we secure both our and user data? 
 - **How do we rollback?** When applicable.
 
-## Deployment patterns
+### Deployment patterns
 **Degrees of automation**
 Both **AI Assistance** and **Partial Automation** approaches are generally called **Human in the loop** deployments/workflows because human verifies ML output.
 ```mermaid
@@ -81,13 +81,13 @@ What do we monitor?
 | **Software metrics** | Memory, compute, latency, throughput, server load                                                   |
 | **Input metrics**    | Avg input length, Avg input volume, Num missing values, Avg image brightness                        |
 | **Output metrics**   | # times return " " (null), <br># times user redoes search, <br># times user switches to typing, CTR |
-# Modeling
+## Modeling
 It is helpful to view this iterative process trough data driven lenses, there was a lot of research on coding part. Though data is still there and generally just getting more data is not a tangible solution to improve the model. There are tools to help me extract max value from the data to improve your models.
 When training a model consider the following milestones
 1. Doing well on training set
 2. Doing well on dev/test set
 3. Doing well on business/project goals/metrics
-## Caveats
+### Caveats
 **Query importance**
 Consider the following diagram, users are unforgiving when we fail at locating proper result for navigational queries.
 ```mermaid
@@ -110,7 +110,7 @@ This also includes product recommendations, also be careful and treat fairly (ec
 
 **BUT! This 1% misdiagnosis could lead to death.** This is not acceptable. You need to make sure that you can detect this 1% and your ML algorithm didn't "got used" printing "0"
 
-## Consider establishing baseline.
+### Consider establishing baseline.
 
 You may focus on a component only to find that a humans (HLP) performs as good as model for a specific condition. This way you can find other areas to improve. Understand that HLP is generally useful with unstructured datatypes.
 ![[Pasted image 20250610023443.png]]
@@ -158,10 +158,9 @@ Consider adding feature which help model, like figuring out beforehand how likel
 Experiment tracking
 ![[Pasted image 20250611013717.png]]![[Pasted image 20250611015632.png]]
 
-# Data
+## Data
 
 Label ambiguity, sometimes can be dealt with UID matching, but you need to do it in a ways to respect user privacy if you figuring whether two accounts belong to human. Have permission.
-
 
 ![[Pasted image 20250612032706.png]]
 
