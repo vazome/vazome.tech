@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:59:03+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 The `KeyId` parameter is not required when decrypting with symmetric encryption [[AWS KMS]] keys. AWS KMS can get the KMS key that was used to encrypt the data from the metadata in the ciphertext blob. But it's always a best practice to specify the KMS key you are using. This practice ensures that you use the intended KMS key, and prevents you from inadvertently decrypting a ciphertext using a KMS key you do not trust.
 

@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Related: [[DDOS]]
 
 Protects against all three DDOS attack types.

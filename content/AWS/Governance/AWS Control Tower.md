@@ -1,9 +1,9 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:52:23+04:00
 tags:
   - concept/scale
   - concept/resilience
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[AWS CloudFormation]], [[AWS Organizations]], [[AWS Config]]
 

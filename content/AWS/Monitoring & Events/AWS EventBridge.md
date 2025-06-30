@@ -1,9 +1,9 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:57:51+04:00
 tags:
   - concept/monitoring
   - concept/events
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:21+04:00
 ---
 Basically do: if X happens, or at Y time(s) .. do Z
 

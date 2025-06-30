@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:59:12+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[EC2 Storage Terminology]], [[AWS S3 Simple Storage Service]]
 
@@ -13,7 +13,7 @@ Can be accessed from on-premises [[AWS Site-to-Site VPN]] or [[AWS Direct Connec
 # Options
 
 - **Speed**: GP (default for 99.9% use cases) and MAX I/O mode (for high parallel processes)
-- **Scaleability**: Bursting (like GP2 in EBS, more data more performance) and Enhanced (Provisioned – you specify your requirements, more rarely used/Elastic - scales automatically) Throughput Mode
+- **Scalability**: Bursting (like GP2 in EBS, more data more performance) and Enhanced (Provisioned – you specify your requirements, more rarely used/Elastic - scales automatically) Throughput Mode
 - **Storage Class**: Standard (default) vs Infrequent Access (IA)
 - **Data Retention**: Lifecycle policies
 

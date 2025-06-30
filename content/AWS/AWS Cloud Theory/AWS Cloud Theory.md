@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-20T15:31:41+04:00
-date modified: 2025-06-21T03:23:48+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Regions are separate as isolated fault domains and geopolitically, location control.
 Regions have Availability Zone which have separate power, connection and are located in different locations. Can be multiple DCs in one AZ. They are isolated too.

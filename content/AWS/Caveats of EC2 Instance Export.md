@@ -1,8 +1,8 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:15:43+04:00
 tags:
   - aws/ec2
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 This article assumes you have: latest AWS CLI, [Necessary Permissions](https://docs.aws.amazon.com/vm-import/latest/userguide/required-permissions.html#iam-permissions-image), needed disk space for `vmdk`/`ova` download.
 

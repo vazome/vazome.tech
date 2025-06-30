@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Related: [[AWS S3 Simple Storage Service]], [[AWS EBS]], [[AWS EFS]], [[content/AWS/RDS/RDS]], [[AWS Amazon Aurora]], [[public/AWS/EC2/EC2]] 
 
 Multi-account, multi-region backup service.

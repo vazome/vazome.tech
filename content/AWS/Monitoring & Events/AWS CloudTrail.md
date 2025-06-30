@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:56:45+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:21+04:00
 ---
 # Auditing
 Is a logging service answering the question "who did"?

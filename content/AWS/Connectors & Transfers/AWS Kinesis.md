@@ -1,6 +1,10 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Related: [[IT Software Architectures]]
 
-Is a scaleable streaming service, producers send data into a kinesis stream.
+Is a scalable streaming service, producers send data into a kinesis stream.
 Public, Has [[Resilience and Reliability#High availability (HA)]]. 
 Data available in the moving windows for 24h by default up to 365d with additional cost. So 24h 1s is discarded.
 Multiple consumers access data from that moving window.

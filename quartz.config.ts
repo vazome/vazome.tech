@@ -18,7 +18,7 @@ const config: QuartzConfig = {
     locale: "en-US",
     baseUrl: "vazome.tech",
     ignorePatterns: ["private", "templates", ".obsidian", "**/(maintenance)/**"],
-    defaultDateType: "modified",
+    defaultDateType: "created",
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
@@ -57,7 +57,7 @@ const config: QuartzConfig = {
     transformers: [
       Plugin.FrontMatter(),
       Plugin.HardLineBreaks(),
-      Plugin.CreatedModifiedDate({
+      Plugin.CreatedModifiedDate({ 
         priority: ["frontmatter", "git", "filesystem"],
       }),
       Plugin.NotebookEmbedding({

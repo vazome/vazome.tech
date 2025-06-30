@@ -1,7 +1,7 @@
 ---
 tags:
   - concept/mlops
-created: 2025-06-29T20:03:44+04:00
+created: 2024-06-29T20:03:44+04:00
 modified: 2025-06-30T06:28:31+04:00
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)

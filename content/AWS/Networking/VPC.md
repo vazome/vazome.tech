@@ -1,8 +1,8 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T02:32:57+04:00
 tags:
   - concept/networking
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Some services can behave badly if default VPC does not exist. 
 
@@ -161,7 +161,7 @@ Works on top of DX or VPN
 
 Transit hub which connects VPCs to on-premise. Also, transitive!
 Reduces network complexity.
-It's a network gateway object, so HA and scaleable.
+It's a network gateway object, so HA and scalable.
 Creates attachment (the way it connects to other network objects), like [[VPC]], [[AWS Site-to-Site VPN]] and [[AWS Direct Connect (DX)#Gateway]] 
 
 ## Comparison w/o and with TGW 

@@ -1,7 +1,7 @@
 ---
 tags: [aws/ec2, compute, monitoring]
-date created: 2025-06-20T16:15:50+04:00
-date modified: 2025-06-21T01:22:35+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 # EC2 Instance Types
 
@@ -10,7 +10,7 @@ Related: [[public/AWS/EC2/EC2]], [[EC2 Purchase Options]]
 The difference affects
 -   Raw: CPU, Memory, Local Storage, Capacity & Type
 -   Resource ratios
--   Storage and Data Network Bandwith
+-   Storage and Data Network Bandwidth
 -   System Architecture / Vendor
 -   Additional features…
 
@@ -240,7 +240,7 @@ Scaling processes have states:
 
 ### Lifecycle hooks
 Allows us to run custom actions when ASG action is happening.
-When an ASG action happens (Launch/Terminate transitions) instances get paused in the flow, they wait. Until timeout, then CONTINUE or ABONDON ASG action or you explicitly resume ASG process with CompleteLifecycleAction (when you done what you wanted)
+When an ASG action happens (Launch/Terminate transitions) instances get paused in the flow, they wait. Until timeout, then CONTINUE or Abandon ASG action or you explicitly resume ASG process with CompleteLifecycleAction (when you done what you wanted)
 
 Can be integrated with [[AWS EventBridge]] or [[AWS SNS]].
 ![[Pasted image 20230201015249.png]]
@@ -281,13 +281,13 @@ Related: [[public/AWS/EC2/EC2]], [[Scaling]]
 	-   You select into which partition launch an instance.
 	-   Best for huge scale parallel processing. Can be used with topology aware applications such as HDFS, HBase and Cassandra (intelligent data replication)![[Pasted image 20230121235802.png]]
 
-# EC2 Enchanced Networking
+# EC2 Enhanced Networking
 
 Related: [[public/AWS/EC2/EC2]], [[L3 Network]]
 
 Enhanced networking uses [[Virtualization#Single Root IOV (SR-IOV) (4rd iteration)]]
 - This feature is required for cluster placement groups for example.
-- Allows more higher I/O & Low Host CPU usage, more bandwith
+- Allows more higher I/O & Low Host CPU usage, more bandwidth
 - Higher packets per second (PPS)
 - Consistent low latency.
 - Either enabled by default or [allowed to be enabled](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking.html) on modern instance types

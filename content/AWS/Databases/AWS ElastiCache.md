@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:37:00+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 In-memory, highly efficient DB, stateless, can store Session Data.
 **Will require some changes for an application to support ElastiCache**

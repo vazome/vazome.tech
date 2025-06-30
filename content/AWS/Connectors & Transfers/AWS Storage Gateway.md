@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:52:44+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[]]
 
@@ -50,7 +50,7 @@ Also support multiple contributions (on-premise shares mapped to one bucket).
 Can be [[Resilience and Reliability#Disaster Recovery (DR)]] if you implement [[S3 Replication#Cross-Region Replication (CRP)]]
 
 >[!Warning]
-> 1. Does not support object locking, use Read only mode on other shares or tight controll file access.
+> 1. Does not support object locking, use Read only mode on other shares or tight control file access.
 > 2. Be aware that storage gateway may not immediately update listing information from S3. 
 > 	1. But you can enable it [NotifyWhenUploaded - Storage Gateway](https://docs.aws.amazon.com/storagegateway/latest/APIReference/API_NotifyWhenUploaded.html) and alert your application/system/integration
 

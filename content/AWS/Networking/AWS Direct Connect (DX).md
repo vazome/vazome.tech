@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:02:28+04:00
-date modified: 2025-06-21T01:58:07+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[]]
 Also uses [Virtual network interface - Wikipedia](https://en.wikipedia.org/wiki/Virtual_network_interface)

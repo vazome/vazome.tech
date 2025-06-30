@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 "Speech to Text to Action"
 
 **Intent + Slot > Utterances (variations of intent) > action (like [[Lambda]])**

@@ -1,11 +1,11 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:57:57+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[Lambda]]
 Service made to create and manage APIs. Endpoint/entry point for applications.
 Sits between applications and backend services (integration)
-Highly available scaleable. Is a public service, so can connect to on-premise too.
+Highly available scalable. Is a public service, so can connect to on-premise too.
 Throttle control - how many requests can be sent per API key
 
 HTTP APIs, REST APIs and WebSocket APIs
@@ -18,7 +18,7 @@ HTTP APIs, REST APIs and WebSocket APIs
 
 [[Amazon Cognito]]:
 [[Lambda]] Authorizer:
-[[AWS IAM]] Passing Credentials with headders..
+[[AWS IAM]] Passing Credentials with headers..
 ![[Pasted image 20230212203207.png]]
 
 # Endpoint types

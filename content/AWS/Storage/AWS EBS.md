@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T03:08:04+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 EBS (Elastic Block Store) is a storage type you connect to an instance, considered a network drive. Can function as main drive and be reattached to other instance. By default can be connected to one instance at a time, but there is a multi-attach feature. Instances create FS on storages.
 

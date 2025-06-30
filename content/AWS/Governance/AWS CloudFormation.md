@@ -1,8 +1,8 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T02:05:27+04:00
 tags:
   - concept/IaC
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Is a [[Terraform]]-be-like, AWS-native **Infrastructure as code** (**IaC**), solution. Abbreviated as CFN
 
@@ -26,7 +26,7 @@ Stack Delete Logical – Delete Physical resource
 ![[Screenshot 2023-03-07 at 01.12.18.png]]
 
 # Templates
-Templates can be non-portable usually if configured improperly. Templates can be provided with parameters (variables..). There can be Default, Allowedvalues, Min&Max lenght & allowed patterns, NoEcho (good for passwords) & Type.
+Templates can be non-portable usually if configured improperly. Templates can be provided with parameters (variables..). There can be Default, Allowedvalues, Min&Max length & allowed patterns, NoEcho (good for passwords) & Type.
 Decrease number of input parameters if possible (more Defaults to) for best practice for better automation.
 ![[Pasted image 20230307013954.png]]
 Also pseudo-parameters which auto-populated by AWS based on the environment 
@@ -40,7 +40,7 @@ Also pseudo-parameters which auto-populated by AWS based on the environment
 - `Fn:Join` & `Fn::Split`
 	- Split string to list with a delimiter and Join is vice-versa.![[Pasted image 20230307020109.png|400]]
 - `Fn::GetAZs` & `Fn::Select`
-	- Important thing that GetAZs returns AZs where defaul VPC has subnets, generally this configuration is untouched (no need to delete default VPC), but be ware :O
+	- Important thing that GetAZs returns AZs where default VPC has subnets, generally this configuration is untouched (no need to delete default VPC), but be ware :O
 	  ![[Pasted image 20230307015803.png|400]]
 - Conditions (`Fn:: IF`, `And`, `Equals`, `Not` & `Or`)
 - `Fn::Base64` (encode text (like user data)) & `Fn::Sub` (substitute text)

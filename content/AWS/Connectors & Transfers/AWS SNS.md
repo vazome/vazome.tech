@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:52:35+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Related: [[]]
 
@@ -18,6 +18,6 @@ Delivers
 
 Delivery Status - (for HTTP, SQS, Lambda..)
 Delivery Retries - Reliable Delivery 
-HA & Scaleable - Regional
+HA & Scalable - Regional
 Server Side Encryption (SSE) - needed to have if mandated by requirements
 Cross-Account via Topic policy 

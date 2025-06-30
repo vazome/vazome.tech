@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:56:15+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Provides both [[content/IT Theory/Security contepts/Security|Security]] and user management for web and mobile apps. An alternative to [Firebase - Wikipedia](https://en.wikipedia.org/wiki/Firebase), but difficult to work with.
 **Terrible naming.**

@@ -1,6 +1,6 @@
 ---
-date created: 2025-06-21T01:26:01+04:00
-date modified: 2025-06-21T01:52:33+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
 ---
 Managed data transfer process TO and FROM AWS end-to-end (vice-versa). Reliable transfer of large quantities of data and integrates with [[AWS EFS]], [[AWS S3 Simple Storage Service]]... 
 - Migrations, Data Processing Transfer, Archival/Cost effective storage and Backup and DR.

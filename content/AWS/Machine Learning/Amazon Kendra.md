@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Intelligent search service designed to mimic interacting with a human expert. Usually connected via API
 - Supports wide range of question types
 - Factoid - Who, What, Where

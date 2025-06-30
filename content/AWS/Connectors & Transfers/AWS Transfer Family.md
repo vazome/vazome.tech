@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 - Managed file transfer service - Supports transferring TO or FROM [[AWS S3 Simple Storage Service]] and [[AWS EFS]]
 - Provides managed "servers" which support protocols
 	- File Transfer Protocol (FTP) - Unencrypted file transfer

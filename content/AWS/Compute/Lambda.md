@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Function as a Service (FaaS) - short running and focused. A key part in [[IT Software Architectures]]: generally used with [[AWS S3 Simple Storage Service]], [[AWS API Gateway]]. Good at file processing: [[AWS S3 Simple Storage Service]], [[S3 Logging#Events]]. Database triggers: [[AWS DynamoDB]], [[AWS DynamoDB#Streams]]. Serverless CRON: [[AWS EventBridge]]/[[CloudWatch (Metrics)#Events]]. Realtime Stream Data Processing ([[AWS Kinesis]] + Lambda)
 
 - Lambda function - is a piece of code which gets executed by Lambda service
@@ -27,7 +31,7 @@ Requires lambda to implement [Idempotence - Wikipedia](https://en.wikipedia.org/
 ![[Pasted image 20230207004942.png|400]]
 ## Event source mapping
 Used on streams or queues which don't generate events, like [[AWS Kinesis]].
-Data stream is broken on to source batches which get's sent to Lambda but as an Event Batch.
+Data stream is broken on to source batches which gets sent to Lambda but as an Event Batch.
 But remember 15 minute timeout for any lambda function.
 ![[Pasted image 20230207005027.png|400]]
 ## Versioning

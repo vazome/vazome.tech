@@ -1,3 +1,7 @@
+---
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:20+04:00
+---
 Related: [[Application Layer (L7) Firewall]]
 
 Aside from Firewall, can log events, can be also integrated with [[AWS EventBridge]] to pass IP Lists to it and many other things.

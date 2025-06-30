@@ -1,8 +1,8 @@
 ---
 tags:
   - concept/monitoring
-date created: 2025-06-20T15:58:27+04:00
-date modified: 2025-06-20T16:09:57+04:00
+created: 2025-06-30T06:32:04+04:00
+modified: 2025-06-30T06:35:21+04:00
 ---
 # CloudWatch (Metrics)
 
