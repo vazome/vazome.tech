@@ -1,11 +1,9 @@
 ---
-date created: 2025-06-05T17:16:06+04:00
-date modified: 2025-06-18T09:09:25+04:00
-tags:
-  - code/python
-  - practice
+tags: [code/python, practice, ml]
+created: 2025-06-29T20:03:44+04:00
+modified: 2025-06-30T06:30:33+04:00
 ---
-We will create a project to run PyTorch for our #ml project
+We will create a project to run PyTorch for our #ml project 
 # Setup
 > [!Tip] Use UV
 > I cannot recommend enough to use UV, install it and use it instead of poetry, pip, and others. It is multiple times faster and more convenient, and you can swap python versions like gloves.

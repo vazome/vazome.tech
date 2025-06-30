@@ -1,8 +1,8 @@
 ---
-date created: 2025-06-05T20:31:05+04:00
-date modified: 2025-06-29T19:59:45+04:00
 tags:
   - concept/mlops
+created: 2025-06-29T20:03:44+04:00
+modified: 2025-06-30T06:28:31+04:00
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)
 # ML in Production
@@ -117,7 +117,7 @@ You may focus on a component only to find that a humans (HLP) performs as good a
 
 Also, research state of the art (via literature search) or open source solution that are available. Or quick and dirty implementation to see what is possible where to go next. And finally performance of older system.
 
-If you doing production system pick something reasonable, not something latest, spend some time on literature. In production your task is to deliver. Think about performance constraints after you established baseline. Try training on smaller dataset (overfit) to see for code erros and whether it works at all, before running through giant dataset. You find bugs faster this way. Same goes for image segmentation. And for classification, use 10-100 classifiers instead of 10000000.
+If you doing production system pick something reasonable, not something latest, spend some time on literature. In production your task is to deliver. Think about performance constraints after you established baseline. Try training on smaller dataset (overfit) to see for code errors and whether it works at all, before running through giant dataset. You find bugs faster this way. Same goes for image segmentation. And for classification, use 10-100 classifiers instead of 10000000.
 
 Initially people worked with spreadsheet to mark miss-predictions when training, but now there are tools, like LandingLens
 ![[Pasted image 20250610025853.png]]
