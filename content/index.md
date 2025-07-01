@@ -2,9 +2,10 @@
 tags: [personal, concept, containers/docker]
 title: About this blog
 created: 2025-07-01T12:08:48+04:00
-modified: 2025-07-01T12:10:47+04:00
+modified: 2025-07-01T12:14:51+04:00
 ---
 This is my personal Tech blog, here I share my articles, lecture notes and opinions.
+==The blog is under creation, I will finish all the core articles and reorganization by 08/2027 ==
 # About
 
 **How to navigate**:
