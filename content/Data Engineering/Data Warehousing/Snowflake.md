@@ -1,5 +1,8 @@
-#dataeng 
-
+---
+tags: []
+created: 2025-07-01T12:15:08+04:00
+modified: 2025-07-01T12:35:10+04:00
+---
 Uses drivers for communication with external tools, supports ODBC and JDBC and connectors like [[Apache Spark]] or python.
 
 This article will use some images that belong to: Data Camp - [Learn Data Science and AI Online \| DataCamp](https://www.datacamp.com/)
