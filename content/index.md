@@ -1,8 +1,8 @@
 ---
-date created: 2025-06-04T22:12:56+04:00
-date modified: 2025-06-28T23:19:34+04:00
 tags: [personal, concept, containers/docker]
 title: About this blog
+created: 2025-07-01T12:08:48+04:00
+modified: 2025-07-01T12:10:47+04:00
 ---
 This is my personal Tech blog, here I share my articles, lecture notes and opinions.
 # About
@@ -36,7 +36,8 @@ Then I did photography (street, journalism) as a hobby, my camera setup was Sony
 | ------------------------------------------------------------- | ------------------------------------------------ |
 | ![[SJvg5_nuKNM.jpg]]                                          | ![[36450522820_e4e3097894_k.jpg]]                |
 | ![[462515117_2338110376523793_6268542425224261985_n.jpg]]     | ![[w0gHaxQUka8.jpg]]                             |
-Some resources using my materials
+
+Some resources that feature my works:
 - [Forbes: Přijde si pro vás policie a zmizíte. Otevřená výpověď Rusa o situaci doma i v Česku](https://forbes.cz/prijde-si-pro-vas-policie-a-zmizite-otevrena-vypoved-rusa-o-situaci-doma-i-u-nas/)
 - [Modernizing Russia Project - CEPA](https://cepa.org/article/modernizing-russia-project/)
 - [Россия: от гражданства – к кастам? \| Eurasianet](https://russian.eurasianet.org/%D1%80%D0%BE%D1%81%D1%81%D0%B8%D1%8F-%D0%BE%D1%82-%D0%B3%D1%80%D0%B0%D0%B6%D0%B4%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%B0-%E2%80%93-%D0%BA-%D0%BA%D0%B0%D1%81%D1%82%D0%B0%D0%BC)
