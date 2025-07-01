@@ -1,12 +1,12 @@
 ---
-date created: 2025-05-12T01:18:03+04:00
-date modified: 2025-06-21T03:03:31+04:00
 tags:
   - code/python
+created: 2025-06-30T06:50:04+04:00
+modified: 2025-07-01T08:12:17+04:00
 ---
 [Socratica Python Programming Tutorials (Computer Science) - YouTube](https://youtube.com/playlist?list=PLi01XoE8jYohWFPpC17Z-wWhPOSuh8Er-&si=p7a0tHr2EgeA8uef)
 # Basics
-Use `dir()` to look up what we can use on an object like this:
+Use `dir()` to look up what we can use on an object:
 ``` python
 example = set()
 dir(example)
@@ -39,7 +39,6 @@ dir(example)
 	print(my_dict)  # Output: {'a': 3, 'b': 2}
 ```
 
-
 ## Variable scopes
 When a variable is encountered, Python searches for it in the following order of scopes ([LEGB](https://realpython.com/python-scope-legb-rule/)):
 - **Local**: defined within a function
@@ -62,19 +61,21 @@ z = (x / y)
 print(f"{z:.f2}") # Outputs: 0.67 formatted number
 ```
 
-## List comprehension vs generator expression
-```python
+## List Comprehension vs Generator Expression
+**Generator Expression (without brackets):**
+``` python
 #The expression
 domain.lower() in repo_field for domain in domains
-#without square brackets is a **generator expression**. A list comprehension would include square brackets, like:
-[domain.lower() in repo_field for domain in domains]
-#So while they look similar, the one without the brackets is lazy and produces a generator rather than a full list.
 ```
+**List Comprehension (with brackets):**
+```python
+[domain.lower() in repo_field for domain in domains]
+```
+So while they look similar, the one without the brackets is lazy evaluation and produces a generator rather than a full list (better memory efficiency since it generates values on demand)
 
+##
 ## Fibonacci Sequence in Python
 >  Fibonacci sequence is a sequence in which each element is the sum of the two elements that precede it, starting from 0 and 1:  `0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...`
-
-
 
 # Package management
 
@@ -100,7 +101,7 @@ What is `no-install-project`?:
 The `uv` tool will do the following:
 - Reads your `pyproject.toml` (specifically the `[project.dependencies]` section)
 - **Installs those dependencies directly** using its own resolver and downloader, **without calling `pip install .`**
-- It uses **uv’s native Rust-based backend**, which is **faster and lower-level than pip**
+- It uses **uv's native Rust-based backend**, which is **faster and lower-level than pip**
 # Linting and code checker
 
 ## Ruff

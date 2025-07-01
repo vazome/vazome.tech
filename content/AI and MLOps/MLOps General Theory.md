@@ -2,7 +2,7 @@
 tags:
   - concept/mlops
 created: 2024-06-29T20:03:44+04:00
-modified: 2025-06-30T06:28:31+04:00
+modified: 2025-07-01T05:35:25+04:00
 ---
 This article will use some images which belong to: [Machine Learning in Production - DeepLearning.AI](https://www.deeplearning.ai/courses/machine-learning-in-production/)
 # ML in Production
@@ -111,7 +111,6 @@ This also includes product recommendations, also be careful and treat fairly (ec
 **BUT! This 1% misdiagnosis could lead to death.** This is not acceptable. You need to make sure that you can detect this 1% and your ML algorithm didn't "got used" printing "0"
 
 ### Consider establishing baseline.
-
 You may focus on a component only to find that a humans (HLP) performs as good as model for a specific condition. This way you can find other areas to improve. Understand that HLP is generally useful with unstructured datatypes.
 ![[Pasted image 20250610023443.png]]
 

@@ -1,7 +1,7 @@
 ---
-tags: [code/python, practice, ml]
+tags: [code/python, practice, ml, code/python/mlflow, code/python/jupyter]
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-06-30T06:30:33+04:00
+modified: 2025-07-01T05:51:01+04:00
 ---
 We will create a project to run PyTorch for our #ml project 
 # Setup
@@ -20,20 +20,19 @@ uv add torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu
 ```
 
 `uv add` creates `.venv` for us, so it auto executes `uv venv [--python x.xx]`
-, but if we didn't want to use `uv add`, we could go with `uv pip install` .
+, but if we don't want to use `uv add`, you may go with old school `uv pip install`.
 ![[Pasted image 20250605180529.png]]
-## Enabling Jupyter
-[Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
-I work in VSCode, UV has instruction on how we can enable Junyper to work with UV environment.
-in
-``` python-r
-uv add --dev ipykernel
-```
-
 Our initial directory will contain all necessary boilerplate environment configurations to begin with coding:
 ![[Pasted image 20250605194251.png]]
 For more info on `pyproject.toml` and other environment files, refer to: [Working on projects \| uv](https://docs.astral.sh/uv/guides/projects/)
-## If you use WSL 2 
+## Enabling Jupyter
+[Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
+I do my work in VSCode, UV has instructions on how to enable Jupyter for UV environment, it's simply:
+`uv add --dev ipykernel{:shell}`
+## Install MLFlow for experiment tracking
+![[MLOps in Process#^608101]]
+
+## If you use WSL 2 and Nvidia 
 To enable CUDA on WSL Ubuntu 24.04, install the following:
 ``` shell
 wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
