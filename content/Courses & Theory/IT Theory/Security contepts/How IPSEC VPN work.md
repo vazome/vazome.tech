@@ -1,7 +1,7 @@
 IPSEC is a group of protocols
 
 Sets up secure tunnels over insecure networks
-Provides [[content/IT Theory/Security contepts/Security#Authentication]] and [[Encryption and Encoding#At Rest]]
+Provides [[content/Courses & Theory/IT Theory/Security contepts/Security#Authentication]] and [[Encryption and Encoding#At Rest]]
 SA - Security Associations. An SA is a relationship between two or more entities that describes how the entities will use security services to communicate securely.
 
 Has two phases

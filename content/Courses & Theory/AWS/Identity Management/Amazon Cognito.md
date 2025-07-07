@@ -2,7 +2,7 @@
 created: 2025-06-30T06:32:04+04:00
 modified: 2025-06-30T06:35:20+04:00
 ---
-Provides both [[content/IT Theory/Security contepts/Security|Security]] and user management for web and mobile apps. An alternative to [Firebase - Wikipedia](https://en.wikipedia.org/wiki/Firebase), but difficult to work with.
+Provides both [[content/Courses & Theory/IT Theory/Security contepts/Security|Security]] and user management for web and mobile apps. An alternative to [Firebase - Wikipedia](https://en.wikipedia.org/wiki/Firebase), but difficult to work with.
 **Terrible naming.**
 
 - `USER POOLS` - Sign-in and get [JSON Web Token - (JWT)](https://en.wikipedia.org/wiki/JSON_Web_Token), but ***most AWS services can't use JWT***.

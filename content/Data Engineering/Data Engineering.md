@@ -1,9 +1,9 @@
-
 > [!NOTE] Types of data
 > Data can be structured, semi-structured, unstructured
 
 ![[Pasted image 20250119205433.png]]
 %% Begin Waypoint %%
+- [[Apache Airflow]]
 - [[Azure Storage]]
 - [[Data Design and Pipelines]]
 - [[Data Visualization]]

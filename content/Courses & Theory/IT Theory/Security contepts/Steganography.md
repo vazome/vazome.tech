@@ -4,7 +4,7 @@ date modified: 2025-06-27T09:35:05+04:00
 tags:
   - concept/security
 ---
-Related: [[content/IT Theory/Security contepts/Security]]
+Related: [[content/Courses & Theory/IT Theory/Security contepts/Security]]
 
 Steganography is a process of hiding something is something else.
 In terms of encryption it helps to find the fact the information is encrypted.

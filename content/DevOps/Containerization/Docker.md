@@ -4,7 +4,6 @@ date modified: 2025-06-14T23:57:07+04:00
 tags:
   - containers/docker
 ---
-
 **Runs isolated containers which utilize kernel from the Host**, Container is isolated system environment. Utilizes LXC containers, removing boilerplate for us.
 
 # Theory
@@ -227,7 +226,7 @@ Most important sections:
 
 ## multistage building
 
-Defined by two FROM fields in Dockerfile. It allows us to create two images within one where first we compile the application and then build the image that will launch the program, we do this to reduce the size of the end image to ensure it does not contain the tools necessary for image building.
+Defined by two FROM fields in Dockerfile. It allows us to create two images within one where first we compile the application and then build the image that will launch the program. We do this to reduce the size of the end image to ensure it does not contain the tools necessary for image building.
 
 ## secret management
 [Secrets \| Docker Docs](https://docs.docker.com/build/building/secrets/#secret-mounts)

@@ -1,8 +1,8 @@
 ---
-date created: 2024-06-14T22:29:54+04:00
-date modified: 2025-06-25T17:54:26+04:00
 tags:
   - containers/kubernetes
+created: 2025-07-01T14:17:04+04:00
+modified: 2025-07-04T13:02:24+04:00
 ---
 Automates (orchestrates) Docker to scale, check for errored out containers and etc.
 
@@ -73,7 +73,7 @@ It all works in scales motion where when you create a deployment it also create 
 	- Either use this or deploy DB outside K8S in a highly available infra, like cloud.
 	- You cannot modify many of the created fields from YAML, like storage size/request!
 	- Has field `serviceName`, i.e. creating dns service for each replica independently (as if each pods got dns name), so in Service declaration you should make it **headless** with `type: ClusterIP` and `ClusterIP: None` ![[Pasted image 20250528213300.png]]
-	- **Why headless** Each connection to the service is forwarded to one randomly selected backing pod. But what if the client needs to connect to all of those pods? What if the backing pods themselves need to each connect to all the other backing pods. Connecting through the service clearly isn’t the way to do this. [Service \| Kubernetes](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services)
+	- **Why headless** Each connection to the service is forwarded to one randomly selected backing pod. But what if the client needs to connect to all of those pods? What if the backing pods themselves need to each connect to all the other backing pods. Connecting through the service clearly isn't the way to do this. [Service \| Kubernetes](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services)
 	- `StatefulSets` currently require a [Headless Service](https://kubernetes.io/docs/concepts/services-networking/service/#headless-services) to be responsible for the network identity of the Pods. You are responsible for creating this Service.
 - **`PersistentVolume`** and **`PersistentVolumeClaim`** stores data persistently, functions as emulated physical storage. PVC is a declaration of need for storage that can at some point become available / satisfied - as in bound to some actual PV. PVC consumes PV. StatefulSet volumeClaimTemplate enables dynamic provision of PV. ![[Pasted image 20250612222656.png]]
 	- Provisioned via PVs, generally via user, via Storage Classes SC
@@ -166,7 +166,10 @@ It is good at templating.
 ![[Pasted image 20250612225407.png]]
 `values.yaml` can have a supplementary `values.schema.json` to define a schema for values. Useful for error prevention
 
-Helm history of the releases in secrets of the clusters
+Helm history of the releases in secrets of the clusters.
+
+`helm show values apache-airflow/airflow` to show configuration values which you can tackle
+`kubectl port-forward svc/airflow-webserver 8080:8080 --namespace airflow`
 
 # In practice
 

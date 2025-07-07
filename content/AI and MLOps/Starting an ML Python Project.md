@@ -1,9 +1,9 @@
 ---
-tags: [code/python, practice, ml, code/python/mlflow, code/python/jupyter]
+tags: [code/python, practice, code/python/mlflow, code/python/jupyter, concept/mlops]
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-01T05:51:01+04:00
+modified: 2025-07-03T10:16:29+04:00
 ---
-We will create a project to run PyTorch for our #ml project 
+We will create a project to run PyTorch for our #concept/mlops project 
 # Setup
 > [!Tip] Use UV
 > I cannot recommend enough to use UV, install it and use it instead of poetry, pip, and others. It is multiple times faster and more convenient, and you can swap python versions like gloves.
