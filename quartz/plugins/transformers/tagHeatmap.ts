@@ -1,9 +1,8 @@
-import { QuartzTransformerPlugin } from "../types"
-import { visit } from "unist-util-visit"
-import { Root } from "mdast"
-import { VFile } from "vfile"
-import * as fs from "fs"
 import colormap from "colormap"
+import { Root } from "mdast"
+import { visit } from "unist-util-visit"
+import { VFile } from "vfile"
+import { QuartzTransformerPlugin } from "../types"
 
 /**
  * TagHeatmap Transformer Plugin
@@ -38,13 +37,16 @@ const globalTagCounts = new Map<string, number>()
 const directTagUsage = new Map<string, number>() // Tags used exactly as written (not derived from hierarchy)
 let debugLogs: string[] = []
 
+/**
+ * Helper function to write debug messages to a log file
+ * This can be useful for troubleshooting the tag processing
+ * when running the Quartz build process
+ * 
+ * DISABLED: Debug logging is currently turned off
+ */
 function writeDebugLog(message: string) {
-  debugLogs.push(message)
-  try {
-    fs.writeFileSync("tagHeatmap-debug.log", debugLogs.join('\n'))
-  } catch (err) {
-    // Ignore file write errors
-  }
+  // No-op function (disabled logging)
+  return;
 }
 
 // Get cell size configuration

@@ -1,19 +1,18 @@
-import { QuartzTransformerPlugin } from "../types"
-import { Root } from "hast"
-import { visit } from "unist-util-visit"
-import { Element } from "hast"
-import path from "path"
 import fs from "fs/promises"
-import { unified } from "unified"
-import remarkParse from "remark-parse"
+import { Element, Root } from "hast"
+import { fromHtml } from "hast-util-from-html"
+import path from "path"
+import rehypeStringify from "rehype-stringify"
 import remarkBreaks from "remark-breaks"
 import remarkFrontmatter from "remark-frontmatter"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
+import remarkParse from "remark-parse"
 import remarkRehype from "remark-rehype"
 import remarkSmartypants from "remark-smartypants"
-import rehypeStringify from "rehype-stringify"
-import { fromHtml } from "hast-util-from-html"
+import { unified } from "unified"
+import { visit } from "unist-util-visit"
+import { QuartzTransformerPlugin } from "../types"
 
 interface Options {
   /** Cache directory for downloaded notebooks */
@@ -238,7 +237,25 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
     return `
       <div class="jupyter-notebook-embedded">
         <div class="notebook-header">
-          <span class="notebook-title">Jupyter Notebook</span>
+          <div class="notebook-header-left">
+            <button class="notebook-toggle" aria-expanded="true" type="button" onclick="this.parentNode.parentNode.parentNode.classList.toggle('collapsed'); this.setAttribute('aria-expanded', this.parentNode.parentNode.parentNode.classList.contains('collapsed') ? 'false' : 'true');">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="5 8 14 8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="notebook-fold"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              <span class="notebook-title">Jupyter Notebook</span>
+            </button>
+          </div>
           <div class="notebook-source">
             <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer" class="notebook-link">
               ${notebookName}
@@ -246,8 +263,11 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
             <img src="${faviconUrl}" alt="${siteName}" class="notebook-favicon" title="Source: ${siteName}">
           </div>
         </div>
-        <div class="notebook-cells">
-          ${cells}
+        <!-- Direct style-based collapsible content -->
+        <div class="notebook-content" style="overflow:hidden; transition: max-height 0.3s ease;">
+          <div class="notebook-cells">
+            ${cells}
+          </div>
         </div>
       </div>
       <style>
@@ -258,6 +278,18 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   background: var(--light);
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   overflow: hidden;
+}
+
+.jupyter-notebook-embedded.collapsed .notebook-content {
+  max-height: 0 !important;
+}
+
+.jupyter-notebook-embedded:not(.collapsed) .notebook-content {
+  max-height: 5000px !important; /* Large enough for any notebook */
+}
+
+.jupyter-notebook-embedded.collapsed .notebook-fold {
+  transform: rotateZ(-90deg);
 }
 
 .notebook-header {
@@ -271,6 +303,34 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   justify-content: space-between;
   gap: 0.5rem;
   max-height: 2.5rem;
+}
+
+.notebook-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notebook-toggle {
+  background: transparent;
+  border: none;
+  color: var(--lightgray);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.notebook-toggle:hover {
+  opacity: 0.8;
+}
+
+.notebook-fold {
+  transition: transform 0.3s ease;
 }
 
 .notebook-source {
@@ -299,9 +359,6 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   opacity: 0.8;
 }
 
-.notebook-cells {
-  padding: 0;
-}
 
 .notebook-cell {
   border-bottom: 1px solid var(--lightgray);
@@ -487,7 +544,45 @@ html[data-theme='dark'] .notebook-error-output pre {
   border-color: #991b1b;
   color: #fca5a5;
 }
+
+html[data-theme='dark'] .notebook-toggle {
+  color: var(--light);
+}
       </style>
+      <script>
+(function() {
+  // Simple script just to save toggle state in localStorage
+  document.addEventListener('DOMContentLoaded', function() {
+    // Restore saved states
+    const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
+    
+    document.querySelectorAll('.jupyter-notebook-embedded').forEach(notebook => {
+      const notebookLink = notebook.querySelector('.notebook-link');
+      const notebookId = notebookLink ? notebookLink.getAttribute('href') : '';
+      if (notebookId && savedStates[notebookId]) {
+        notebook.classList.add('collapsed');
+        const button = notebook.querySelector('.notebook-toggle');
+        if (button) button.setAttribute('aria-expanded', 'false');
+      }
+    });
+    
+    // Set up click listeners to save state
+    document.querySelectorAll('.notebook-toggle').forEach(button => {
+      button.addEventListener('click', function() {
+        const notebook = this.closest('.jupyter-notebook-embedded');
+        const notebookLink = notebook.querySelector('.notebook-link');
+        const notebookId = notebookLink ? notebookLink.getAttribute('href') : '';
+        if (notebookId) {
+          const isCollapsed = notebook.classList.contains('collapsed');
+          const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
+          savedStates[notebookId] = isCollapsed;
+          localStorage.setItem('notebookStates', JSON.stringify(savedStates));
+        }
+      });
+    });
+  });
+})();
+      </script>
     `
   }
   // Favicon detection and fetching
