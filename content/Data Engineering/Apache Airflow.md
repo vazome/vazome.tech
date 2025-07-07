@@ -1,6 +1,6 @@
 ---
 created: 2025-07-07T14:31:02+04:00
-modified: 2025-07-07T18:05:44+04:00
+modified: 2025-07-07T18:13:31+04:00
 tags:
   - practice
 ---
@@ -11,7 +11,7 @@ tags:
 > [!info]
 > Screenshots were taken at different hours, so expect light/dark modes switches.
 
-## Airflow DAGs and Scripts
+## Prepare Airflow DAGs 
 We can use TaskFlow API to create DAG instead of "old school" `PythonOperator`, `BashOperator`, etc; use wrappers to create tasks.
 
 We define `@dag{:python}` wrapper and there we can also [parameterize](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/params.html) the script, this especially comes useful when we intend to reuse the script. Set `render_template_as_native_obj=True{:python}` to preserve parameter types, by default airflow converts them to strings.
@@ -118,7 +118,7 @@ dag_instance = upload_to_s3_test()
 if __name__ == "__main__":
     dag_instance.test()
 ```
-## Airflow via Helm
+## Deploy via Helm
 Airflow allows us to [extend image](https://airflow.apache.org/docs/docker-stack/build.html) to add more python packages or additional configurations. Let's do both. 
 
 Suppose we need `mlflow` and couple of other libraries we have in our project:
@@ -182,15 +182,14 @@ helm upgrade --install airflow apache-airflow/airflow --namespace airflow --crea
 ```
 
 ![[Pasted image 20250707145834.png]]
-To access Airflow API Server UI we would need to port forward:
+## Access Airflow UI
+To access Airflow API Server from host we need to port forward:
 ``` shell
 kubectl port-forward svc/airflow-api-server 8080:8080 --namespace airflow
 ```
 
 ![[Screenshot 2025-07-03 090436.png]]
-## Airflow UI
 First thing I saw once logged in the console were DAG Import errors, these came from `tests_common` module provided by Airflow. One script couldn't load a module. Generally DAG import errors are easily fixable, for me usually it's either me forgetting to remove and argument after refactoring or TaskFlow task order issue.
 ![[Screenshot 2025-07-03 091245.png]]*Airflow would print status of import and stack trace.*
 
-The task interface is friendly.
-![[Pasted image 20250707165322.png]]
+The task interface is friendly.![[Pasted image 20250707165322.png]]
