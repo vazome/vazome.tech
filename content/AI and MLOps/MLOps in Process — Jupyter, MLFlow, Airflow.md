@@ -5,11 +5,11 @@ tags:
   - code/python/mlflow
   - code/python/jupyter
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-07T20:40:51+04:00
+modified: 2025-07-07T21:54:52+04:00
 ---
 # Experiments in Jupyter
 
-Very basic ML Experiment:
+At first we start with Jupyter, but Jupyter does not scale well if we are on to model deployment. Here is simple Jupyter note example
 [03-training-ride-prediction.ipynb](https://raw.githubusercontent.com/vazome/mlops-zoomcamp-epam/main/01-intro/03-training-ride-prediction.ipynb)
 
 # Tracking and Management with MLFlow

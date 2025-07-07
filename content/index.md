@@ -29,9 +29,7 @@ My *Alesis Nitro Max Kit* — it gives you all key things and not skipping on th
 
 ![[drums.jpg|300]]
 
-I had a dream to be a scientist, in 2012 we even were [one of the laureates](https://integraciya.org/sborniki/uneko/UNEKO-2013.pdf) of National Science and Ecology Competition, for local radiation pollution research project. Though, later I figured, biological stuff was too much for me.
-
-Then I did photography (street, journalism) as a hobby, my camera setup was Sony Alpha 58 with kit, portrait, and Minolta f4/70-210mm (beer can) lenses. Here is a little showcase:
+I did photography (street, journalism) as a hobby, my camera setup was Sony Alpha 58 with kit, portrait, and Minolta f4/70-210mm (beer can) lenses. Here is a little showcase:
 
 | ![[35223634376_6f88fb2ef4_k.jpg]]Protestor being carried away | ![[35077105151_0fb18d9cf9_k.jpg]]A fan, chanting |
 | ------------------------------------------------------------- | ------------------------------------------------ |

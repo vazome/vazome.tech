@@ -238,7 +238,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
       <div class="jupyter-notebook-embedded">
         <div class="notebook-header">
           <div class="notebook-header-left">
-            <button class="notebook-toggle" aria-expanded="true" type="button" onclick="this.parentNode.parentNode.parentNode.classList.toggle('collapsed'); this.setAttribute('aria-expanded', this.parentNode.parentNode.parentNode.classList.contains('collapsed') ? 'false' : 'true');">
+            <button class="notebook-toggle" aria-expanded="true" aria-label="Toggle notebook visibility" type="button" onclick="this.closest('.jupyter-notebook-embedded').classList.toggle('collapsed'); this.setAttribute('aria-expanded', this.closest('.jupyter-notebook-embedded').classList.contains('collapsed') ? 'false' : 'true');">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
@@ -264,7 +264,7 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
           </div>
         </div>
         <!-- Direct style-based collapsible content -->
-        <div class="notebook-content" style="overflow:hidden; transition: max-height 0.3s ease;">
+        <div class="notebook-content">
           <div class="notebook-cells">
             ${cells}
           </div>
@@ -280,12 +280,14 @@ export const NotebookEmbedding: QuartzTransformerPlugin<Partial<Options>> = (use
   overflow: hidden;
 }
 
-.jupyter-notebook-embedded.collapsed .notebook-content {
-  max-height: 0 !important;
+.notebook-content {
+  overflow: hidden;
+  max-height: 10000px; /* Large enough for any notebook */
+  transition: max-height 0.5s ease-in-out;
 }
 
-.jupyter-notebook-embedded:not(.collapsed) .notebook-content {
-  max-height: 5000px !important; /* Large enough for any notebook */
+.jupyter-notebook-embedded.collapsed .notebook-content {
+  max-height: 0;
 }
 
 .jupyter-notebook-embedded.collapsed .notebook-fold {
@@ -551,35 +553,86 @@ html[data-theme='dark'] .notebook-toggle {
       </style>
       <script>
 (function() {
-  // Simple script just to save toggle state in localStorage
   document.addEventListener('DOMContentLoaded', function() {
-    // Restore saved states
-    const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
-    
-    document.querySelectorAll('.jupyter-notebook-embedded').forEach(notebook => {
+    // Function to toggle notebook expansion - simplified version
+    function toggleNotebook(notebook, collapse) {
+      const content = notebook.querySelector('.notebook-content');
+      const button = notebook.querySelector('.notebook-toggle');
+      
+      if (!content) return;
+      
+      if (collapse === undefined) {
+        // Toggle if no specific state is provided
+        collapse = !notebook.classList.contains('collapsed');
+      }
+      
+      // Simple toggle approach
+      if (collapse) {
+        notebook.classList.add('collapsed');
+        if (button) button.setAttribute('aria-expanded', 'false');
+      } else {
+        notebook.classList.remove('collapsed');
+        if (button) button.setAttribute('aria-expanded', 'true');
+      }
+      
+      // Save state to localStorage
       const notebookLink = notebook.querySelector('.notebook-link');
       const notebookId = notebookLink ? notebookLink.getAttribute('href') : '';
-      if (notebookId && savedStates[notebookId]) {
-        notebook.classList.add('collapsed');
-        const button = notebook.querySelector('.notebook-toggle');
-        if (button) button.setAttribute('aria-expanded', 'false');
+      if (notebookId) {
+        const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
+        savedStates[notebookId] = collapse;
+        localStorage.setItem('notebookStates', JSON.stringify(savedStates));
       }
+    }
+    
+    // Initialize all notebooks and restore saved states
+    const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
+    
+    // Function to initialize a notebook - simplified
+    function initializeNotebook(notebook) {
+      const notebookLink = notebook.querySelector('.notebook-link');
+      const notebookId = notebookLink ? notebookLink.getAttribute('href') : '';
+      const toggle = notebook.querySelector('.notebook-toggle');
+      
+      // Ensure the button has a click listener
+      if (toggle && !toggle.hasAttribute('data-initialized')) {
+        toggle.setAttribute('data-initialized', 'true');
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          toggleNotebook(notebook);
+        });
+      }
+      
+      // Restore saved collapsed state if needed
+      if (notebookId && savedStates[notebookId]) {
+        toggleNotebook(notebook, true);
+      }
+    }
+    
+    // Initialize all notebooks on the page
+    document.querySelectorAll('.jupyter-notebook-embedded').forEach(notebook => {
+      initializeNotebook(notebook);
     });
     
-    // Set up click listeners to save state
-    document.querySelectorAll('.notebook-toggle').forEach(button => {
-      button.addEventListener('click', function() {
-        const notebook = this.closest('.jupyter-notebook-embedded');
-        const notebookLink = notebook.querySelector('.notebook-link');
-        const notebookId = notebookLink ? notebookLink.getAttribute('href') : '';
-        if (notebookId) {
-          const isCollapsed = notebook.classList.contains('collapsed');
-          const savedStates = JSON.parse(localStorage.getItem('notebookStates') || '{}');
-          savedStates[notebookId] = isCollapsed;
-          localStorage.setItem('notebookStates', JSON.stringify(savedStates));
-        }
+    // Set up a MutationObserver to handle dynamically added notebooks
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) { // Element node
+            const notebooks = node.classList && node.classList.contains('jupyter-notebook-embedded') 
+              ? [node] 
+              : Array.from(node.querySelectorAll('.jupyter-notebook-embedded'));
+              
+            notebooks.forEach(notebook => {
+              // Use the same initialization function for consistency
+              initializeNotebook(notebook);
+            });
+          }
+        });
       });
     });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
   });
 })();
       </script>
