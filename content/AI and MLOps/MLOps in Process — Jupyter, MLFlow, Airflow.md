@@ -4,8 +4,10 @@ tags:
   - practice
   - code/python/mlflow
   - code/python/jupyter
+  - dataeng/airflow
+  - code/jupyter
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-07T21:54:52+04:00
+modified: 2025-07-07T22:45:56+04:00
 ---
 # Experiments in Jupyter
 
@@ -13,14 +15,14 @@ At first we start with Jupyter, but Jupyter does not scale well if we are on to 
 [03-training-ride-prediction.ipynb](https://raw.githubusercontent.com/vazome/mlops-zoomcamp-epam/main/01-intro/03-training-ride-prediction.ipynb)
 
 # Tracking and Management with MLFlow
-Use MLFlow for experiment: tracking, logging and statistical insights, it is integrated within [[Databricks]]. Modern way to install it in a python project is `uv add mlflow{:shell}` ^608101
+Use MLFlow for experiment: tracking, logging and statistical insights and it is supported by within [[Databricks]]. You can install it in a python project via `uv add mlflow{:shell}` ^608101
 
-You can start UI and provide different backend like: `mlflow ui --backend-store-uri sqlite:///mlflow.db{:shell}`
+To start MLFlow tracking server: `mlflow ui --backend-store-uri sqlite:///mlflow.db{:shell}`
 ![[Pasted image 20250628113950.png]]
-Within your experiment, to log with mlflow you track specific parameters with `mlflow.log*{:python}` method and to automatically log most of the stuff with [MLFlow autolog](https://mlflow.org/docs/latest/ml/tracking/autolog). Ideally combine both, for explicit logging, utilize `mlflow.log_params(params_dict){:python}`
+Within your experiment, MLFlow provides a way to log parameters, models, and artifacts with `mlflow.log*{:python}` methods (like `mlflow.log_params(params_dict){:python}`) and to automatically log variety of the data utilize [MLFlow autolog](https://mlflow.org/docs/latest/ml/tracking/autolog). But keep in mind that autolog won't register a model for you.
 ![[Pasted image 20250629201041.png]]
 
-You can load a saved model via:
+You can load a saved model with:
 ``` python
 import mlflow.pyfunc
 model = mlflow.pyfunc.load_model(model_uri="models:/<model_name>/<version_or_alias>")
@@ -28,7 +30,7 @@ result = model.predict(data)
 ```
 more options here: [Load a Registered Model \| MLflow](https://mlflow.org/docs/latest/ml/getting-started/registering-first-model/step3-load-model)
 
-You can control MLFlow within python via:
+You can control MLFlow within python with:
 ```python
 from mlflow.tracking import MlflowClient
 client = MlflowClient()
@@ -62,8 +64,7 @@ mlflow gc --backend-store-uri sqlite:///mlflow.db --experiment-ids 4 --tracking-
 ```
 
 ## Kubernetes Deployment
-
-First we would need an image, I prefer to create one in this case than using developer provided. I was having issues with their distribution.
+Firstly we would need an image, I prefer to create dockerfile in this case than using developer provided image. This way we can have more granular control of what goes into it.
 ``` dockerfile
 FROM python:3.12-slim-bookworm
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/

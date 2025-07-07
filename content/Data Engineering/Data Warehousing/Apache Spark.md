@@ -1,4 +1,9 @@
-#dataeng 
+---
+tags:
+  - dataeng/spark
+created: 2025-07-07T21:56:25+04:00
+modified: 2025-07-07T23:02:48+04:00
+---
 
 This article will use some images from: [Learning Spark, 2nd Edition [Book] (oreilly.com)](https://www.oreilly.com/library/view/learning-spark-2nd/9781492050032/) 
 # Main
@@ -128,9 +133,9 @@ Transformation can be classified into Narrow and Wide:
 
 > Any transformation where a single output partition can be computed from a single input partition is a **narrow transformation**. Both `filter()` and `contains()` can be classified as such. 
 > There are many Narrow Transformations supported by Spark: **`map(func); flatMap(func); filter(func); mapPartition(func); mapPartitionWithIndex(func); union(dataset); zip(dataset); zipWithIndex(); zipWithUniqueId().`**
-Map func returns new RDD after calulation, Filter returns resource on if condition succesful, and Union basically joins RDDs into new one
+Map func returns new RDD after calculation, Filter returns resource on if condition successful, and Union basically joins RDDs into new one
 > 
-> However, `groupBy()` or `orderBy()` instruct Spark to perform **wide transformations**, where data from other partitions is read in, combined, and written to disk. Since each partition will have its own count of the word that contains the “Spark” word in its row of data, a `count(groupBy())` will force a shuffle of data from each of the executor’s partitions across the cluster. In this transformation,` orderBy()` requires output from other partitions to compute the final aggregation.
+> However, `groupBy()` or `orderBy()` instruct Spark to perform **wide transformations**, where data from other partitions is read in, combined, and written to disk. Since each partition will have its own count of the word that contains the "Spark" word in its row of data, a `count(groupBy())` will force a shuffle of data from each of the executor's partitions across the cluster. In this transformation,` orderBy()` requires output from other partitions to compute the final aggregation.
 
 ![[Screenshot 2024-06-17 at 22.45.24.png]]
 Here is how can you list all of dataframes in a session:
@@ -143,7 +148,7 @@ def list_dataframes():
 Zipping
 **zip, zipWithIndex, zipWithUniqueId**
 zip -  zips this RDD with another one, returning key-value pairs (PairRDD) with the elements pair.
-For instance, if you have two RDDs with (‘A’, ‘B’, ‘C’) first and (1, 2, 3) second, and you try to zip them, then you get a new RDD with pairs (‘A’, 1), (‘B’, 2), (‘C’, 3). It’s like a hash map with ‘A’, ‘B’, ‘C’ as keys, and 1,2,3 as values for them respectively
+For instance, if you have two RDDs with ('A', 'B', 'C') first and (1, 2, 3) second, and you try to zip them, then you get a new RDD with pairs ('A', 1), ('B', 2), ('C', 3). It's like a hash map with 'A', 'B', 'C' as keys, and 1,2,3 as values for them respectively
 ```
 val x = sc.parallelize('A' to 'C',2)
 val y = sc.parallelize(1 to 3, 2)
@@ -184,7 +189,7 @@ val x = sc.parallelize(1 to 6, 4)
 val z = x.repartition(2)
 // [1, 2, 4, 5], [3, 6]
 ```
-> Thus, what’s the difference between a coalesce and repartition? The only thing coalesce can do is to decrease the number of partitions, while repartition can increase them.
+> Thus, what's the difference between a coalesce and repartition? The only thing coalesce can do is to decrease the number of partitions, while repartition can increase them.
 > If you are not sure how many partitions you have and do not want to increase them but possibly decrease, then coalesce is your choice. Otherwise, if there is no need to change the number of partitions, whether increasing or decreasing, then select repartition
 #### Actions
 Provide non RDD DATA

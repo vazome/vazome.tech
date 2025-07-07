@@ -1,6 +1,6 @@
 ---
 created: 2025-07-07T14:31:02+04:00
-modified: 2025-07-07T20:38:39+04:00
+modified: 2025-07-07T23:04:26+04:00
 tags:
   - practice
   - dataeng/airflow
@@ -8,6 +8,8 @@ tags:
 ---
 # Theory
 ==TBD==
+## Execution
+![[Apache Spark#DAG and how it works]]
 # Deploy
 
 > [!info]

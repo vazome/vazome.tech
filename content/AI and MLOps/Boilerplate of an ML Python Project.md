@@ -1,7 +1,7 @@
 ---
 tags: [code/python, practice, code/python/mlflow, code/python/jupyter, concept/mlops]
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-03T10:16:29+04:00
+modified: 2025-07-07T23:06:48+04:00
 ---
 We will create a project to run PyTorch for our #concept/mlops project 
 # Setup
@@ -12,11 +12,11 @@ We will create a project to run PyTorch for our #concept/mlops project
 Let's create the environment, the following will
 1. Create a directory
 2. Initiate a proper python project there
-3. Install PyTorch
+3. Install necessary packages
 ``` shell
 mkdir pytorch-sandbox && cd pytorch-sandbox
 uv init
-uv add torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu128 
+uv add mlflow torch torchvision torchaudio  --index https://download.pytorch.org/whl/cu128 
 ```
 
 `uv add` creates `.venv` for us, so it auto executes `uv venv [--python x.xx]`
