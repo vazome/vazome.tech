@@ -1,8 +1,10 @@
 ---
 created: 2025-07-07T14:31:02+04:00
-modified: 2025-07-07T18:13:31+04:00
+modified: 2025-07-07T20:38:39+04:00
 tags:
   - practice
+  - dataeng/airflow
+  - code/python
 ---
 # Theory
 ==TBD==
@@ -155,8 +157,10 @@ docker build --pull --tag my-airflow:0.0.1 . -f airflow.dockerfile
 > [!attention]
 > If your K8S is setup via kind you can load extended image into K8S as such:
 > ``` shell
-> kind load docker-image my-airflow:0.0.1
+> kind load docker-image name:version
 > ```
+
+^330462
 
 To provide additional configuration, since we deploy though Helm in K8S we would extend the chart. We can let's learn more from the docs: 
 - [Extending the Chart — helm-chart Documentation](https://airflow.apache.org/docs/helm-chart/stable/extending-the-chart.html) 

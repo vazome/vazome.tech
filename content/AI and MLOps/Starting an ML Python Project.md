@@ -30,7 +30,7 @@ For more info on `pyproject.toml` and other environment files, refer to: [Workin
 I do my work in VSCode, UV has instructions on how to enable Jupyter for UV environment, it's simply:
 `uv add --dev ipykernel{:shell}`
 ## Install MLFlow for experiment tracking
-![[MLOps in Process#^608101]]
+![[MLOps in Process —#^608101]]
 
 ## If you use WSL 2 and Nvidia 
 To enable CUDA on WSL Ubuntu 24.04, install the following:
