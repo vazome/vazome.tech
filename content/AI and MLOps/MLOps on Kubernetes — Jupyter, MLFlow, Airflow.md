@@ -9,7 +9,7 @@ tags:
 aliases:
   - "mlops-kubernetes-setup"
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-08T13:32:16+04:00
+modified: 2025-07-08T13:41:50+04:00
 ---
 This setup mostly fits for the development environment, in the future articles we will discuss production deployment.
 # Experiments in Jupyter
@@ -197,7 +197,11 @@ def train_model(x_train, y_train, x_val, y_val, dv):
 		registered_model_name="nyc-taxi-yellow-prediction",
 	)
 ```
-![[Pasted image 20250707191809.png]]
-Though there is a concern, considering isolated nature of tasks, we pass data between them with XCom. 
+![[Pasted image 20250708133716.png]]*DAG workflow overview*
+![[Pasted image 20250707191809.png]]*Task logs example*
+
+There is a concern: taking into account isolated nature of tasks, we are relying on passing data with XCom. For higher number of experiment or data, consider using Apache Spark or Databricks operators.
+- [Apache Spark Operators — apache-airflow-providers-apache-spark Documentation](https://airflow.apache.org/docs/apache-airflow-providers-apache-spark/stable/operators.html)
+- [Databricks Operators — apache-airflow-providers-databricks Documentation](https://airflow.apache.org/docs/apache-airflow-providers-databricks/stable/operators/index.html)
 
 At [[Apache Airflow]] article you can find more info on deployment and configuration.
