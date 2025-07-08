@@ -1,12 +1,12 @@
 ---
 tags: [code/python, practice, code/python/mlflow, code/python/jupyter, concept/mlops]
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-07T23:06:48+04:00
+modified: 2025-07-08T12:45:48+04:00
 ---
 We will create a project to run PyTorch for our #concept/mlops project 
 # Setup
 > [!Tip] Use UV
-> I cannot recommend enough to use UV, install it and use it instead of poetry, pip, and others. It is multiple times faster and more convenient, and you can swap python versions like gloves.
+> I cannot recommend enough to use UV, install it and use it instead of poetry, pip, and others. It is many times faster and more convenient, and you can swap python versions like easily.
 > [Installation \| uv](https://docs.astral.sh/uv/getting-started/installation)
 
 Let's create the environment, the following will
@@ -26,11 +26,10 @@ Our initial directory will contain all necessary boilerplate environment configu
 ![[Pasted image 20250605194251.png]]
 For more info on `pyproject.toml` and other environment files, refer to: [Working on projects \| uv](https://docs.astral.sh/uv/guides/projects/)
 ## Enabling Jupyter
-[Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
-I do my work in VSCode, UV has instructions on how to enable Jupyter for UV environment, it's simply:
-`uv add --dev ipykernel{:shell}`
+I do my work in VSCode and it integrates well with UV. We can enable Jupyter the following way: `uv add --dev ipykernel{:shell}`
+For more: [Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
 ## Install MLFlow for experiment tracking
-![[MLOps in Process — Jupyter, MLFlow, Airflow#^608101]]
+![[MLOps Dev Showcase — Jupyter, MLFlow, Airflow#^608101]]
 
 ## If you use WSL 2 and Nvidia 
 To enable CUDA on WSL Ubuntu 24.04, install the following:

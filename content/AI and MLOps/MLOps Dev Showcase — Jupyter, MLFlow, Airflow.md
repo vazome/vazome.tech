@@ -7,17 +7,19 @@ tags:
   - dataeng/airflow
   - code/jupyter
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-07T22:45:56+04:00
+modified: 2025-07-08T12:40:17+04:00
 ---
 # Experiments in Jupyter
+At first we start with Jupyter, but Jupyter does not scale well if we are on to model deployment.
+![[Boilerplate of an ML Python Project#Enabling Jupyter]]
 
-At first we start with Jupyter, but Jupyter does not scale well if we are on to model deployment. Here is simple Jupyter note example
-[03-training-ride-prediction.ipynb](https://raw.githubusercontent.com/vazome/mlops-zoomcamp-epam/main/01-intro/03-training-ride-prediction.ipynb)
+Here is Jupyter note showcasing linear regression model.
+[03-training-ride-prediction.ipynb](https://github.com/vazome/mlops-zoomcamp-epam/blob/main/01-intro/03-training-ride-prediction.ipynb)
 
 # Tracking and Management with MLFlow
 Use MLFlow for experiment: tracking, logging and statistical insights and it is supported by within [[Databricks]]. You can install it in a python project via `uv add mlflow{:shell}` ^608101
 
-To start MLFlow tracking server: `mlflow ui --backend-store-uri sqlite:///mlflow.db{:shell}`
+To start MLFlow tracking server: `mlflow ui --backend-store-uri sqlite:///mlflow.db{:shell}` — MLFlow supports remote artifact stores, such as AWS S3 [Artifact Stores \| MLflow](https://mlflow.org/docs/latest/ml/tracking/artifact-stores/)
 ![[Pasted image 20250628113950.png]]
 Within your experiment, MLFlow provides a way to log parameters, models, and artifacts with `mlflow.log*{:python}` methods (like `mlflow.log_params(params_dict){:python}`) and to automatically log variety of the data utilize [MLFlow autolog](https://mlflow.org/docs/latest/ml/tracking/autolog). But keep in mind that autolog won't register a model for you.
 ![[Pasted image 20250629201041.png]]
