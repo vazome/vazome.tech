@@ -1,7 +1,7 @@
 ---
 tags: [code/python, practice, code/python/mlflow, code/python/jupyter, concept/mlops]
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-08T12:45:48+04:00
+modified: 2025-07-08T13:24:21+04:00
 ---
 We will create a project to run PyTorch for our #concept/mlops project 
 # Setup
@@ -26,8 +26,9 @@ Our initial directory will contain all necessary boilerplate environment configu
 ![[Pasted image 20250605194251.png]]
 For more info on `pyproject.toml` and other environment files, refer to: [Working on projects \| uv](https://docs.astral.sh/uv/guides/projects/)
 ## Enabling Jupyter
-I do my work in VSCode and it integrates well with UV. We can enable Jupyter the following way: `uv add --dev ipykernel{:shell}`
-For more: [Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
+I do my work in VSCode and it integrates well with UV. 
+We can enable Jupyter the following way: `uv add --dev ipykernel{:shell}`
+For more info: [Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
 ## Install MLFlow for experiment tracking
 ![[MLOps on Kubernetes — Jupyter, MLFlow, Airflow#^608101]]
 
