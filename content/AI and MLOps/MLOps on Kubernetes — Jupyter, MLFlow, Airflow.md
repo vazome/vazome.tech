@@ -6,6 +6,8 @@ tags:
   - code/python/jupyter
   - dataeng/airflow
   - code/jupyter
+aliases:
+  - "mlops-kubernetes-setup"
 created: 2025-06-29T20:03:44+04:00
 modified: 2025-07-08T13:05:22+04:00
 ---
