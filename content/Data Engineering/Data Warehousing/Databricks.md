@@ -1,3 +1,8 @@
+---
+tags: [dataeng]
+created: 2025-07-08T12:49:25+04:00
+modified: 2025-07-08T13:02:28+04:00
+---
 #dataeng 
 
 Is a PaaS platform, functions 3rd part for GCP and AWS, and 1st party on Azure i.e. Azure has more responsibilities on it's part which can be important for business.
@@ -15,10 +20,8 @@ When you setup a cluster Databricks preinstalls necessary libraries depending on
 **Delete** = Delete Cluster.
 
 **Single node** – low cost.
-**Multi node** - production (more than 2 VM)
+**Multi node** – production (more than 2 VM)
 
-**All purpose compute** 
-**Job cluster** (production focused, auto scaling enabled by default, used by Databricks scheduler
 ![[Screenshot 2024-06-20 at 01.38.49.png]]
 
 Runtimes can be:
@@ -33,7 +36,7 @@ A notebook is a collection of executable cells, each notebook is tied to a Speci
 
 There are markers ==%== which if present before a command can tell the Notebook  it's a Markdown, Python or Scala cell. Cells can also be multilanguage. [Develop code in Databricks notebooks#How to format Python and SQL cells](https://docs.databricks.com/en/notebooks/notebooks-code.html#how-to-format-python-and-sql-cells)
 
-Python has ability to execute shell commands in Databricks with use of exclamation mark ==`!`==. 
+Similarly to Jupyter and Apache Spark has ability to execute shell commands in Databricks with use of exclamation mark ==`!`==. 
  ![[Screenshot 2024-06-18 at 05.15.37.png]]![[Screenshot 2024-06-18 at 05.16.50.png]]
 Shift + Option + Space can recommend you some queries 
 
@@ -87,7 +90,7 @@ For jobs orchestration. 2 Types:
 	  ![[Screenshot 2024-06-20 at 01.12.12.png|400]]
 - Delta Live Tables (DLR)
 	- Only notebooks
-	- Automatics dependecy controll
+	- Automatics dependency control
 	- Self provisioned.
 	- No timeouts, retries are automatic in prod mode.
 	- No library import support.

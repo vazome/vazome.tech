@@ -29,7 +29,7 @@ For more info on `pyproject.toml` and other environment files, refer to: [Workin
 I do my work in VSCode and it integrates well with UV. We can enable Jupyter the following way: `uv add --dev ipykernel{:shell}`
 For more: [Using uv with Jupyter \| Using Jupyter from VS Code \| uv](https://docs.astral.sh/uv/guides/integration/jupyter/#using-jupyter-from-vs-code)
 ## Install MLFlow for experiment tracking
-![[MLOps Dev Showcase — Jupyter, MLFlow, Airflow#^608101]]
+![[MLOps on Kubernetes — Jupyter, MLFlow, Airflow#^608101]]
 
 ## If you use WSL 2 and Nvidia 
 To enable CUDA on WSL Ubuntu 24.04, install the following:

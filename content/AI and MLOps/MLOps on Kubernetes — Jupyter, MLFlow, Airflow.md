@@ -7,8 +7,9 @@ tags:
   - dataeng/airflow
   - code/jupyter
 created: 2025-06-29T20:03:44+04:00
-modified: 2025-07-08T12:40:17+04:00
+modified: 2025-07-08T13:05:22+04:00
 ---
+This setup mostly fits for the development environment, in the future articles we will discuss production deployment.
 # Experiments in Jupyter
 At first we start with Jupyter, but Jupyter does not scale well if we are on to model deployment.
 ![[Boilerplate of an ML Python Project#Enabling Jupyter]]
@@ -16,7 +17,7 @@ At first we start with Jupyter, but Jupyter does not scale well if we are on to 
 Here is Jupyter note showcasing linear regression model.
 [03-training-ride-prediction.ipynb](https://github.com/vazome/mlops-zoomcamp-epam/blob/main/01-intro/03-training-ride-prediction.ipynb)
 
-# Tracking and Management with MLFlow
+# A Brief Into MLFlow
 Use MLFlow for experiment: tracking, logging and statistical insights and it is supported by within [[Databricks]]. You can install it in a python project via `uv add mlflow{:shell}` ^608101
 
 To start MLFlow tracking server: `mlflow ui --backend-store-uri sqlite:///mlflow.db{:shell}` — MLFlow supports remote artifact stores, such as AWS S3 [Artifact Stores \| MLflow](https://mlflow.org/docs/latest/ml/tracking/artifact-stores/)
@@ -40,7 +41,7 @@ client = MlflowClient()
 
 ![[Pasted image 20250701081724.png]]
 
-`client.search_runs` does not return `runs[0].outputs{:python}` even though in Jupyter I can see for some reason, the following on the bottom **will not** work:
+`client.search_runs` does not return `runs[0].outputs{:python}` even though in Jupyter I can see for some reason, the following on the bottom **may not** work:
 ``` python
 experiment_id = client.get_experiment_by_name("random-forest-hyperopt").experiment_id
 
@@ -66,7 +67,8 @@ mlflow gc --backend-store-uri sqlite:///mlflow.db --experiment-ids 4 --tracking-
 ```
 
 ## Kubernetes Deployment
-Firstly we would need an image, I prefer to create dockerfile in this case than using developer provided image. This way we can have more granular control of what goes into it.
+Kubernetes comes in handy in implementation of MLOps.
+Firstly we would need an image, let's create a dockerfile. This way we can have more granular control of what goes into it, instead of relying on developer images.
 ``` dockerfile
 FROM python:3.12-slim-bookworm
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -78,7 +80,6 @@ RUN uv init
 
 RUN uv add mlflow boto3 psycopg2-binary
 
-# Launch mlflow via (TEMP DB in /tmp)
 CMD ["bash"]
 ```
 
@@ -197,4 +198,4 @@ def train_model(x_train, y_train, x_val, y_val, dv):
 ![[Pasted image 20250707191809.png]]
 Though there is a concern, considering isolated nature of tasks, we pass data between them with XCom. 
 
-
+At [[Apache Airflow]] article you can find more info on deployment and configuration.
