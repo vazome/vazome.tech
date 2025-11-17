@@ -4,15 +4,13 @@ title: About this blog
 created: 2025-07-01T12:08:48+04:00
 modified: 2025-07-01T12:17:12+04:00
 ---
-This is my personal Tech blog, here I share my articles, lecture notes and opinions.
-==The blog is under creation, I will finish all the core articles and reorganization by 08/2025 ==
-# About
+Here I share my professional and personal notes, along with some random stuff.
 
-**How to navigate**:
-Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials. Here is a tag heatmap I built for easier navigation:
+> [!info] How to navigate
+> Click on tags like #concept or children tags #containers/docker. Backlinks or Graph to find similar or relevant materials.
 
-```tag-heatmap
-```
+## Technical
+Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname on GitHub.
 
 ## Technical
 Career-vise I'm a DevOps engineer. My tech pseudonym is `vazome` - my last name, that is also my nickname in GitHub.
