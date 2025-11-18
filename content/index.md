@@ -19,9 +19,6 @@ Occasional open-source contributor. Obsidian and Quartz are my go-to stack for n
 - [GitHub - vazome/quartz-jupyter-embed-plugin: A minimal Quartz plugin for embedding and displaying Jupyter notebooks](https://github.com/vazome/quartz-jupyter-embed-plugin)
 - [GitHub - vazome/quartz-clickable-images-zoom-plugin: Enabled Lightbox zoom for Quartz built websites](https://github.com/vazome/quartz-clickable-images-zoom-plugin)
 ## Personal
-I'm of Russian origin, here is a photo me in front of a permanently closed IKEA store, just before I left Russia.
-![[me.jpg|300]]
-
 I play drums, even have one at home!
 My *Alesis Nitro Max Kit* — it gives you all key things and not skipping on the features like MIDI, recording, samples, and a full kick pad (on the right).
 
